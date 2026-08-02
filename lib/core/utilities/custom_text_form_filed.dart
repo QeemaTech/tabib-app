@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({super.key,  this.controller, required this.hintText,  this.keyboardType});
+  const CustomTextFormField({super.key,  this.controller, required this.hintText,  this.keyboardType, this.suffixWidget, this.padding, this.validator});
   final TextEditingController? controller;
   final String hintText;
   final TextInputType? keyboardType;
-
+  final Widget? suffixWidget;
+  final EdgeInsets? padding;
+  final String? Function(String?)? validator; 
   @override
   Widget build(BuildContext context) {
     final theme=context.appTheme;
@@ -16,7 +18,7 @@ class CustomTextFormField extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.0), // Creates the smooth rounded corners
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
+            color: Colors.grey.withValues(alpha: 0.15),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 4), // Replicates the soft bottom shadow
@@ -24,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
+        validator: validator,
         onTapUpOutside: (event) {
           FocusScope.of(context).unfocus();
         },
@@ -31,9 +34,10 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         style:theme.regular14,
         decoration: InputDecoration(
+          suffix: suffixWidget,
           hintText: hintText,
           hintStyle: theme.regular14.copyWith(color: theme.textColor200),
-          contentPadding: const EdgeInsets.all(16.0),
+          contentPadding: padding ?? const EdgeInsets.all(16.0),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,

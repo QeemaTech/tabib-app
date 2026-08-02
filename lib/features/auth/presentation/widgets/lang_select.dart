@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
 class LanguageSelector extends StatefulWidget {
-  const LanguageSelector({super.key});
-
+  const LanguageSelector({super.key, required this.onLanguageSelected});
+  final ValueChanged<String> onLanguageSelected;
   @override
   State<LanguageSelector> createState() => _LanguageSelectorState();
 }
 
 class _LanguageSelectorState extends State<LanguageSelector> {
-  String _selectedLanguage = 'ar'; 
+  String selectedLanguage = 'ar';
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,13 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             context: context,
             label: 'English',
             value: 'en',
-            isSelected: _selectedLanguage == 'en',
+            isSelected: selectedLanguage == 'en',
+            onTap: () {
+              widget.onLanguageSelected('en');
+              setState(() {
+                selectedLanguage = 'en';
+              });
+            },
           ),
         ),
         const SizedBox(width: 16.0), // Space between the buttons
@@ -32,7 +38,13 @@ class _LanguageSelectorState extends State<LanguageSelector> {
             context: context,
             label: 'العربية',
             value: 'ar',
-            isSelected: _selectedLanguage == 'ar',
+            isSelected: selectedLanguage == 'ar',
+            onTap: () {
+              widget.onLanguageSelected("ar");
+              setState(() {
+                selectedLanguage = 'ar';
+              });
+            },
           ),
         ),
       ],
@@ -44,14 +56,11 @@ class _LanguageSelectorState extends State<LanguageSelector> {
     required String label,
     required String value,
     required bool isSelected,
+    required VoidCallback onTap,
   }) {
-    final theme=context.appTheme;
+    final theme = context.appTheme;
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedLanguage = value;
-        });
-      },
+      onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
@@ -71,7 +80,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? theme.primaryColor : const Color(0xFF9EA6B4),
+                color: isSelected
+                    ? theme.primaryColor
+                    : const Color(0xFF9EA6B4),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -81,9 +92,13 @@ class _LanguageSelectorState extends State<LanguageSelector> {
               height: 20,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? theme.primaryColor.withOpacity(0.2) : const Color(0xFFE5E7EB),
+                color: isSelected
+                    ? theme.primaryColor.withValues(alpha: 0.2)
+                    : const Color(0xFFE5E7EB),
                 border: Border.all(
-                  color: isSelected ? theme.primaryColor : const Color(0xFF9EA6B4),
+                  color: isSelected
+                      ? theme.primaryColor
+                      : const Color(0xFF9EA6B4),
                   width: 1.5,
                 ),
               ),

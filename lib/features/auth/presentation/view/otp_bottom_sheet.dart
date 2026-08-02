@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/extension/app_extension.dart';
@@ -11,21 +13,31 @@ class OtpBottomSheet extends StatefulWidget {
 }
 
 class _OtpBottomSheetState extends State<OtpBottomSheet> {
-  // Creating 6 focus nodes and controllers for individual digit cells
-  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
-  final List<TextEditingController> _controllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
+  Timer? _timer;
+  int _remainingTime = 30;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _timer?.cancel();
+          _remainingTime = 30;
+        }
+      });
+    });
+  }
 
   @override
   void dispose() {
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -44,63 +56,65 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
         top: 16,
         left: 24,
         right: 24,
-        // dynamically adjusts padding when the on-screen keyboard appears
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(width: 24), // Spacer to center the title text
-              Text(
-                "Verification",
-                style: theme.bold24.copyWith(
-                  fontSize: 20,
-                  color: theme.textColor600,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 24), // Spacer to center the title text
+                Text(
+                  "Verification",
+                  style: theme.bold24.copyWith(
+                    fontSize: 20,
+                    color: theme.textColor600,
+                  ),
                 ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Color(0xFF1B365D),
-                  size: 24,
+                IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    color: Color(0xFF1B365D),
+                    size: 24,
+                  ),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'We have sent a 6-digit code to your phone number +965 ••••1234',
-            textAlign: TextAlign.center,
-            style: theme.regular14.copyWith(color: theme.textColor200),
-          ),
-        OTPWidget(
-          onCompleted: (pin) {
-
-
-          },
-          hasError: false,
-          isLoading: false,
-        ),
-          const SizedBox(height: 24),
-
-          Text(
-            "Didn't receive the code? Resend it in 30 seconds.",
-            style: theme.regular14.copyWith(color: theme.textColor200),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text(
-              'Confirm',
-              style: theme.regular14.copyWith(color: theme.whiteColor),
+              ],
             ),
-          ),
-          const SizedBox(height: 12),
-        ],
+            const SizedBox(height: 12),
+            Text(
+              'We have sent a 6-digit code to your phone number +965 ••••1234',
+              textAlign: TextAlign.center,
+              style: theme.regular14.copyWith(color: theme.textColor200),
+            ),
+            OTPWidget(onCompleted: (pin) {}, hasError: false, isLoading: false),
+            const SizedBox(height: 24),
+            Text.rich(
+              textAlign: TextAlign.center,
+              TextSpan(children: [
+                TextSpan(
+                  text: "Didn't receive the code? Resend it in $_remainingTime seconds.",
+                  style: theme.regular14.copyWith(color: theme.primaryColor300),
+                ),
+                TextSpan(
+                  text: "Resend it",
+                  style: theme.medium16.copyWith(color: theme.blackColor),
+                ),
+              ],
+            )),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                'Confirm',
+                style: theme.regular14.copyWith(color: theme.whiteColor),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
       ),
     );
   }

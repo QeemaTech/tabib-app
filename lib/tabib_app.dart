@@ -16,7 +16,7 @@ class TabibApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       onGenerateRoute: Routes.onGenerateRoute,
-      initialRoute: AppRoutes.roleView,
+      initialRoute: AppRoutes.welcomeView   ,
       theme: LightTheme().themeData,
     );
   }
