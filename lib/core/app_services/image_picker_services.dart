@@ -18,4 +18,18 @@ class ImagePickerServices {
     }
   }
 
+
+  Future<List<XFile>> pickMultiImage({
+    required ImageSource source,
+  }) async {
+    final images = await picker.pickMultiImage(
+      maxWidth: 1000,
+      maxHeight: 1000,
+      imageQuality: 70,
+      limit: 6,
+      requestFullMetadata: true,
+    );
+    return images;
+  }
+
 }

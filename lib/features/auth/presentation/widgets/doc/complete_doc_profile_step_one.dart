@@ -31,6 +31,7 @@ class CompleteDocProfileStepOne extends StatelessWidget {
         ),
         CustomDropdownField(
           hintText: 'auth.completeProfile.stepOne.chooseMainSpecialization'.tr(),
+           items: [],
         ),
         Text(
           'auth.completeProfile.stepOne.subSpecializations'.tr(),
@@ -38,6 +39,7 @@ class CompleteDocProfileStepOne extends StatelessWidget {
         ),
         CustomDropdownField(
           hintText: 'auth.completeProfile.stepOne.chooseSubSpecializations'.tr(),
+           items: [],
         ),
         Row(
           spacing: 8,
@@ -53,6 +55,7 @@ class CompleteDocProfileStepOne extends StatelessWidget {
                   ),
                   CustomDropdownField(
                     hintText: 'auth.completeProfile.stepOne.consultant'.tr(),
+                     items: [],
                   ),
                 ],
               ),
@@ -70,6 +73,7 @@ class CompleteDocProfileStepOne extends StatelessWidget {
                     hintText:
                         'auth.completeProfile.stepOne.yearsExperiencePlaceholder'
                             .tr(),
+                             items: [],
                   ),
                 ],
               ),

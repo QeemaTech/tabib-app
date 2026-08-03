@@ -19,10 +19,10 @@ class SeeMoreSpecializationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     final List<SpecializationsData> specializations = [
-      SpecializationsData(title: "kids", imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "kids", imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "kids", imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "kids", imageUrl: AssetsManager.doctor),
+      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
+      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
+      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
+      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
     ];
 
     return Scaffold(

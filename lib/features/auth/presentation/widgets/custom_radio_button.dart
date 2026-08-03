@@ -18,7 +18,7 @@ class _CustomRadioGroupState extends State<CustomRadioGroup> {
 
       children: [
         _buildRadioButton(
-          title: 'yes',
+          title: 'common.yes',
           value: 'yes',
           groupValue: _selectedValue,
           onChanged: (value) {
@@ -27,10 +27,9 @@ class _CustomRadioGroupState extends State<CustomRadioGroup> {
             });
           },
         ),
-        SizedBox(width: 100,),
-
+        const SizedBox(width: 100),
         _buildRadioButton(
-          title: 'no',
+          title: 'common.no',
           value: 'no',
           groupValue: _selectedValue,
           onChanged: (value) {

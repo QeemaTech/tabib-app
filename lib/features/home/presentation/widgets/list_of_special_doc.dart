@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constant/assets_manager.dart';
@@ -16,10 +17,10 @@ class ListOfSpecialDoc extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 10,
         itemBuilder: (context, index) {
-          return const Padding(
-            padding: EdgeInsetsDirectional.only(end: 12),
+          return Padding(
+            padding: const EdgeInsetsDirectional.only(end: 12),
             child: SpecialItem(
-              title: 'Kids',
+              title: 'common.kids'.tr(),
               image: AssetsManager.skinDoc,
             ),
           );

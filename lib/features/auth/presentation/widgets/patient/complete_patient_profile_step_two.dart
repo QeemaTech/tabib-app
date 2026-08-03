@@ -1,14 +1,35 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
+import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/custom_radio_button.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/drop_down_menu.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/uploads_widget.dart';
 
-class CompletepatientProfileStepTwo extends StatelessWidget {
+class CompletepatientProfileStepTwo extends StatefulWidget {
   const CompletepatientProfileStepTwo({super.key});
 
+  @override
+  State<CompletepatientProfileStepTwo> createState() => _CompletepatientProfileStepTwoState();
+}
+
+class _CompletepatientProfileStepTwoState extends State<CompletepatientProfileStepTwo> {
+  late TextEditingController essentialMedicationsHint;
+  late TextEditingController allergyHint; 
+  @override
+  void initState() {
+    super.initState();
+    essentialMedicationsHint = TextEditingController();
+    allergyHint = TextEditingController();
+  }
+  @override
+  void dispose() {
+    essentialMedicationsHint.dispose();
+    allergyHint.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -18,48 +39,45 @@ class CompletepatientProfileStepTwo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Do you have any chronic illnesses?'.tr(),
+            'auth.completePatientProfile.stepTwo.chronicIllnesses'.tr(),
             style: theme.medium16.copyWith(fontSize: 18),
           ),
+          CustomDropdownField(
+            hintText: 'auth.completePatientProfile.stepTwo.chronicHint'.tr(),
+            items: ['x',"x2"],
+            onChanged: (value) {
+              if (value != null) {
+                context.read<CompletePatientProfileViewModel>().updateChronicIllnesses(value);
+              }
+            },
 
-          CustomDropdownField(hintText: "sensitive"),
+          ),
           Text(
-            "Are you taking any essential medications?",
+            'auth.completePatientProfile.stepTwo.essentialMedications'.tr(),
             style: theme.medium16.copyWith(fontSize: 18),
           ),
-          CustomTextFormField(hintText: "Choose the essential medications you take"),
+          CustomTextFormField(
+            hintText:
+                'auth.completePatientProfile.stepTwo.essentialMedicationsHint'
+                    .tr(),
+                controller: essentialMedicationsHint,
+          ),
           Text(
-            "Are you allergic to any certain medications?",
+            'auth.completePatientProfile.stepTwo.allergyQuestion'.tr(),
             style: theme.medium16.copyWith(fontSize: 18),
           ),
-
-          CustomRadioGroup(),
-          CustomTextFormField(hintText: "Write the type of allergy or the name of the medication."),
-
+          const CustomRadioGroup(),
+          CustomTextFormField(
+            hintText: 'auth.completePatientProfile.stepTwo.allergyHint'.tr(),
+            controller: allergyHint,
+          ),
           Text(
-            "Do you want to add reports/rays?",
+            'auth.completePatientProfile.stepTwo.addReports'.tr(),
             style: theme.medium16.copyWith(fontSize: 18),
           ),
-        UploadsWidget(hintText:"Upload files" ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          UploadsWidget(
+            hintText: 'auth.completePatientProfile.stepTwo.uploadFiles'.tr(),
+          ),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -78,31 +96,9 @@ class CompletepatientProfileStepTwo extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
         ],
       ),
-    );
-  }
-}
-
-class _UploadFiles extends StatelessWidget {
-  const _UploadFiles({required this.title, this.hintText, this.onTap});
-  final String title;
-  final String? hintText;
-  final void Function()? onTap;
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.appTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
-      children: [
-        Text(title, style: theme.bold18.copyWith(fontSize: 16)),
-        UploadsWidget(
-          onTap:onTap ,
-          hintText: hintText ?? 'auth.completeProfile.stepTwo.uploadFile'.tr(),
-        ),
-      ],
     );
   }
 }

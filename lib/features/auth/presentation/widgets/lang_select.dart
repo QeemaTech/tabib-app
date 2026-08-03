@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
@@ -9,42 +10,44 @@ class LanguageSelector extends StatefulWidget {
 }
 
 class _LanguageSelectorState extends State<LanguageSelector> {
-  String selectedLanguage = 'ar';
+  late String selectedLanguage;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    selectedLanguage = context.locale.languageCode;
+  }
+
+  Future<void> _selectLanguage(String value) async {
+    widget.onLanguageSelected(value);
+    await context.setLocale(Locale(value));
+    setState(() {
+      selectedLanguage = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // English Option
         Expanded(
           child: _buildLanguageButton(
             context: context,
             label: 'English',
             value: 'en',
             isSelected: selectedLanguage == 'en',
-            onTap: () {
-              widget.onLanguageSelected('en');
-              setState(() {
-                selectedLanguage = 'en';
-              });
-            },
+            onTap: () => _selectLanguage('en'),
           ),
         ),
-        const SizedBox(width: 16.0), // Space between the buttons
-        // Arabic Option
+        const SizedBox(width: 16.0),
         Expanded(
           child: _buildLanguageButton(
             context: context,
             label: 'العربية',
             value: 'ar',
             isSelected: selectedLanguage == 'ar',
-            onTap: () {
-              widget.onLanguageSelected("ar");
-              setState(() {
-                selectedLanguage = 'ar';
-              });
-            },
+            onTap: () => _selectLanguage('ar'),
           ),
         ),
       ],

@@ -97,7 +97,7 @@ class AppointmentDetailsView extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Riyadh, Saudi Arabia',
+                            'home.appointmentDetails.sampleLocation'.tr(),
                             style: theme.regular12.copyWith(
                               color: theme.textColor300,
                             ),
@@ -110,11 +110,23 @@ class AppointmentDetailsView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               // Details List
-              _buildDetailItem('home.appointmentDetails.day'.tr(), 'Tuesday, February 5', theme),
+              _buildDetailItem(
+                'home.appointmentDetails.day'.tr(),
+                'home.appointmentDetails.sampleDay'.tr(),
+                theme,
+              ),
               const SizedBox(height: 12),
-              _buildDetailItem('home.appointmentDetails.time'.tr(), '5:30 PM', theme),
+              _buildDetailItem(
+                'home.appointmentDetails.time'.tr(),
+                'home.appointmentDetails.sampleTime'.tr(),
+                theme,
+              ),
               const SizedBox(height: 12),
-              _buildDetailItem('home.appointmentDetails.price'.tr(), '500 ${'home.search.currency'.tr()}', theme),
+              _buildDetailItem(
+                'home.appointmentDetails.price'.tr(),
+                '500 ${'home.search.currency'.tr()}',
+                theme,
+              ),
             ],
           ),
         ),

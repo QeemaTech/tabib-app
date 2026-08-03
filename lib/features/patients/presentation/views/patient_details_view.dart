@@ -183,9 +183,19 @@ class PatientDetailsView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildVisitItem("فحص طبي سنوي", "18 مايو، الاثنين", "10:30 م", theme),
+          _buildVisitItem(
+            'patients.details.annualCheckup'.tr(),
+            '18 مايو، الاثنين',
+            '10:30 م',
+            theme,
+          ),
           const Divider(),
-          _buildVisitItem("فحص طبي سنوي", "18 مايو، الاثنين", "10:30 م", theme),
+          _buildVisitItem(
+            'patients.details.annualCheckup'.tr(),
+            '18 مايو، الاثنين',
+            '10:30 م',
+            theme,
+          ),
         ],
       ),
     );
@@ -232,9 +242,9 @@ class PatientDetailsView extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: _buildVisitItem(
-        "أشعة رنين مغناطيسي",
-        "18 مايو، الاثنين",
-        "10:30 م",
+        'patients.details.mriScan'.tr(),
+        '18 مايو، الاثنين',
+        '10:30 م',
         theme,
       ),
     );

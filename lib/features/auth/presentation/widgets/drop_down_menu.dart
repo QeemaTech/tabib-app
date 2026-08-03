@@ -2,24 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
-class CustomDropdownField extends StatefulWidget {
-  const CustomDropdownField({super.key, required this.hintText});
+class CustomDropdownField extends StatelessWidget {
+  const CustomDropdownField({super.key, required this.hintText, required this.items, this.onChanged});
   final String hintText;
-
-  @override
-  State<CustomDropdownField> createState() => _CustomDropdownFieldState();
-}
-
-class _CustomDropdownFieldState extends State<CustomDropdownField> {
-  String? _selectedValue;
-
-  final List<String> _specialtyKeys = [
-    'specialties.general',
-    'specialties.pediatrics',
-    'specialties.dentistry',
-    'specialties.cardiology',
-  ];
-
+  final List<String> items;
+  final void Function(String?)? onChanged;
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -37,9 +24,10 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
         ],
       ),
       child: DropdownButtonFormField<String>(
-        value: _selectedValue,
+        
+        initialValue: items.first,
         hint: Text(
-          widget.hintText,
+          hintText,
           style: theme.medium16.copyWith(
             fontWeight: FontWeight.w400,
             color: theme.textColor300,
@@ -55,6 +43,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
         ),
         alignment: AlignmentDirectional.centerStart,
         isExpanded: true,
+        
         style: const TextStyle(fontSize: 16.0, color: Colors.black87),
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(
@@ -65,16 +54,15 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
         ),
-        items: _specialtyKeys.map((String key) {
+        items: items.map((String key) {
           return DropdownMenuItem<String>(
+
             value: key,
             child: Text(key.tr()),
           );
         }).toList(),
         onChanged: (newValue) {
-          setState(() {
-            _selectedValue = newValue;
-          });
+          onChanged?.call(newValue);
         },
       ),
     );

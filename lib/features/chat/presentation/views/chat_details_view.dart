@@ -86,7 +86,7 @@ class ChatDetailsView extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: 'Type your message here...',
+                          hintText: 'chat.hint'.tr(),
                           hintStyle: theme.regular14.copyWith(
                             color: theme.textColor200,
                           ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
@@ -27,10 +28,14 @@ class PatientInfoDetails extends StatelessWidget {
       child: Column(
         spacing: 5,
         children: [
-          _buildInfoItem(context, 'تاريخ الميلاد', birthDate),
-          _buildInfoItem(context, 'النوع', gender),
-          _buildInfoItem(context, 'الوزن', weight),
-          _buildInfoItem(context, 'الطول', height),
+          _buildInfoItem(
+            context,
+            'patients.details.birthDate'.tr(),
+            birthDate,
+          ),
+          _buildInfoItem(context, 'patients.details.gender'.tr(), gender),
+          _buildInfoItem(context, 'patients.details.weight'.tr(), weight),
+          _buildInfoItem(context, 'patients.details.height'.tr(), height),
         ],
       ),
     );

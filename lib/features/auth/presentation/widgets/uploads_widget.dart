@@ -4,10 +4,10 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 
 class UploadsWidget extends StatelessWidget {
-  const UploadsWidget({super.key, required this.hintText, this.onTap});
+  const UploadsWidget({super.key, required this.hintText, this.onTap, this.widget});
   final String hintText;
   final void Function()? onTap;
-
+final Widget?widget;
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -41,7 +41,7 @@ class UploadsWidget extends StatelessWidget {
                 ),
               ),
             ),
-            CustomImageView(imagePath: AssetsManager.upload),
+            widget ?? CustomImageView(imagePath: AssetsManager.upload),
           ],
         ),
       ),

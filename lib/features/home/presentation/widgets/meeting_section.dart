@@ -43,10 +43,9 @@ class MeetingSection extends StatelessWidget {
         spacing: 16,
         children: [
           CustomAppBarProfile(
-            title: "home.doctor.sessionStartsNow".tr(),
-            subTitle: "home.doctor.sessionDescription".tr(
-              args: ["Dr. Ahmed Ramadan"],
-            ),
+            title: "home.doctor.sessionStartsNow",
+            subTitle: "home.doctor.sessionDescription",
+            subTitleArgs: ["appointments.drName".tr()],
             trailing: AvailableDoc(),
           ),
           Column(

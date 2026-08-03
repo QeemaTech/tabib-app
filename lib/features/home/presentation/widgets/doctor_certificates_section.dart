@@ -14,9 +14,12 @@ class DoctorCertificatesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildBulletItem('PhD in Medicine from Harvard University', theme),
+          _buildBulletItem('home.doctorDetails.certificatePhd'.tr(), theme),
           const SizedBox(height: 8),
-          _buildBulletItem('Fellowship in Cardiovascular Diseases', theme),
+          _buildBulletItem(
+            'home.doctorDetails.certificateFellowship'.tr(),
+            theme,
+          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
@@ -113,7 +114,7 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
                 children: [
                   const SizedBox(width: 24),
                   Text(
-                    "Verification",
+                    'auth.otp.title'.tr(),
                     style: theme.bold24.copyWith(
                       fontSize: 20,
                       color: theme.textColor600,
@@ -135,7 +136,7 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
                   final phone = state.phone ?? '';
                   final countryCode = state.countryCode ?? '';
                   return Text(
-                    'We have sent a 6-digit code to your phone number $countryCode $phone',
+                    'auth.otp.sentTo'.tr(args: [countryCode, phone]),
                     textAlign: TextAlign.center,
                     style: theme.regular14.copyWith(color: theme.textColor200),
                   );
@@ -154,14 +155,15 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text:
-                          "Didn't receive the code? Resend it in $_remainingTime seconds.",
+                      text: 'auth.otp.resendIn'.tr(
+                        args: ['$_remainingTime'],
+                      ),
                       style: theme.regular14.copyWith(
                         color: theme.primaryColor300,
                       ),
                     ),
                     TextSpan(
-                      text: "Resend it",
+                      text: 'auth.otp.resend'.tr(),
                       style: theme.medium16.copyWith(color: theme.blackColor),
                     ),
                   ],
@@ -181,7 +183,7 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
                             ),
                           )
                         : Text(
-                            'Confirm',
+                            'auth.otp.confirm'.tr(),
                             style: theme.regular14.copyWith(
                               color: theme.whiteColor,
                             ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
@@ -24,7 +25,7 @@ class PatientsAppointmentDetailsView extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "تفاصيل الحجز",
+          'patients.appointmentDetails.title'.tr(),
           style: theme.bold18.copyWith(color: theme.textColor600),
         ),
       ),
@@ -32,56 +33,48 @@ class PatientsAppointmentDetailsView extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const PatientInfoCard(
-              name: "أ. أحمد رمضان",
-              id: "232345",
+            PatientInfoCard(
+              name: 'appointments.drName'.tr(),
+              id: '232345',
             ),
             const SizedBox(height: 16),
             ExpandableSection(
-              title: "معلومات المريض",
-              backgroundColor:Color
-                (
-                  0xFFE9EBF1
-              )
-              ,
+              title: 'patients.appointmentDetails.patientInfo'.tr(),
+              backgroundColor: const Color(0xFFE9EBF1),
               iconPath: AssetsManager.patientsActive,
-              child: const PatientInfoDetails(
-                gender: "أنثى",
-                birthDate: "1 يناير (26 سنة)",
-                height: "155 سم",
-                weight: "60 كيلو",
+              child: PatientInfoDetails(
+                gender: 'profile.female'.tr(),
+                birthDate: '1 يناير (26 سنة)',
+                height: '155 ${'patients.details.cm'.tr()}',
+                weight: '60 ${'patients.details.kg'.tr()}',
               ),
             ),
             ExpandableSection(
-              title: "موعد الحجز",
-              backgroundColor:Color
-                (
-                  0xFFE9EBF1
-              )
-              ,
+              title: 'patients.appointmentDetails.appointmentTime'.tr(),
+              backgroundColor: const Color(0xFFE9EBF1),
               iconPath: AssetsManager.appointmentsActive,
               child: const AppointmentInfoDetails(
-                date: "15 فبراير 2026",
-                time: "10:00 صباحاً",
-                day: "السبت",
-                month: "فبراير",
-                dayNumber: "15",
+                date: '15 فبراير 2026',
+                time: '10:00 صباحاً',
+                day: 'السبت',
+                month: 'فبراير',
+                dayNumber: '15',
               ),
             ),
             ExpandableSection(
-              title: "اعراض / شكوى المريض",
+              title: 'patients.appointmentDetails.symptoms'.tr(),
               isExpanded: true,
               backgroundColor: const Color(0xFFFEF9F0),
               iconPath: AssetsManager.document,
-              child: const Column(
+              child: Column(
                 children: [
                   MedicalNoteCard(
-                    note: "أفاد المريض بتحسن في التنفس، قياسات ذروة التدفق مستقرة. استمر في خطة العمل الحالية للربو.",
-                    date: "18 يناير، الاثنين • 10:30 م",
+                    note: 'patients.details.dummyNotes'.tr(),
+                    date: '18 يناير، الاثنين • 10:30 م',
                   ),
                   MedicalNoteCard(
-                    note: "أفاد المريض بتحسن في التنفس، قياسات ذروة التدفق مستقرة. استمر في خطة العمل الحالية للربو.",
-                    date: "18 يناير، الاثنين • 10:30 م",
+                    note: 'patients.details.dummyNotes'.tr(),
+                    date: '18 يناير، الاثنين • 10:30 م',
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 {
+  "appTitle": "Tabib App",
   "auth": {
     "login": {
       "welcomeBack": "Welcome Back",
@@ -41,6 +42,13 @@
       "languageDescription": "Preferred language for communication",
       "signUpButton": "Next"
     },
+    "otp": {
+      "title": "Verification",
+      "sentTo": "We have sent a 6-digit code to your phone number {} {}",
+      "resendIn": "Didn't receive the code? Resend it in {} seconds.",
+      "resend": "Resend it",
+      "confirm": "Confirm"
+    },
     "completeProfile": {
       "skip": "Skip",
       "next": "Next",
@@ -71,6 +79,33 @@
         "canEditLater": "You can edit this data later from your medical profile."
       }
     },
+    "completePatientProfile": {
+      "title": "Complete your health file",
+      "description": "Help doctors better understand your condition by adding some basic information.",
+      "stepOne": {
+        "dateOfBirth": "Date of birth",
+        "chooseDateOfBirth": "Choose date of birth",
+        "sex": "Sex",
+        "male": "Male",
+        "female": "Female",
+        "weight": "Weight",
+        "height": "Height",
+        "weightHint": "74 kg",
+        "heightHint": "128 cm",
+        "addReports": "Do you want to add reports / radiation?",
+        "uploadFiles": "Upload files"
+      },
+      "stepTwo": {
+        "chronicIllnesses": "Do you have any chronic illnesses?",
+        "chronicHint": "Select illness",
+        "essentialMedications": "Are you taking any essential medications?",
+        "essentialMedicationsHint": "Choose the essential medications you take",
+        "allergyQuestion": "Are you allergic to any certain medications?",
+        "allergyHint": "Write the type of allergy or the name of the medication.",
+        "addReports": "Do you want to add reports / rays?",
+        "uploadFiles": "Upload files"
+      }
+    },
     "specialties": {
       "general": "General Medicine",
       "pediatrics": "Pediatrics",
@@ -95,7 +130,15 @@
     "close": "Close",
     "cancel": "Cancel",
     "availableNow": "Available now",
-    "currency": "SAR"
+    "currency": "SAR",
+    "yes": "Yes",
+    "no": "No",
+    "viewProfile": "View Profile",
+    "yearsOld": "{} years",
+    "yearsOldMale": "{} years - Male",
+    "yearsOldFemale": "{} years - Female",
+    "lastVisitAt": "{} Last visit",
+    "kids": "Kids"
   },
   "appointments": {
     "confirmed": "Confirmed",
@@ -104,7 +147,15 @@
     "injuryRehabilitation": "Injury Rehabilitation",
     "motorRehabilitation": "Motor Rehabilitation",
     "drName": "Dr. Ahmed Ramadan",
-    "dateTime": "Tuesday 24.12.2025 | 5 PM"
+    "dateTime": "Tuesday 24.12.2025 | 5 PM",
+    "filters": {
+      "all": "All",
+      "confirm": "Confirm",
+      "holding": "Holding",
+      "completed": "Completed",
+      "cancel": "Cancel"
+    },
+    "addAppointment": "Add Appointment"
   },
   "records": {
     "title": "Medical Records",
@@ -131,6 +182,10 @@
     }
   },
   "home": {
+    "appBar": {
+      "title": "Welcome",
+      "subtitle": "Here's a quick look at your day"
+    },
     "search": {
       "title": "Search",
       "hint": "Search for doctor or specialty",
@@ -142,7 +197,10 @@
     "doctorDetails": {
       "title": "Doctor Details",
       "about": "About the Doctor",
+      "aboutText": "Dr. Ahmed Ramadan is a specialist in treating and following up on cases of bones, joints, and sports injuries. He is interested in providing a comprehensive treatment plan that helps the patient restore movement and quality of life.",
       "certificates": "Certificates",
+      "certificatePhd": "PhD in Medicine from Harvard University",
+      "certificateFellowship": "Fellowship in Cardiovascular Diseases",
       "reviews": "Patient Reviews",
       "selectDay": "Select Day",
       "price": "Price",
@@ -157,7 +215,10 @@
       "time": "Time",
       "price": "Price",
       "cancel": "Cancel",
-      "start": "Start Appointment"
+      "start": "Start Appointment",
+      "sampleDay": "Tuesday, February 5",
+      "sampleTime": "5:30 PM",
+      "sampleLocation": "Riyadh, Saudi Arabia"
     },
     "doctor": {
       "appointmentsToday": "Today's appointments",
@@ -245,6 +306,21 @@
     "cancelBtn": "Cancel"
   },
   "patients": {
+    "filters": {
+      "all": "All",
+      "lastVisit": "Last visit",
+      "needReview": "Needs review",
+      "stable": "Stable"
+    },
+    "viewProfile": "View Profile",
+    "ageGender": "{} years - {}",
+    "lastVisitTime": "{} Last visit",
+    "appointmentDetails": {
+      "title": "Booking Details",
+      "patientInfo": "Patient Information",
+      "appointmentTime": "Appointment Time",
+      "symptoms": "Symptoms / Patient Complaint"
+    },
     "details": {
       "title": "Patient Profile",
       "patientInfo": "Patient Information",
@@ -267,7 +343,63 @@
       "latex": "Latex",
       "viewDetails": "View Details",
       "id": "ID",
-      "dummyNotes": "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      "dummyNotes": "It is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "annualCheckup": "Annual medical checkup",
+      "mriScan": "MRI scan"
     }
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": {
+      "required": "Email is required",
+      "invalid": "Please enter a valid email"
+    },
+    "password": {
+      "required": "Password is required",
+      "minLength": "Password must be at least 8 characters"
+    },
+    "confirmPassword": {
+      "required": "Please confirm your password",
+      "mismatch": "Passwords do not match"
+    },
+    "phone": {
+      "required": "Phone number is required",
+      "invalid": "Please enter a valid phone number"
+    },
+    "name": {
+      "required": "Name is required",
+      "minLength": "Name must be at least 3 characters"
+    },
+    "note": {
+      "maxLength": "Note must not exceed 500 characters"
+    },
+    "otp": {
+      "required": "OTP is required",
+      "minLength": "OTP must be at least 5 digits"
+    },
+    "city": {
+      "required": "City is required"
+    }
+  },
+  "errors": {
+    "connectionTimeout": "Connection timed out. Please try again.",
+    "sendTimeout": "Send timed out. Please try again.",
+    "receiveTimeout": "Receive timed out. Please try again.",
+    "badCertificate": "Invalid security certificate.",
+    "cancel": "Request was cancelled.",
+    "connectionError": "No internet connection. Please check your network.",
+    "unknown": "Something went wrong. Please try again.",
+    "badRequest": "Invalid request. Please check your data.",
+    "error401": "Unauthorized. Please log in again.",
+    "error403": "You don't have permission to perform this action.",
+    "notFound": "The requested resource was not found.",
+    "error408": "Request timed out. Please try again.",
+    "error429": "Too many requests. Please wait and try again.",
+    "error500": "Internal server error. Please try again later.",
+    "error502": "Bad gateway. Please try again later.",
+    "error503": "Service unavailable. Please try again later.",
+    "error504": "Gateway timeout. Please try again later.",
+    "serverError": "Server error ({code}). Please try again.",
+    "defaultError": "An unexpected error occurred."
   }
 }

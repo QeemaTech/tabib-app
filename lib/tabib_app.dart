@@ -11,12 +11,12 @@ class TabibApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Tabib App',
+      title: 'appTitle'.tr(),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       onGenerateRoute: Routes.onGenerateRoute,
-      initialRoute: AppRoutes.welcomeView   ,
+      initialRoute: AppRoutes.completeProfileView,
       theme: LightTheme().themeData,
     );
   }

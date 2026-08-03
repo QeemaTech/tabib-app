@@ -23,10 +23,10 @@ class _PatientsViewState extends State<PatientsView> {
     final theme = context.appTheme;
     return Column(
       children: [
-        SearchBarWidget(),
+        const SearchBarWidget(),
         const SizedBox(height: 26),
         FilterChips(
-          filters:  [
+          filters: [
             "patients.filters.all".tr(),
             "patients.filters.lastVisit".tr(),
             "patients.filters.needReview".tr(),
@@ -49,9 +49,7 @@ class _PatientsViewState extends State<PatientsView> {
             }
           },
         ),
-
         const SizedBox(height: 16),
-
         Expanded(
           child: switch (status.value) {
             Status.all => ListView.separated(
@@ -59,16 +57,17 @@ class _PatientsViewState extends State<PatientsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "مؤكدة - الآن",
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "25 سنة - ذكر",
-                  time: "08:30  اخر زياره م",
+                  status: "reservations.confirmedNow".tr(),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "common.yearsOldMale".tr(args: ['25']),
+                  time: "patients.lastVisitTime".tr(args: ['08:30']),
                   actions: [
                     ReservationActionButton(
-                      label: "عرض الملف",
+                      label: "patients.viewProfile".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientDetailsView);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.patientDetailsView);
                       },
                     ),
                   ],
@@ -80,18 +79,19 @@ class _PatientsViewState extends State<PatientsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "اخر زيارة",
+                  status: "patients.filters.lastVisit".tr(),
                   statusColor: theme.primaryColor500,
-                  statusBackgroundColor: Color(0xFFE9EBF1),
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "25 سنة - ذكر",
-                  time: "08:30  اخر زياره م",
+                  statusBackgroundColor: const Color(0xFFE9EBF1),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "common.yearsOldMale".tr(args: ['25']),
+                  time: "patients.lastVisitTime".tr(args: ['08:30']),
                   actions: [
                     ReservationActionButton(
-                      label: "عرض الملف",
+                      label: "patients.viewProfile".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientDetailsView);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.patientDetailsView);
                       },
                     ),
                   ],
@@ -103,22 +103,19 @@ class _PatientsViewState extends State<PatientsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "اخر زيارة",
+                  status: "patients.filters.lastVisit".tr(),
                   statusColor: const Color(0xFFDCB263),
-                  statusBackgroundColor: Color
-                    (
-                      0xFFFEF9F0
-                  )
-                  ,
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "25 سنة - ذكر",
-                  time: "08:30  اخر زياره م",
+                  statusBackgroundColor: const Color(0xFFFEF9F0),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "common.yearsOldMale".tr(args: ['25']),
+                  time: "patients.lastVisitTime".tr(args: ['08:30']),
                   actions: [
                     ReservationActionButton(
-                      label: "عرض الملف",
+                      label: "patients.viewProfile".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientDetailsView);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.patientDetailsView);
                       },
                     ),
                   ],
@@ -130,22 +127,19 @@ class _PatientsViewState extends State<PatientsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "مستقر",
+                  status: "patients.filters.stable".tr(),
                   statusColor: const Color(0xFFDCB263),
-                  statusBackgroundColor: Color
-                    (
-                      0xFFFEF9F0
-                  )
-                  ,
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "25 سنة - ذكر",
-                  time: "08:30  اخر زياره م",
+                  statusBackgroundColor: const Color(0xFFFEF9F0),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "common.yearsOldMale".tr(args: ['25']),
+                  time: "patients.lastVisitTime".tr(args: ['08:30']),
                   actions: [
                     ReservationActionButton(
-                      label: "عرض الملف",
+                      label: "patients.viewProfile".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientDetailsView);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.patientDetailsView);
                       },
                     ),
                   ],

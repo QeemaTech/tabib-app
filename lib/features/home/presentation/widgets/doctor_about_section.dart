@@ -9,9 +9,9 @@ class DoctorAboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsSection(
       title: 'home.doctorDetails.about'.tr(),
-      child: const Text(
-        'Dr. Ahmed Ramadan is a specialist in treating and following up on cases of bones, joints, and sports injuries. He is interested in providing a comprehensive treatment plan that helps the patient restore movement and quality of life.',
-        style: TextStyle(height: 1.5),
+      child: Text(
+        'home.doctorDetails.aboutText'.tr(),
+        style: const TextStyle(height: 1.5),
       ),
     );
   }

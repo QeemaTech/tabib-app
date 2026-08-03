@@ -26,13 +26,13 @@ class _ReservationsViewState extends State<ReservationsView> {
       children: [
         const SizedBox(height: 26),
         FilterChips(
-          filters:  [
+          filters: [
             "appointments.filters.all".tr(),
             "appointments.filters.confirm".tr(),
             "appointments.filters.holding".tr(),
             "appointments.filters.completed".tr(),
             "appointments.filters.cancel".tr(),
-            ],
+          ],
           onSelected: (index) {
             switch (index) {
               case 0:
@@ -54,7 +54,7 @@ class _ReservationsViewState extends State<ReservationsView> {
           },
         ),
         if (status.value == Status.all) ...[
-          CalendarSection(),
+          const CalendarSection(),
           OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(double.infinity, 48),
@@ -69,12 +69,11 @@ class _ReservationsViewState extends State<ReservationsView> {
               ),
             ),
             onPressed: () {},
-            label:  Text("appointments.addAppointment".tr()),
+            label: Text("appointments.addAppointment".tr()),
             icon: const Icon(Icons.add_circle_outline),
           ),
         ],
         const SizedBox(height: 16),
-
         Expanded(
           child: switch (status.value) {
             Status.all => ListView.separated(
@@ -82,25 +81,26 @@ class _ReservationsViewState extends State<ReservationsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "مؤكدة - الآن",
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "استشارة قلب وأوعية دموية",
+                  status: "reservations.confirmedNow".tr(),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "reservations.cardiologyConsultation".tr(),
                   time: "08:30 م",
                   actions: [
-                     ReservationActionButton(
-                      label: "بدء الجلسة",
+                    ReservationActionButton(
+                      label: "reservations.startSession".tr(),
                       iconPath: AssetsManager.video,
                       isFilled: true,
                       onTap: () {},
                     ),
                     ReservationActionButton(
-                      label: "تفاصيل الحجز",
+                      label: "reservations.bookingDetails".tr(),
                       iconPath: AssetsManager.records,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientsAppointmentDetailsView);
+                        Navigator.of(context).pushNamed(
+                          AppRoutes.patientsAppointmentDetailsView,
+                        );
                       },
                     ),
-                   
                   ],
                 );
               },
@@ -110,16 +110,18 @@ class _ReservationsViewState extends State<ReservationsView> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
-                  status: "مؤكدة - الآن",
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "استشارة قلب وأوعية دموية",
+                  status: "reservations.confirmedNow".tr(),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "reservations.cardiologyConsultation".tr(),
                   time: "08:30 م",
                   actions: [
                     ReservationActionButton(
-                      label: "تفاصيل الحجز",
+                      label: "reservations.bookingDetails".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.patientsAppointmentDetailsView);
+                        Navigator.of(context).pushNamed(
+                          AppRoutes.patientsAppointmentDetailsView,
+                        );
                       },
                     ),
                   ],
@@ -130,26 +132,26 @@ class _ReservationsViewState extends State<ReservationsView> {
               separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemCount: 5,
               itemBuilder: (context, index) {
-                return RequestReviewDocCard();
+                return const RequestReviewDocCard();
               },
             ),
             Status.completed => ListView.separated(
               separatorBuilder: (context, index) => const SizedBox(height: 16),
-
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
                   showTime: false,
-                  status: "مؤكدة - الآن",
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "استشارة قلب وأوعية دموية",
+                  status: "reservations.confirmedNow".tr(),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "reservations.cardiologyConsultation".tr(),
                   time: "08:30 م",
                   actions: [
                     ReservationActionButton(
-                      label: "انشاء تقرير",
+                      label: "reservations.createReportBtn".tr(),
                       iconPath: AssetsManager.report,
                       onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.createReportView);
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.createReportView);
                       },
                     ),
                   ],
@@ -158,16 +160,15 @@ class _ReservationsViewState extends State<ReservationsView> {
             ),
             Status.cancel => ListView.separated(
               separatorBuilder: (context, index) => const SizedBox(height: 16),
-
               itemCount: 5,
               itemBuilder: (context, index) {
                 return ReservationCard(
                   showTime: false,
                   statusBackgroundColor: const Color(0xFFF7E4E3),
                   statusColor: const Color(0xFFFF3B30),
-                  status: "الغاء",
-                  doctorName: "أ. أحمد رمضان",
-                  subTitle: "استشارة قلب وأوعية دموية",
+                  status: "reservations.cancelBtn".tr(),
+                  doctorName: "appointments.drName".tr(),
+                  subTitle: "reservations.cardiologyConsultation".tr(),
                 );
               },
             ),

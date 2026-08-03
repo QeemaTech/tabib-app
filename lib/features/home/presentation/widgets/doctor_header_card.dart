@@ -57,7 +57,7 @@ class DoctorHeaderCard extends StatelessWidget {
               Icon(Icons.location_on_outlined, size: 16, color: theme.textColor300),
               const SizedBox(width: 4),
               Text(
-                'Riyadh, Saudi Arabia',
+                'home.appointmentDetails.sampleLocation'.tr(),
                 style: theme.regular12.copyWith(color: theme.textColor300),
               ),
             ],
