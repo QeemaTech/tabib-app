@@ -104,6 +104,9 @@
         "allergyHint": "اكتب نوع الحساسية أو اسم الدواء.",
         "addReports": "هل تريد إضافة تقارير / أشعة؟",
         "uploadFiles": "رفع الملفات"
+      },
+      "validation": {
+        "fillRequired": "يرجى ملء جميع الحقول المطلوبة"
       }
     },
     "specialties": {

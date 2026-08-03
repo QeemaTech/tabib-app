@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tabib_app/core/base_state/base_state.dart';
+import 'package:tabib_app/features/auth/domain/entities/patient_health_profile_result_entity.dart';
+import 'package:tabib_app/features/auth/domain/entities/patient_medical_info_result_entity.dart';
 
 class CompletePatientProfileState extends Equatable {
   final XFile? academicCertificateImage;
@@ -15,7 +18,11 @@ class CompletePatientProfileState extends Equatable {
   final String? chronicIllnesses;
   final String? essentialMedications;
   final bool? areHaveAnyAllergies;
+  final String? allergyDetails;
   final List<XFile>? reportesAndrays;
+  final BaseState<PatientHealthProfileResultEntity> healthProfileState;
+  final BaseState<PatientMedicalInfoResultEntity> medicalInfoState;
+
   const CompletePatientProfileState({
     this.academicCertificateImage,
     this.idProofImage,
@@ -29,8 +36,11 @@ class CompletePatientProfileState extends Equatable {
     this.currentStep = 0,
     this.chronicIllnesses,
     this.essentialMedications,
-    this.areHaveAnyAllergies= false,
+    this.areHaveAnyAllergies = false,
+    this.allergyDetails,
     this.reportesAndrays,
+    this.healthProfileState = const BaseState(requestState: RequestState.init),
+    this.medicalInfoState = const BaseState(requestState: RequestState.init),
   });
 
   CompletePatientProfileState copyWith({
@@ -47,7 +57,10 @@ class CompletePatientProfileState extends Equatable {
     String? chronicIllnesses,
     String? essentialMedications,
     bool? areHaveAnyAllergies,
+    String? allergyDetails,
     List<XFile>? reportesAndrays,
+    BaseState<PatientHealthProfileResultEntity>? healthProfileState,
+    BaseState<PatientMedicalInfoResultEntity>? medicalInfoState,
   }) {
     return CompletePatientProfileState(
       academicCertificateImage:
@@ -64,7 +77,10 @@ class CompletePatientProfileState extends Equatable {
       chronicIllnesses: chronicIllnesses ?? this.chronicIllnesses,
       essentialMedications: essentialMedications ?? this.essentialMedications,
       areHaveAnyAllergies: areHaveAnyAllergies ?? this.areHaveAnyAllergies,
+      allergyDetails: allergyDetails ?? this.allergyDetails,
       reportesAndrays: reportesAndrays ?? this.reportesAndrays,
+      healthProfileState: healthProfileState ?? this.healthProfileState,
+      medicalInfoState: medicalInfoState ?? this.medicalInfoState,
     );
   }
 
@@ -83,6 +99,9 @@ class CompletePatientProfileState extends Equatable {
     chronicIllnesses,
     essentialMedications,
     areHaveAnyAllergies,
+    allergyDetails,
     reportesAndrays,
+    healthProfileState,
+    medicalInfoState,
   ];
 }

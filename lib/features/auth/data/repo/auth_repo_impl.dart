@@ -1,4 +1,6 @@
 import 'package:injectable/injectable.dart';
+import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
+import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/auth/data/data_source/remote_data_source.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
@@ -54,11 +56,24 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Result<VerifyOtpResponse>> verifyOtp(VerifyOtpRequest request) async {
     final response = await remoteDataSource.verifyOtp(request);
+
     switch (response) {
       case Success<VerifyOtpResponse>():
+        _saveToken(
+          response.data.data?.accessToken ?? '',
+          response.data.data?.refreshToken ?? '',
+        );
         return Success(response.data);
       case Failure<VerifyOtpResponse>():
         return Failure(response.errorMessage);
     }
+  }
+
+  void _saveToken(String token, String refreshToken) async {
+    await AppLocalStorage.setSecuredString(key: LocalKeys.token, value: token);
+    await AppLocalStorage.setSecuredString(
+      key: LocalKeys.refreshToken,
+      value: refreshToken,
+    );
   }
 }

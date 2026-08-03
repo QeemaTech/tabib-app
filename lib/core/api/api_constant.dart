@@ -7,4 +7,6 @@ class EndPoint {
   static const String registerDoctor = "/auth/doctor/register";
   static const String sendOtp = "/auth/send-otp";
   static const String verifyOtp = "/auth/verify-otp";
+  static const String patientHealthProfile = "/patient/health-profile";
+  static const String patientMedicalInfo = "/patient/health-profile/medical-info";
 }

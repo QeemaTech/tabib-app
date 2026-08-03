@@ -104,6 +104,9 @@
         "allergyHint": "Write the type of allergy or the name of the medication.",
         "addReports": "Do you want to add reports / rays?",
         "uploadFiles": "Upload files"
+      },
+      "validation": {
+        "fillRequired": "Please fill in all required fields"
       }
     },
     "specialties": {

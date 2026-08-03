@@ -11,7 +11,10 @@ class CustomTextFormField extends StatelessWidget {
     this.padding,
     this.validator,
     this.readOnly = false,
-    this.onTap, this.initialValue, this.style,
+    this.onTap,
+    this.initialValue,
+    this.style,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -24,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
   final void Function()? onTap;
   final String? initialValue;
   final TextStyle? style;
+  final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -50,6 +54,7 @@ class CustomTextFormField extends StatelessWidget {
         },
         initialValue: initialValue,
         onTap: onTap,
+        onChanged: onChanged,
         keyboardType: keyboardType,
         controller: controller,
         style: theme.regular14,

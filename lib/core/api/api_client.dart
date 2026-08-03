@@ -5,6 +5,8 @@ import 'package:tabib_app/core/api/api_constant.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/auth/data/models/response/patient_health_profile_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 
@@ -26,4 +28,24 @@ abstract class ApiClient {
 
   @POST(EndPoint.verifyOtp)
   Future<VerifyOtpResponse> verifyOtp(@Body() VerifyOtpRequest request);
+
+  @MultiPart()
+  @PUT(EndPoint.patientHealthProfile)
+  Future<PatientHealthProfileResponse> updatePatientHealthProfile({
+    @Part(name: 'dateOfBirth') required String dateOfBirth,
+    @Part(name: 'gender') required String gender,
+    @Part(name: 'heightCm') required int heightCm,
+    @Part(name: 'weightKg') required int weightKg,
+    @Part(name: 'files') required List<MultipartFile> files,
+  });
+
+  @MultiPart()
+  @PUT(EndPoint.patientMedicalInfo)
+  Future<PatientMedicalInfoResponse> updatePatientMedicalInfo({
+    @Part(name: 'chronicConditions') required String chronicConditions,
+    @Part(name: 'currentMedications') required String currentMedications,
+    @Part(name: 'hasMedicationAllergy') required bool hasMedicationAllergy,
+    @Part(name: 'allergyDetails') required String allergyDetails,
+    @Part(name: 'files') required List<MultipartFile> files,
+  });
 }
