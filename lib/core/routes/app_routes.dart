@@ -7,6 +7,7 @@ import 'package:tabib_app/features/auth/presentation/view/login_view.dart';
 import 'package:tabib_app/features/auth/presentation/view/role_view.dart';
 import 'package:tabib_app/features/auth/presentation/view/sign_up_view.dart';
 import 'package:tabib_app/features/auth/presentation/view/welcome_view.dart';
+import 'package:tabib_app/features/auth/presentation/view_model/auth_constants.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/doc/complete_doc_profile_cubit.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
@@ -29,22 +30,33 @@ class Routes {
     switch (settings.name) {
       case AppRoutes.welcomeView:
         return MaterialPageRoute(builder: (context) => const WelcomeView());
+      case AppRoutes.roleView:
+        final args = settings.arguments;
+        final mode = args is Map
+            ? (args['mode'] as String? ?? AuthMode.login)
+            : AuthMode.login;
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) =>
+                getIt<AuthViewModel>()..setAuthMode(mode),
+            child: const RoleView(),
+          ),
+        );
       case AppRoutes.loginView:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<AuthViewModel>(),
-            child: const LoginView(),
+          builder: (context) => _authScoped(
+            settings.arguments,
+            const LoginView(),
           ),
         );
       case AppRoutes.signUpView:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<AuthViewModel>(),
-            child: const SignUpView(),
+          builder: (context) => _authScoped(
+            settings.arguments,
+            const SignUpView(),
           ),
         );
-      case AppRoutes.roleView:
-        return MaterialPageRoute(builder: (context) => const RoleView());
       case AppRoutes.mainLayoutView:
         final role = settings.arguments as String? ?? "user";
         return MaterialPageRoute(
@@ -108,5 +120,15 @@ class Routes {
       default:
         return null;
     }
+  }
+
+  static Widget _authScoped(Object? arguments, Widget child) {
+    if (arguments is AuthViewModel) {
+      return BlocProvider.value(value: arguments, child: child);
+    }
+    return BlocProvider(
+      create: (context) => getIt<AuthViewModel>(),
+      child: child,
+    );
   }
 }

@@ -7,6 +7,9 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/app_validator.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
+import 'package:tabib_app/core/utilities/custom_toast.dart';
+import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/auth/presentation/view/otp_bottom_sheet.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/auth_state.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/auth_view_model.dart';
 
@@ -20,67 +23,93 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController phoneController;
+
   @override
   void initState() {
     super.initState();
     phoneController = TextEditingController();
   }
+
   @override
   void dispose() {
     phoneController.dispose();
     super.dispose();
   }
+
+  void _showOtpSheet(BuildContext context) {
+    final authViewModel = context.read<AuthViewModel>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => BlocProvider.value(
+        value: authViewModel,
+        child: const OtpBottomSheet(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            PositionedDirectional(
-              start: 0,
-              top: 60,
-              child: CustomImageView(imagePath: AssetsManager.alba),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 66),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: CustomImageView(imagePath: AssetsManager.logo),
-                    ),
-                    const SizedBox(height: 36),
-                    Text(
-                      "auth.login.welcomeBack".tr(),
-                      style: theme.medium20.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "auth.login.subtitle".tr(),
-                      style: theme.medium16.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.textColor300,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "auth.login.phoneNumber".tr(),
-                      style: theme.bold18.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                   Row(
+    return BlocListener<AuthViewModel, AuthState>(
+      listenWhen: (previous, current) =>
+          previous.loginModel != current.loginModel,
+      listener: (context, state) {
+        if (state.loginModel.isError) {
+          CustomToast.error(context, state.loginModel.errorMessage ?? '');
+        }
+        if (state.loginModel.isLoaded) {
+          _showOtpSheet(context);
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              PositionedDirectional(
+                start: 0,
+                top: 60,
+                child: CustomImageView(imagePath: AssetsManager.alba),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 66),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: CustomImageView(imagePath: AssetsManager.logo),
+                        ),
+                        const SizedBox(height: 36),
+                        Text(
+                          "auth.login.welcomeBack".tr(),
+                          style: theme.medium20.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "auth.login.subtitle".tr(),
+                          style: theme.medium16.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.textColor300,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          "auth.login.phoneNumber".tr(),
+                          style: theme.bold18.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
                           children: [
                             BlocBuilder<AuthViewModel, AuthState>(
                               builder: (context, state) {
@@ -148,21 +177,44 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ],
                         ),
-                    const SizedBox(height: 40),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                      
-                        },
-                        child: Text("auth.login.loginButton".tr()),
-                      ),
+                        const SizedBox(height: 40),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) return;
+                              final authViewModel =
+                                  context.read<AuthViewModel>();
+                              authViewModel.sendOtp(
+                                LoginRequest(
+                                  phone: phoneController.text.trim(),
+                                  countryCode: authViewModel.state.countryCode,
+                                  role: authViewModel.state.role,
+                                ),
+                              );
+                            },
+                            child: BlocBuilder<AuthViewModel, AuthState>(
+                              builder: (context, state) {
+                                return state.loginModel.isLoading
+                                    ? SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
+                                          color: theme.whiteColor,
+                                        ),
+                                      )
+                                    : Text("auth.login.loginButton".tr());
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-        )],
+            ],
+          ),
         ),
       ),
     );

@@ -4,4 +4,7 @@ class EndPoint {
   EndPoint._();
 
   static const String registerPatient = "/auth/patient/register";
+  static const String registerDoctor = "/auth/doctor/register";
+  static const String sendOtp = "/auth/send-otp";
+  static const String verifyOtp = "/auth/verify-otp";
 }

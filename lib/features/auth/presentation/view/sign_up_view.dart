@@ -46,14 +46,21 @@ class _SignUpViewState extends State<SignUpView> {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return BlocListener<AuthViewModel, AuthState>(
+      listenWhen: (previous, current) =>
+          previous.registerModel != current.registerModel,
       listener: (context, state) {
         if (state.registerModel.isError) {
           CustomToast.error(context, state.registerModel.errorMessage ?? '');
         }
         if (state.registerModel.isLoaded) {
+          final authViewModel = context.read<AuthViewModel>();
           showModalBottomSheet(
             context: context,
-            builder: (context) => const OtpBottomSheet(),
+            isScrollControlled: true,
+            builder: (_) => BlocProvider.value(
+              value: authViewModel,
+              child: const OtpBottomSheet(),
+            ),
           );
         }
       },
@@ -213,7 +220,7 @@ class _SignUpViewState extends State<SignUpView> {
                                     authViewModel.state.preferredLanguage,
                                 countryCode: authViewModel.state.countryCode,
                               );
-                              authViewModel.registerPatient(registerRequest);
+                              authViewModel.register(registerRequest);
                             }
                           },
                           child: BlocBuilder<AuthViewModel, AuthState>(

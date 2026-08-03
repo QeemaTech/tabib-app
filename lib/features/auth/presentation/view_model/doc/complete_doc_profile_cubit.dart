@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import '../../../../../core/app_services/image_picker_services.dart';
 part 'complete_doc_profile_state.dart';
 
+@injectable
 class CompleteDocProfileCubit extends Cubit<CompleteDocProfileState> {
   CompleteDocProfileCubit(this._imagePickerServices)
     : super(const CompleteDocProfileState());
