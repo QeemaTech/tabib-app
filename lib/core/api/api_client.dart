@@ -9,6 +9,7 @@ import 'package:tabib_app/features/auth/data/models/response/patient_health_prof
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 
 part 'api_client.g.dart';
@@ -52,4 +53,7 @@ abstract class ApiClient {
 
   @GET(EndPoint.patientHome)
   Future<PatientHomeResponse> getPatientHome();
+
+  @GET(EndPoint.patientDoctorDetails)
+  Future<DoctorDetailsResponse> getPatientDoctorDetails(@Path('id') String id);
 }

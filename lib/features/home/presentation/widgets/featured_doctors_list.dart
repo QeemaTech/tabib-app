@@ -23,7 +23,11 @@ class FeaturedDoctorsList extends StatelessWidget {
         return FeaturedDoctorCard(
           doctor: doctors[index],
           onTap: () {
-            Navigator.pushNamed(context, AppRoutes.doctorDetailsView);
+            Navigator.pushNamed(
+              context,
+              AppRoutes.doctorDetailsView,
+              arguments: doctors[index].id,
+            );
           },
         );
       },

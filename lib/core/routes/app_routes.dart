@@ -14,6 +14,7 @@ import 'package:tabib_app/features/auth/presentation/view_model/patient/complete
 import 'package:tabib_app/features/chat/presentation/views/chat_details_view.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_list_view.dart';
 import 'package:tabib_app/features/home/presentation/views/user/search_view.dart';
+import 'package:tabib_app/features/home/presentation/view_model/doctor_details_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/views/patient_details_view.dart';
 import 'package:tabib_app/features/reservations/presentation/views/create_report_view.dart';
 import '../../features/auth/presentation/view/patient/complete_user_profile_view.dart';
@@ -80,8 +81,14 @@ class Routes {
           builder: (context) => const NotificationView(),
         );
       case AppRoutes.doctorDetailsView:
+        final doctorId = settings.arguments as String? ?? '';
         return MaterialPageRoute(
-          builder: (context) => const DoctorDetailsView(),
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (_) =>
+                getIt<DoctorDetailsViewModel>()..loadDoctorDetails(doctorId),
+            child: const DoctorDetailsView(),
+          ),
         );
       case AppRoutes.chatListView:
         return MaterialPageRoute(builder: (context) => const ChatListView());

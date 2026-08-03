@@ -1,17 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/home/presentation/widgets/details_section.dart';
 
 class DoctorAboutSection extends StatelessWidget {
-  const DoctorAboutSection({super.key});
+  final String bio;
+
+  const DoctorAboutSection({super.key, required this.bio});
 
   @override
   Widget build(BuildContext context) {
+    if (bio.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final theme = context.appTheme;
     return DetailsSection(
       title: 'home.doctorDetails.about'.tr(),
       child: Text(
-        'home.doctorDetails.aboutText'.tr(),
-        style: const TextStyle(height: 1.5),
+        bio,
+        style: theme.regular14.copyWith(
+          color: theme.textColor300,
+          height: 1.5,
+        ),
       ),
     );
   }

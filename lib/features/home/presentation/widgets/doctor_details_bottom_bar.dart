@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
 class DoctorDetailsBottomBar extends StatelessWidget {
-  const DoctorDetailsBottomBar({super.key});
+  final double consultationFee;
+
+  const DoctorDetailsBottomBar({
+    super.key,
+    required this.consultationFee,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class DoctorDetailsBottomBar extends StatelessWidget {
         color: theme.whiteColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: theme.textColor600.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -31,7 +36,7 @@ class DoctorDetailsBottomBar extends StatelessWidget {
                 style: theme.regular12.copyWith(color: theme.textColor200),
               ),
               Text(
-                '500 ${'home.search.currency'.tr()}',
+                '$consultationFee ${'home.search.currency'.tr()}',
                 style: theme.bold18.copyWith(color: theme.primaryColor),
               ),
             ],
@@ -49,10 +54,10 @@ class DoctorDetailsBottomBar extends StatelessWidget {
               ),
               child: Text(
                 'home.doctorDetails.confirm'.tr(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                style: theme.bold18.copyWith(
+                  color: theme.whiteColor,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
