@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/features/home/presentation/widgets/list_of_special_doc.dart';
+import 'package:tabib_app/features/home/presentation/widgets/special_item.dart';
 import 'package:tabib_app/features/home/presentation/widgets/search_bar_widget.dart';
 
 class SpecializationsData {

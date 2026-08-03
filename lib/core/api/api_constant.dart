@@ -9,4 +9,5 @@ class EndPoint {
   static const String verifyOtp = "/auth/verify-otp";
   static const String patientHealthProfile = "/patient/health-profile";
   static const String patientMedicalInfo = "/patient/health-profile/medical-info";
+  static const String patientHome = "/patient/home";
 }

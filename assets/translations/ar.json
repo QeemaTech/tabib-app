@@ -237,7 +237,8 @@
       "more": "المزيد"
     },
     "user": {
-      "fastSpecializations": "التخصصات السريعة"
+      "fastSpecializations": "التخصصات السريعة",
+      "featuredDoctors": "الأطباء المميزون"
     }
   },
   "profile": {
