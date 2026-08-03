@@ -5,6 +5,7 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_state.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_view_model.dart';
+import 'package:tabib_app/features/home/presentation/widgets/available_appointment_list.dart';
 import 'package:tabib_app/features/home/presentation/widgets/doctor_about_section.dart';
 import 'package:tabib_app/features/home/presentation/widgets/doctor_certificates_section.dart';
 import 'package:tabib_app/features/home/presentation/widgets/doctor_details_bottom_bar.dart';
@@ -81,8 +82,14 @@ class DoctorDetailsView extends StatelessWidget {
                 const SizedBox(height: 16),
                 DoctorCertificatesSection(certificates: doctor.certificates),
                 const SizedBox(height: 16),
-                const CalendarSection(),
+                CalendarSection(
+                  selectedDay: state.selectedDate,
+                  onDaySelected: (day) {
+                    context.read<DoctorDetailsViewModel>().selectDate(day);
+                  },
+                ),
                 const SizedBox(height: 20),
+                const AvailableAppointmentList(),
               ],
             ),
           );

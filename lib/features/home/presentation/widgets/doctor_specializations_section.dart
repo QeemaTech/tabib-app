@@ -34,7 +34,7 @@ class DoctorSpecializationsSection extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.primaryColor300,
+                  color:Color(0xffE9EBF1),
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(

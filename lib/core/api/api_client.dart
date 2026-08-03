@@ -9,6 +9,7 @@ import 'package:tabib_app/features/auth/data/models/response/patient_health_prof
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 
@@ -56,4 +57,10 @@ abstract class ApiClient {
 
   @GET(EndPoint.patientDoctorDetails)
   Future<DoctorDetailsResponse> getPatientDoctorDetails(@Path('id') String id);
+
+  @GET(EndPoint.patientDoctorAvailability)
+  Future<DoctorAvailabilityResponse> getPatientDoctorAvailability({
+    @Path('id') required String id,
+    @Query('date') required String date,
+  });
 }

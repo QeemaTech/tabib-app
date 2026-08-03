@@ -4,36 +4,67 @@ import 'package:tabib_app/features/home/presentation/widgets/details_section.dar
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarSection extends StatefulWidget {
-  const CalendarSection({super.key, this.calendarFormat});
-  final CalendarFormat ?calendarFormat;
+  const CalendarSection({
+    super.key,
+    this.calendarFormat,
+    this.selectedDay,
+    this.onDaySelected,
+  });
+
+  final CalendarFormat? calendarFormat;
+  final DateTime? selectedDay;
+  final ValueChanged<DateTime>? onDaySelected;
+
   @override
   State<CalendarSection> createState() => _CalendarSectionState();
 }
 
 class _CalendarSectionState extends State<CalendarSection> {
-  var _selectedDay = DateTime.now();
+  late DateTime _selectedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = widget.selectedDay ?? DateTime.now();
+  }
+
+  @override
+  void didUpdateWidget(covariant CalendarSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedDay != null &&
+        !isSameDay(widget.selectedDay, _selectedDay)) {
+      _selectedDay = widget.selectedDay!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final selectedDay = widget.selectedDay ?? _selectedDay;
+
     return DetailsSection(
       title: 'home.doctorDetails.selectDay'.tr(),
       child: TableCalendar(
         locale: context.locale.languageCode,
         firstDay: DateTime.now(),
-        calendarFormat: CalendarFormat.week ,
+        calendarFormat: widget.calendarFormat ?? CalendarFormat.week,
         lastDay: DateTime.utc(2030, 3, 14),
         headerStyle: const HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
         ),
         selectedDayPredicate: (day) {
-          return isSameDay(_selectedDay, day);
+          return isSameDay(selectedDay, day);
         },
-        onDaySelected: (selectedDay, focusedDay) {
-          setState(() {
-            _selectedDay = selectedDay;
-          });
+        onDaySelected: (day, focusedDay) {
+          if (widget.onDaySelected != null) {
+            widget.onDaySelected!(day);
+          } else {
+            setState(() {
+              _selectedDay = day;
+            });
+          }
         },
-        focusedDay: _selectedDay,
+        focusedDay: selectedDay,
       ),
     );
   }

@@ -206,6 +206,10 @@
       "certificateFellowship": "Fellowship in Cardiovascular Diseases",
       "reviews": "Patient Reviews",
       "selectDay": "Select Day",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "available": "Available",
+      "unavailable": "Unavailable",
       "price": "Price",
       "book": "Book Appointment",
       "confirm": "Confirm"

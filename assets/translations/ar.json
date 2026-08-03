@@ -206,6 +206,10 @@
       "certificateFellowship": "زمالة في أمراض القلب والأوعية الدموية",
       "reviews": "آراء المرضى",
       "selectDay": "اختر اليوم",
+      "startTime": "وقت البداية",
+      "endTime": "وقت النهاية",
+      "available": "متاح",
+      "unavailable": "غير متاح",
       "price": "السعر",
       "book": "حجز موعد",
       "confirm": "تأكيد"
