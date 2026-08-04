@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/home/domain/entities/availability_slot_entity.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_state.dart';
@@ -21,12 +22,25 @@ class AvailableAppointmentList extends StatelessWidget {
         final availabilityState = state.availabilityState;
 
         if (availabilityState.isLoading || availabilityState.isInitial) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: CircularProgressIndicator(color: theme.primaryColor),
-            ),
-          );
+           return Skeletonizer(
+            enabled: true,
+             child: ListView.separated(
+                       shrinkWrap: true,
+                       physics: const NeverScrollableScrollPhysics(),
+                       itemCount: 10,
+                       separatorBuilder: (_, _) => const SizedBox(height: 8),
+                       itemBuilder: (context, index) {
+                      
+              return AvailableAppointmentCard(
+                startTime: '10:00',
+                endTime: '11:00',
+                isAvailable: true,
+                isSelected: false,
+                
+              );
+                       },
+                     ),
+           );
         }
 
         if (availabilityState.isError) {

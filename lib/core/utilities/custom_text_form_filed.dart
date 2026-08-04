@@ -15,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     this.initialValue,
     this.style,
     this.onChanged,
+    this.maxLines,
   });
 
   final TextEditingController? controller;
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? initialValue;
   final TextStyle? style;
   final void Function(String)? onChanged;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -49,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
       child: TextFormField(
         readOnly: readOnly,
         validator: validator,
+        maxLines: maxLines,
         onTapUpOutside: (event) {
           FocusScope.of(context).unfocus();
         },

@@ -212,7 +212,16 @@
       "unavailable": "غير متاح",
       "price": "السعر",
       "book": "حجز موعد",
-      "confirm": "تأكيد"
+      "confirm": "تأكيد",
+      "selectConsultationType": "اختر نوع الاستشارة",
+      "notes": "ملاحظات",
+      "notesHint": "ملاحظات",
+      "consultationChat": "محادثة",
+      "consultationVideo": "فيديو",
+      "consultationCall": "مكالمة",
+      "bookSuccess": "تم حجز الموعد بنجاح",
+      "selectSlotRequired": "يرجى اختيار موعد متاح",
+      "selectConsultationRequired": "يرجى اختيار نوع الاستشارة"
     },
     "appointmentDetails": {
       "title": "تفاصيل الموعد",

@@ -9,6 +9,8 @@ import 'package:tabib_app/features/auth/data/models/response/patient_health_prof
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
+import 'package:tabib_app/features/home/data/models/response/book_appointment_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
@@ -63,4 +65,9 @@ abstract class ApiClient {
     @Path('id') required String id,
     @Query('date') required String date,
   });
+
+  @POST(EndPoint.patientAppointments)
+  Future<BookAppointmentResponse> bookAppointment(
+    @Body() BookAppointmentRequest request,
+  );
 }

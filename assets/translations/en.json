@@ -212,7 +212,16 @@
       "unavailable": "Unavailable",
       "price": "Price",
       "book": "Book Appointment",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "selectConsultationType": "Select Consultation Type",
+      "notes": "Notes",
+      "notesHint": "Notes",
+      "consultationChat": "Chat",
+      "consultationVideo": "Video",
+      "consultationCall": "Call",
+      "bookSuccess": "Appointment booked successfully",
+      "selectSlotRequired": "Please select an available time slot",
+      "selectConsultationRequired": "Please select a consultation type"
     },
     "appointmentDetails": {
       "title": "Appointment Details",

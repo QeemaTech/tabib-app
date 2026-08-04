@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
+import 'package:tabib_app/features/home/domain/entities/appointment_entity.dart';
 import 'package:tabib_app/features/home/domain/entities/availability_slot_entity.dart';
 import 'package:tabib_app/features/home/domain/entities/doctor_availability_entity.dart';
 import 'package:tabib_app/features/home/domain/entities/doctor_details_entity.dart';
@@ -78,6 +80,62 @@ class DoctorDetailsViewModel extends Cubit<DoctorDetailsState> {
   void selectSlot(AvailabilitySlotEntity slot) {
     if (!slot.available) return;
     emit(state.copyWith(selectedSlot: slot));
+  }
+
+  void selectConsultationType(String type) {
+    emit(state.copyWith(consultationType: type));
+  }
+
+  Future<void> bookAppointment() async {
+    final doctorId = _doctorId;
+    final slot = state.selectedSlot;
+    final consultationType = state.consultationType;
+
+    if (consultationType == null || consultationType.isEmpty) {
+      emit(
+        state.copyWith(
+          bookAppointmentState: BaseState.error(
+            'home.doctorDetails.selectConsultationRequired'.tr(),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (slot == null) {
+      emit(
+        state.copyWith(
+          bookAppointmentState: BaseState.error(
+            'home.doctorDetails.selectSlotRequired'.tr(),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (doctorId == null) return;
+
+    emit(state.copyWith(bookAppointmentState: BaseState.loading()));
+    final result = await doctorDetailsRepo.bookAppointment(
+      doctorId: doctorId,
+      date: _formatDate(state.selectedDate),
+      startTime: slot.startTime,
+      consultationType: consultationType,
+    );
+    switch (result) {
+      case Success<AppointmentEntity>():
+        emit(
+          state.copyWith(
+            bookAppointmentState: BaseState.loaded(result.data),
+          ),
+        );
+      case Failure<AppointmentEntity>():
+        emit(
+          state.copyWith(
+            bookAppointmentState: BaseState.error(result.errorMessage),
+          ),
+        );
+    }
   }
 
   Future<void> retry() async {

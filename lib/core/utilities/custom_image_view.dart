@@ -80,7 +80,7 @@ class CustomImageView extends StatelessWidget {
           return SizedBox(
             height: height,
             width: width,
-            child: SvgPicture.asset(
+          child: SvgPicture.asset(
               imagePath!,
               height: height,
               width: width,
