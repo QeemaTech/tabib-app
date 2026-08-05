@@ -322,7 +322,20 @@
       "earnings": "الأرباح",
       "patients": "المرضى",
       "ratings": "التقييمات",
-      "orthopedicConsultant": "استشاري جراحة العظام والطب الرياضي"
+      "orthopedicConsultant": "استشاري جراحة العظام والطب الرياضي",
+      "professionalTitle": "اللقب المهني",
+      "mainSpecialty": "التخصص الرئيسي",
+      "subSpecialties": "التخصصات الفرعية",
+      "experienceYears": "سنوات الخبرة",
+      "consultationFee": "رسوم الاستشارة",
+      "verificationStatus": "حالة التحقق",
+      "rating": "التقييم",
+      "clinic": "العيادة",
+      "clinicAddress": "عنوان العيادة",
+      "bio": "نبذة",
+      "statusPending": "قيد المراجعة",
+      "statusVerified": "موثق",
+      "statusRejected": "مرفوض"
     }
   },
   "notifications": {

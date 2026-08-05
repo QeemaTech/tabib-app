@@ -322,7 +322,20 @@
       "earnings": "Earnings",
       "patients": "Patients",
       "ratings": "Ratings",
-      "orthopedicConsultant": "Orthopedic & Sports Medicine Consultant"
+      "orthopedicConsultant": "Orthopedic & Sports Medicine Consultant",
+      "professionalTitle": "Professional title",
+      "mainSpecialty": "Main specialty",
+      "subSpecialties": "Sub-specialties",
+      "experienceYears": "Years of experience",
+      "consultationFee": "Consultation fee",
+      "verificationStatus": "Verification status",
+      "rating": "Rating",
+      "clinic": "Clinic",
+      "clinicAddress": "Clinic address",
+      "bio": "Bio",
+      "statusPending": "Pending",
+      "statusVerified": "Verified",
+      "statusRejected": "Rejected"
     }
   },
   "notifications": {

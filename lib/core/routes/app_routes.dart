@@ -26,6 +26,7 @@ import '../../features/layout/bottom_nav_bar.dart';
 import '../../features/layout/view_model/layout_view_model.dart';
 import '../../features/notification/presentation/views/notification_view.dart';
 import '../../features/patients/presentation/views/patient_appointment_details_view.dart';
+import '../../features/profile/presentation/views/doc/doctor_personal_info_view.dart';
 import '../../features/profile/presentation/views/user/patient_personal_info_view.dart';
 import '../../features/records/presentation/views/prescription_details_view.dart';
 
@@ -127,6 +128,10 @@ class Routes {
       case AppRoutes.patientPersonalInfoView:
         return MaterialPageRoute(
           builder: (context) => const PatientPersonalInfoView(),
+        );
+      case AppRoutes.doctorPersonalInfoView:
+        return MaterialPageRoute(
+          builder: (context) => const DoctorPersonalInfoView(),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';
