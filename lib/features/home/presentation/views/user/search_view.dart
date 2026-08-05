@@ -1,12 +1,36 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/features/home/presentation/views/user/appointment_details_view.dart';
+import 'package:tabib_app/features/home/domain/entities/search_doctor_entity.dart';
+import 'package:tabib_app/features/home/presentation/view_model/search_doctors_state.dart';
+import 'package:tabib_app/features/home/presentation/view_model/search_doctors_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/doctor_search_card.dart';
-import 'package:tabib_app/features/home/presentation/widgets/search_bar_widget.dart';
+import 'package:tabib_app/features/home/presentation/widgets/search_doctor_result_card.dart';
+import 'package:tabib_app/features/home/presentation/widgets/search_view_header.dart';
 
-class SearchView extends StatelessWidget {
+class SearchView extends StatefulWidget {
   const SearchView({super.key});
+
+  @override
+  State<SearchView> createState() => _SearchViewState();
+}
+
+class _SearchViewState extends State<SearchView> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,60 +50,137 @@ class SearchView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: theme.whiteColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: theme.textColor100.withOpacity(0.5)),
-                  ),
-                  child: Icon(Icons.tune, color: theme.primaryColor, size: 24),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: SearchBarWidget(
-                    hintText: 'home.search.hint'.tr(),
-                  ),
-                ),
-              ],
-            ),
+          SearchViewHeader(
+            controller: _searchController,
+            onChanged: context.read<SearchDoctorsViewModel>().onSearchChanged,
           ),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(20),
-              itemCount: 3,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                return DoctorSearchCard(
-                  name: 'appointments.drName'.tr(),
-                  specialty: 'appointments.physiotherapy'.tr(),
-                  rating: 4.8,
-                  appointmentsCount: '+100',
-                  specializations: [
-                    'appointments.injuryRehabilitation'.tr(),
-                    'appointments.motorRehabilitation'.tr(),
-                  ],
-                  date: 'Tuesday 24.12.2025',
-                  time: '5:00 PM',
-                  price: '120',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AppointmentDetailsView(),
-                      ),
-                    );
-                  },
+            child: BlocBuilder<SearchDoctorsViewModel, SearchDoctorsState>(
+              buildWhen: (previous, current) =>
+                  previous.searchState != current.searchState,
+              builder: (context, state) {
+                final searchState = state.searchState;
+                if (searchState.isLoading || searchState.isInitial) {
+                  return const _SearchLoadingWidget();
+                }
+                if (searchState.isError) {
+                  return _SearchErrorWidget(
+                    message: searchState.errorMessage ?? '',
+                  );
+                }
+                return _SearchSuccessWidget(
+                  doctors: searchState.data?.doctors ?? const [],
                 );
               },
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SearchLoadingWidget extends StatelessWidget {
+  const _SearchLoadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: ListView.separated(
+        padding: const EdgeInsets.all(20),
+        itemCount: 3,
+        separatorBuilder: (_, _) => const SizedBox(height: 16),
+        itemBuilder: (_, _) => const DoctorSearchCard(
+          name: 'Doctor Name',
+          specialty: 'Specialty',
+          rating: 4.5,
+          appointmentsCount: '20',
+          specializations: ['Specialty One', 'Specialty Two'],
+          date: 'Clinic',
+          time: 'City',
+          price: '15',
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchErrorWidget extends StatelessWidget {
+  final String message;
+
+  const _SearchErrorWidget({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return RefreshIndicator(
+      color: theme.primaryColor,
+      onRefresh: () => context.read<SearchDoctorsViewModel>().refresh(),
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: theme.regular14.copyWith(color: theme.textColor300),
+                  ),
+                  IconButton(
+                    onPressed: () =>
+                        context.read<SearchDoctorsViewModel>().retry(),
+                    icon: Icon(Icons.refresh, color: theme.primaryColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchSuccessWidget extends StatelessWidget {
+  final List<SearchDoctorEntity> doctors;
+
+  const _SearchSuccessWidget({required this.doctors});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return RefreshIndicator(
+      color: theme.primaryColor,
+      onRefresh: () => context.read<SearchDoctorsViewModel>().refresh(),
+      child: doctors.isEmpty
+          ? CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Text(
+                      'home.search.empty'.tr(),
+                      style:
+                          theme.regular14.copyWith(color: theme.textColor300),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(20),
+              itemCount: doctors.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 16),
+              itemBuilder: (context, index) =>
+                  SearchDoctorResultCard(doctor: doctors[index]),
+            ),
     );
   }
 }

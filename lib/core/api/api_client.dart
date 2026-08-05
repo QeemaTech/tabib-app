@@ -17,6 +17,7 @@ import 'package:tabib_app/features/home/data/models/response/book_appointment_re
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
+import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
 import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
 import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
@@ -62,6 +63,14 @@ abstract class ApiClient {
 
   @GET(EndPoint.patientHome)
   Future<PatientHomeResponse> getPatientHome();
+
+  @GET(EndPoint.patientDoctors)
+  Future<SearchDoctorsResponse> searchDoctors({
+    @Query('search') String? search,
+    @Query('specialty') String? specialty,
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
 
   @GET(EndPoint.patientDoctorDetails)
   Future<DoctorDetailsResponse> getPatientDoctorDetails(@Path('id') String id);

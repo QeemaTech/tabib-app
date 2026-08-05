@@ -9,11 +9,18 @@ class SearchBarWidget extends StatelessWidget {
   final String? hintText;
   final void Function()? onTap;
   final bool? readOnly;
+  final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+
   const SearchBarWidget({
     super.key,
     this.hintText,
     this.onTap,
     this.readOnly,
+    this.onChanged,
+    this.controller,
+    this.focusNode,
   });
 
   @override
@@ -21,13 +28,17 @@ class SearchBarWidget extends StatelessWidget {
     final theme = context.appTheme;
 
     return TextField(
+      controller: controller,
+      focusNode: focusNode,
       readOnly: readOnly ?? false,
+      onChanged: onChanged,
       onTapUpOutside: (event) {
         FocusScope.of(context).unfocus();
       },
       onTap: onTap,
+      style: theme.regular14.copyWith(color: theme.textColor600),
       decoration: InputDecoration(
-        hintText: hintText ?? "home.search.hint".tr(),
+        hintText: hintText ?? 'home.search.hint'.tr(),
         hintStyle: theme.regular14.copyWith(color: theme.textColor200),
         prefixIcon: CustomImageView(
           imagePath: AssetsManager.search,
@@ -42,7 +53,7 @@ class SearchBarWidget extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(100.0),
           borderSide: const BorderSide(
-            color: Color(0xFFE5E9F0), // Subtle light gray border
+            color: Color(0xFFE5E9F0),
             width: 1.0,
           ),
         ),

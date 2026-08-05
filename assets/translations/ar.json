@@ -215,7 +215,8 @@
       "specHint": "ابحث عن تخصص",
       "specializations": "التخصصات",
       "appointments": "موعد",
-      "currency": "ريال"
+      "currency": "ريال",
+      "empty": "لا يوجد أطباء"
     },
     "doctorDetails": {
       "title": "تفاصيل الطبيب",

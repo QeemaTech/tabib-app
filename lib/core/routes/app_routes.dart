@@ -15,6 +15,7 @@ import 'package:tabib_app/features/chat/presentation/views/chat_details_view.dar
 import 'package:tabib_app/features/chat/presentation/views/chat_list_view.dart';
 import 'package:tabib_app/features/home/presentation/views/user/search_view.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_view_model.dart';
+import 'package:tabib_app/features/home/presentation/view_model/search_doctors_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/views/patient_details_view.dart';
 import 'package:tabib_app/features/reservations/presentation/views/create_report_view.dart';
 import '../../features/auth/presentation/view/patient/complete_user_profile_view.dart';
@@ -76,7 +77,17 @@ class Routes {
           builder: (context) => const SeeMoreSpecializationView(),
         );
       case AppRoutes.searchView:
-        return MaterialPageRoute(builder: (context) => const SearchView());
+        final args = settings.arguments;
+        final specialty = args is String
+            ? args
+            : (args is Map ? args['specialty'] as String? : null);
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) =>
+                getIt<SearchDoctorsViewModel>()..init(specialty: specialty),
+            child: const SearchView(),
+          ),
+        );
       case AppRoutes.notificationView:
         return MaterialPageRoute(
           builder: (context) => const NotificationView(),

@@ -43,7 +43,7 @@ class AssetsManager {
 
   static const String wallet = "$svgBase/wallet.svg";
   static const String walletActive = "$svgBase/active_wallet.svg";
-  static const String walletInactive = "$svgBase/inactive_wallet.svg";
+  static const String walletInactive = "$svgBase/in_active_wallet.svg";
 
   static const String ads = "$imageBase/ads.png";
   static const String skinDoc = "$imageBase/skin_doc.png";

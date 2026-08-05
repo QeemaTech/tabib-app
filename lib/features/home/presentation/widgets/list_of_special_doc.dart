@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
+import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/home/domain/entities/home_specialty_entity.dart';
 import 'package:tabib_app/features/home/presentation/widgets/special_item.dart';
 
@@ -27,11 +28,21 @@ class ListOfSpecialDoc extends StatelessWidget {
           final iconUrl = specialty.iconUrl;
           return Padding(
             padding: const EdgeInsetsDirectional.only(end: 12),
-            child: SpecialItem(
-              title: specialty.localizedName(languageCode),
-              image: (iconUrl != null && iconUrl.isNotEmpty)
-                  ? iconUrl
-                  : AssetsManager.skinDoc,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.searchView,
+                  arguments: specialty.id,
+                );
+              },
+              child: SpecialItem(
+                title: specialty.localizedName(languageCode),
+                image: (iconUrl != null && iconUrl.isNotEmpty)
+                    ? iconUrl
+                    : AssetsManager.skinDoc,
+              ),
             ),
           );
         },
