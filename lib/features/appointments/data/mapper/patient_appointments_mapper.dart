@@ -1,0 +1,48 @@
+import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
+import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_entity.dart';
+
+extension PatientAppointmentsResponseMapper on PatientAppointmentsResponse {
+  List<PatientAppointmentEntity> toEntityList() {
+    return data?.map((item) => item.toEntity()).toList() ?? const [];
+  }
+}
+
+extension PatientAppointmentItemResponseMapper
+    on PatientAppointmentItemResponse {
+  PatientAppointmentEntity toEntity() {
+    return PatientAppointmentEntity(
+      id: id ?? '',
+      status: status ?? '',
+      date: date ?? '',
+      startTime: startTime ?? '',
+      endTime: endTime ?? '',
+      consultationType: consultationType ?? '',
+      notes: notes ?? '',
+      cancelReason: cancelReason ?? '',
+      createdAt: createdAt ?? '',
+      doctor: doctor?.toEntity() ??
+          const PatientAppointmentDoctorEntity(
+            id: '',
+            fullNameAr: '',
+            fullNameEn: '',
+            avatarUrl: '',
+            consultationFee: 0,
+            specialties: [],
+          ),
+    );
+  }
+}
+
+extension PatientAppointmentDoctorResponseMapper
+    on PatientAppointmentDoctorResponse {
+  PatientAppointmentDoctorEntity toEntity() {
+    return PatientAppointmentDoctorEntity(
+      id: id ?? '',
+      fullNameAr: fullNameAr ?? '',
+      fullNameEn: fullNameEn ?? '',
+      avatarUrl: avatarUrl ?? '',
+      consultationFee: consultationFee?.toDouble() ?? 0,
+      specialties: specialties ?? const [],
+    );
+  }
+}

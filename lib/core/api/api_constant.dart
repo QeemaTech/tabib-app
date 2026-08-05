@@ -14,4 +14,6 @@ class EndPoint {
   static const String patientDoctorAvailability =
       "/patient/doctors/{id}/availability";
   static const String patientAppointments = "/patient/appointments";
+  static const String patientCancelAppointment =
+      "/patient/appointments/{id}/cancel";
 }

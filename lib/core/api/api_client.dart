@@ -9,6 +9,9 @@ import 'package:tabib_app/features/auth/data/models/response/patient_health_prof
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
+import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
 import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
 import 'package:tabib_app/features/home/data/models/response/book_appointment_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
@@ -69,5 +72,14 @@ abstract class ApiClient {
   @POST(EndPoint.patientAppointments)
   Future<BookAppointmentResponse> bookAppointment(
     @Body() BookAppointmentRequest request,
+  );
+
+  @GET(EndPoint.patientAppointments)
+  Future<PatientAppointmentsResponse> getPatientAppointments();
+
+  @PATCH(EndPoint.patientCancelAppointment)
+  Future<CancelAppointmentResponse> cancelAppointment(
+    @Path('id') String id,
+    @Body() CancelAppointmentRequest request,
   );
 }

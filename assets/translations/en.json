@@ -158,7 +158,19 @@
       "completed": "Completed",
       "cancel": "Cancel"
     },
-    "addAppointment": "Add Appointment"
+    "addAppointment": "Add Appointment",
+    "empty": "No appointments yet",
+    "statusConfirmed": "Confirmed",
+    "statusInProgress": "In Progress",
+    "statusCompleted": "Completed",
+    "statusPending": "Pending",
+    "statusCancelled": "Cancelled",
+    "cancelAppointment": "Cancel Appointment",
+    "cancelReasonTitle": "Cancel appointment",
+    "cancelReasonHint": "Enter cancellation reason",
+    "cancelConfirm": "Confirm",
+    "cancelSuccess": "Appointment cancelled successfully",
+    "cancelReasonRequired": "Please enter a cancellation reason"
   },
   "records": {
     "title": "Medical Records",

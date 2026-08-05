@@ -158,7 +158,19 @@
       "completed": "مكتمل",
       "cancel": "ملغى"
     },
-    "addAppointment": "إضافة موعد"
+    "addAppointment": "إضافة موعد",
+    "empty": "لا توجد مواعيد بعد",
+    "statusConfirmed": "مؤكد",
+    "statusInProgress": "جاري",
+    "statusCompleted": "مكتمل",
+    "statusPending": "قيد الانتظار",
+    "statusCancelled": "ملغى",
+    "cancelAppointment": "إلغاء الموعد",
+    "cancelReasonTitle": "إلغاء الموعد",
+    "cancelReasonHint": "أدخل سبب الإلغاء",
+    "cancelConfirm": "تأكيد",
+    "cancelSuccess": "تم إلغاء الموعد بنجاح",
+    "cancelReasonRequired": "يرجى إدخال سبب الإلغاء"
   },
   "records": {
     "title": "السجلات الطبية",
