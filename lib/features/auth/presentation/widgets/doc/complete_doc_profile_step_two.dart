@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
@@ -14,6 +15,7 @@ class CompleteDocProfileStepTwo extends StatelessWidget {
   const CompleteDocProfileStepTwo({super.key});
 
   void _goToHome(BuildContext context) {
+    CachedUserRole.uiRole = 'doctor';
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.mainLayoutView,
       (route) => false,

@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
@@ -97,7 +98,23 @@ class AuthViewModel extends Cubit<AuthState> {
             value: refreshToken,
           );
         }
-        emit(state.copyWith(verifyOtpModel: BaseState.loaded(result.data)));
+
+        final apiRole = result.data.data?.user?.role;
+        final resolvedApiRole =
+            (apiRole != null && apiRole.isNotEmpty) ? apiRole : state.role;
+        final uiRole = AuthRole.toUi(resolvedApiRole);
+        CachedUserRole.uiRole = uiRole;
+        await AppLocalStorage.setSecuredString(
+          key: LocalKeys.role,
+          value: uiRole,
+        );
+
+        emit(
+          state.copyWith(
+            verifyOtpModel: BaseState.loaded(result.data),
+            role: resolvedApiRole,
+          ),
+        );
       case Failure<VerifyOtpResponse>():
         emit(
           state.copyWith(verifyOtpModel: BaseState.error(result.errorMessage)),

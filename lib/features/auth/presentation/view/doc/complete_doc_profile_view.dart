@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import '../../widgets/doc/complete_doc_profile_step_one.dart';
@@ -28,6 +29,7 @@ class _CompleteProfileViewState extends State<CompleteDocProfileView> {
   }
 
   void _goToHome() {
+    CachedUserRole.uiRole = 'doctor';
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.mainLayoutView,
       (route) => false,

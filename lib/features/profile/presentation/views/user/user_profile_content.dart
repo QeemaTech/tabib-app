@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_state.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_view_model.dart';
@@ -59,6 +60,7 @@ class UserProfileContent extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 AppLocalStorage.clearAllSecuredData();
+                CachedUserRole.uiRole = 'user';
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   AppRoutes.welcomeView,
                   (route) => false,

@@ -5,10 +5,15 @@ class AuthRole {
   static const String doctor = 'DOCTOR';
 
   static String fromUi(String uiRole) =>
-      uiRole == 'doctor' ? doctor : patient;
+      uiRole == 'doctor' || uiRole == 'doc' ? doctor : patient;
 
-  static String toUi(String apiRole) =>
-      apiRole == doctor ? 'doctor' : 'user';
+  static String toUi(String apiRole) {
+    final normalized = apiRole.trim().toUpperCase();
+    if (normalized == doctor || normalized == 'DOC') {
+      return 'doctor';
+    }
+    return 'user';
+  }
 }
 
 class AuthMode {

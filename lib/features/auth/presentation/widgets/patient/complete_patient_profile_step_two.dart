@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
@@ -9,7 +10,6 @@ import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_state.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/custom_radio_button.dart';
-import 'package:tabib_app/features/auth/presentation/widgets/drop_down_menu.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/uploads_widget.dart';
 
 class CompletepatientProfileStepTwo extends StatefulWidget {
@@ -52,6 +52,7 @@ class _CompletepatientProfileStepTwoState
           previous.medicalInfoState != current.medicalInfoState,
       listener: (context, state) {
         if (state.medicalInfoState.isLoaded) {
+          CachedUserRole.uiRole = 'user';
           Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.mainLayoutView,
             (route) => false,

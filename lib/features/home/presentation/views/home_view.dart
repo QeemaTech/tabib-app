@@ -12,18 +12,18 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUser = role == 'user';
+    final isDoctor = role == 'doctor' || role == 'doc';
 
     return CustomScrollView(
       slivers: [
         const AppBarSliverSection(),
         SliverFillRemaining(
-          child: isUser
-              ? BlocProvider(
+          child: isDoctor
+              ? const DocContent()
+              : BlocProvider(
                   create: (_) => getIt<PatientHomeViewModel>()..loadHome(),
                   child: const UserContent(),
-                )
-              : const DocContent(),
+                ),
         ),
       ],
     );

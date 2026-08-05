@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/auth/presentation/view/doc/complete_doc_profile_view.dart';
@@ -61,7 +62,12 @@ class Routes {
           ),
         );
       case AppRoutes.mainLayoutView:
-        final role = settings.arguments as String? ?? "user";
+        final argsRole = settings.arguments is String
+            ? settings.arguments as String
+            : null;
+        final role = (argsRole != null && argsRole.isNotEmpty)
+            ? argsRole
+            : CachedUserRole.uiRole;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => getIt<LayoutViewModel>(),

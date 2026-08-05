@@ -37,21 +37,21 @@ class RequestReviewDocCard extends StatelessWidget {
       ),
       child: Column(
         spacing: 16,
-        children: [
-          Row(
-            spacing: 10,
-            children: [
-              CircleAvatar(radius: 25),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 2,
-                children: [
-                  Text(
-                    "A. Marwa Al-Sudani",
-                    style: theme.bold18.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: theme.primaryColor500,
+          children: [
+            Row(
+              spacing: 10,
+              children: [
+                
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 2,
+                  children: [
+                    Text(
+                      "A. Marwa Al-Sudani",
+                      style: theme.bold18.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: theme.primaryColor500,
                       fontSize: 14,
                     ),
                   ),
@@ -78,7 +78,7 @@ class RequestReviewDocCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              
               CustomImageView(imagePath: AssetsManager.edit),
             ],
           ),

@@ -24,6 +24,10 @@ import '../../features/appointments/domain/repo/appointments_repo.dart'
     as _i201;
 import '../../features/appointments/presentation/view_model/appointments_view_model.dart'
     as _i486;
+import '../../features/auth/data/data_source/doctor_onboarding_data_source.dart'
+    as _i577;
+import '../../features/auth/data/data_source/doctor_onboarding_data_source_impl.dart'
+    as _i651;
 import '../../features/auth/data/data_source/patient_health_profile_data_source.dart'
     as _i659;
 import '../../features/auth/data/data_source/patient_health_profile_data_source_impl.dart'
@@ -32,9 +36,12 @@ import '../../features/auth/data/data_source/remote_data_source.dart' as _i217;
 import '../../features/auth/data/data_source/remote_data_source_impl.dart'
     as _i52;
 import '../../features/auth/data/repo/auth_repo_impl.dart' as _i984;
+import '../../features/auth/data/repo/doctor_onboarding_repo_impl.dart'
+    as _i291;
 import '../../features/auth/data/repo/patient_health_profile_repo_impl.dart'
     as _i49;
 import '../../features/auth/domain/repo/auth_repo.dart' as _i170;
+import '../../features/auth/domain/repo/doctor_onboarding_repo.dart' as _i313;
 import '../../features/auth/domain/repo/patient_health_profile_repo.dart'
     as _i541;
 import '../../features/auth/presentation/view_model/auth_view_model.dart'
@@ -116,6 +123,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i275.AppointmentsDataSource>(
       () => _i47.AppointmentsDataSourceImpl(gh<_i277.ApiClient>()),
     );
+    gh.lazySingleton<_i577.DoctorOnboardingDataSource>(
+      () => _i651.DoctorOnboardingDataSourceImpl(gh<_i277.ApiClient>()),
+    );
     gh.lazySingleton<_i862.PatientHomeDataSource>(
       () => _i443.PatientHomeDataSourceImpl(gh<_i277.ApiClient>()),
     );
@@ -129,9 +139,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i311.PatientProfileDataSource>(
       () => _i762.PatientProfileDataSourceImpl(gh<_i277.ApiClient>()),
-    );
-    gh.factory<_i380.CompleteDocProfileCubit>(
-      () => _i380.CompleteDocProfileCubit(gh<_i772.ImagePickerServices>()),
     );
     gh.lazySingleton<_i407.PatientProfileRepo>(
       () => _i544.PatientProfileRepoImpl(gh<_i311.PatientProfileDataSource>()),
@@ -167,6 +174,17 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i170.AuthRepo>(
       () => _i984.AuthRepoImpl(gh<_i217.RemoteDataSource>()),
+    );
+    gh.lazySingleton<_i313.DoctorOnboardingRepo>(
+      () => _i291.DoctorOnboardingRepoImpl(
+        gh<_i577.DoctorOnboardingDataSource>(),
+      ),
+    );
+    gh.factory<_i380.CompleteDocProfileCubit>(
+      () => _i380.CompleteDocProfileCubit(
+        gh<_i772.ImagePickerServices>(),
+        gh<_i313.DoctorOnboardingRepo>(),
+      ),
     );
     gh.factory<_i53.SearchDoctorsViewModel>(
       () => _i53.SearchDoctorsViewModel(

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_state.dart';
@@ -45,6 +46,7 @@ class _CompleteProfileViewState extends State<CompleteUserProfileView> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      CachedUserRole.uiRole = 'user';
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         AppRoutes.mainLayoutView,
                         (route) => false,
