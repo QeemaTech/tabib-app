@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_state.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_view_model.dart';
@@ -22,8 +23,7 @@ class UserProfileContent extends StatelessWidget {
             final profileState = state.profileState;
             return UserProfileHeader(
               profile: profileState.data,
-              isLoading:
-                  profileState.isLoading || profileState.isInitial,
+              isLoading: profileState.isLoading || profileState.isInitial,
             );
           },
         ),
@@ -36,9 +36,9 @@ class UserProfileContent extends StatelessWidget {
               subtitle: 'profile.personalSubtitle'.tr(),
               icon: Icons.person_outline,
               onTap: () async {
-                await Navigator.of(context).pushNamed(
-                  AppRoutes.patientPersonalInfoView,
-                );
+                await Navigator.of(
+                  context,
+                ).pushNamed(AppRoutes.patientPersonalInfoView);
                 if (context.mounted) {
                   context.read<PatientProfileViewModel>().refreshProfile();
                 }
@@ -56,7 +56,16 @@ class UserProfileContent extends StatelessWidget {
               icon: Icons.settings_outlined,
               onTap: () {},
             ),
-
+            ElevatedButton(
+              onPressed: () {
+                AppLocalStorage.clearAllSecuredData();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.welcomeView,
+                  (route) => false,
+                );
+              },
+              child: Text('Logout'.tr()),
+            ),
           ],
         ),
       ],
