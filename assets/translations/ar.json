@@ -294,7 +294,16 @@
       "height": "الطول",
       "weight": "الوزن",
       "bloodType": "فصيلة الدم",
-      "verified": "حساب موثق"
+      "verified": "حساب موثق",
+      "fullNameAr": "الاسم الكامل (عربي)",
+      "fullNameEn": "الاسم الكامل (إنجليزي)",
+      "fullNameSo": "الاسم الكامل (صومالي)",
+      "allergies": "الحساسية",
+      "chronicConditions": "الأمراض المزمنة",
+      "chooseBirthDate": "اختر تاريخ الميلاد",
+      "editTitle": "تعديل المعلومات الشخصية",
+      "save": "حفظ",
+      "updateSuccess": "تم تحديث الملف الشخصي بنجاح"
     },
     "doctor": {
       "earnings": "الأرباح",

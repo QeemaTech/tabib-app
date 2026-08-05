@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/di/di.dart';
+import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_view_model.dart';
 import 'package:tabib_app/features/profile/presentation/views/doc/doc_profile_content.dart';
 import 'package:tabib_app/features/profile/presentation/views/user/user_profile_content.dart';
 
@@ -8,9 +11,14 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDoctor = role == 'doctor' || role == 'doc';
     return SingleChildScrollView(
-        child: role == "doctor" || role == "doc"
-            ? const DocProfileContent()
-            : const UserProfileContent());
+      child: isDoctor
+          ? const DocProfileContent()
+          : BlocProvider(
+              create: (_) => getIt<PatientProfileViewModel>()..loadProfile(),
+              child: const UserProfileContent(),
+            ),
+    );
   }
 }

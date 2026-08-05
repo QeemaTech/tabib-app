@@ -39,6 +39,8 @@ class PatientProfileEntity extends Equatable {
     required this.isVerified,
   });
 
+  bool get hasAvatar => avatarUrl.trim().isNotEmpty;
+
   String localizedName(String languageCode) {
     if (languageCode.startsWith('ar') && fullNameAr.isNotEmpty) {
       return fullNameAr;
@@ -60,6 +62,47 @@ class PatientProfileEntity extends Equatable {
       years--;
     }
     return years;
+  }
+
+  PatientProfileEntity copyWith({
+    String? id,
+    String? fullNameAr,
+    String? fullNameEn,
+    String? fullNameSo,
+    String? dateOfBirth,
+    String? gender,
+    int? heightCm,
+    int? weightKg,
+    String? avatarUrl,
+    String? bloodType,
+    String? allergies,
+    String? chronicConditions,
+    String? currentMedications,
+    bool? hasMedicationAllergy,
+    String? phone,
+    String? email,
+    bool? isVerified,
+  }) {
+    return PatientProfileEntity(
+      id: id ?? this.id,
+      fullNameAr: fullNameAr ?? this.fullNameAr,
+      fullNameEn: fullNameEn ?? this.fullNameEn,
+      fullNameSo: fullNameSo ?? this.fullNameSo,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      gender: gender ?? this.gender,
+      heightCm: heightCm ?? this.heightCm,
+      weightKg: weightKg ?? this.weightKg,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      bloodType: bloodType ?? this.bloodType,
+      allergies: allergies ?? this.allergies,
+      chronicConditions: chronicConditions ?? this.chronicConditions,
+      currentMedications: currentMedications ?? this.currentMedications,
+      hasMedicationAllergy:
+          hasMedicationAllergy ?? this.hasMedicationAllergy,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      isVerified: isVerified ?? this.isVerified,
+    );
   }
 
   @override

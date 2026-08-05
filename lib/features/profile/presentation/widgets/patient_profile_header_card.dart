@@ -39,7 +39,7 @@ class PatientProfileHeaderCard extends StatelessWidget {
       child: Column(
         children: [
           CustomImageView(
-            imagePath: profile.avatarUrl.isNotEmpty
+            imagePath: profile.hasAvatar
                 ? profile.avatarUrl
                 : AssetsManager.user,
             height: 88,

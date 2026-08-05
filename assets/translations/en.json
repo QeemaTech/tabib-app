@@ -294,7 +294,16 @@
       "height": "Height",
       "weight": "Weight",
       "bloodType": "Blood Type",
-      "verified": "Verified account"
+      "verified": "Verified account",
+      "fullNameAr": "Full name (Arabic)",
+      "fullNameEn": "Full name (English)",
+      "fullNameSo": "Full name (Somali)",
+      "allergies": "Allergies",
+      "chronicConditions": "Chronic conditions",
+      "chooseBirthDate": "Choose birth date",
+      "editTitle": "Edit personal info",
+      "save": "Save",
+      "updateSuccess": "Profile updated successfully"
     },
     "doctor": {
       "earnings": "Earnings",

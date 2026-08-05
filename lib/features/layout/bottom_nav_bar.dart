@@ -140,13 +140,14 @@ class _MainLayoutState extends State<MainLayout> {
             ),
             BottomNavigationBarItem(
               icon: CustomImageView(
-                imagePath: AssetsManager.walletInactive,
+                imagePath: AssetsManager.walletActive,
                 color: theme.textColor300,
               ),
               activeIcon: CustomImageView(
-                imagePath: AssetsManager.walletActive,
+                imagePath: AssetsManager.walletInactive,
                 color: theme.primaryColor,
               ),
+
               label: 'layout.navBar.wallet'.tr(),
             ),
             BottomNavigationBarItem(

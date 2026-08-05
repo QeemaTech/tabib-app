@@ -33,4 +33,50 @@ class PatientProfileViewModel extends Cubit<PatientProfileState> {
   Future<void> retry() => loadProfile();
 
   Future<void> refreshProfile() => loadProfile(showLoading: false);
+
+  Future<void> updateProfile({
+    required String fullNameAr,
+    required String fullNameEn,
+    required String fullNameSo,
+    required String dateOfBirth,
+    required String gender,
+    required String bloodType,
+    required String allergies,
+    required String chronicConditions,
+  }) async {
+    emit(state.copyWith(updateProfileState: BaseState.loading()));
+    final result = await patientProfileRepo.updatePatientProfile(
+      fullNameAr: fullNameAr.trim(),
+      fullNameEn: fullNameEn.trim(),
+      fullNameSo: fullNameSo.trim(),
+      dateOfBirth: dateOfBirth,
+      gender: gender,
+      bloodType: bloodType.trim(),
+      allergies: allergies.trim(),
+      chronicConditions: chronicConditions.trim(),
+    );
+    switch (result) {
+      case Success<PatientProfileEntity>():
+        emit(
+          state.copyWith(
+            updateProfileState: BaseState.loaded(result.data),
+            profileState: BaseState.loaded(result.data),
+          ),
+        );
+      case Failure<PatientProfileEntity>():
+        emit(
+          state.copyWith(
+            updateProfileState: BaseState.error(result.errorMessage),
+          ),
+        );
+    }
+  }
+
+  void resetUpdateState() {
+    emit(
+      state.copyWith(
+        updateProfileState: BaseState.init(),
+      ),
+    );
+  }
 }

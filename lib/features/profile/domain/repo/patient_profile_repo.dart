@@ -3,4 +3,15 @@ import 'package:tabib_app/features/profile/domain/entities/patient_profile_entit
 
 abstract interface class PatientProfileRepo {
   Future<Result<PatientProfileEntity>> getPatientProfile();
+
+  Future<Result<PatientProfileEntity>> updatePatientProfile({
+    required String fullNameAr,
+    required String fullNameEn,
+    required String fullNameSo,
+    required String dateOfBirth,
+    required String gender,
+    required String bloodType,
+    required String allergies,
+    required String chronicConditions,
+  });
 }
