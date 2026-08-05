@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/routes/routes.dart';
 import '../../widgets/doc/complete_doc_profile_step_one.dart';
 import '../../widgets/doc/complete_doc_profile_step_two.dart';
 
@@ -15,19 +15,26 @@ class CompleteDocProfileView extends StatefulWidget {
 
 class _CompleteProfileViewState extends State<CompleteDocProfileView> {
   late PageController _pageController;
-  int _currentPage = 0;
+  late final List<Widget> completesProfileSteps;
+
   @override
   void initState() {
     _pageController = PageController();
     completesProfileSteps = [
       CompleteDocProfileStepOne(pageController: _pageController),
-      CompleteDocProfileStepTwo(),
+      const CompleteDocProfileStepTwo(),
     ];
-
     super.initState();
   }
 
-  late final List<Widget> completesProfileSteps;
+  void _goToHome() {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.mainLayoutView,
+      (route) => false,
+      arguments: 'doctor',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -38,9 +45,7 @@ class _CompleteProfileViewState extends State<CompleteDocProfileView> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () {
-                  log("skip");
-                },
+                onTap: _goToHome,
                 child: Align(
                   alignment: AlignmentDirectional.topStart,
                   child: Text(
@@ -53,9 +58,9 @@ class _CompleteProfileViewState extends State<CompleteDocProfileView> {
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               SmoothPageIndicator(
-                controller: _pageController, // PageController
+                controller: _pageController,
                 count: 2,
                 effect: ExpandingDotsEffect(
                   dotHeight: 8,
@@ -64,16 +69,11 @@ class _CompleteProfileViewState extends State<CompleteDocProfileView> {
                 ),
                 onDotClicked: (index) {},
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Expanded(
                 child: PageView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
-                  onPageChanged: (value) {
-                    setState(() {
-                      _currentPage = value;
-                    });
-                  },
                   itemCount: completesProfileSteps.length,
                   itemBuilder: (context, index) {
                     return completesProfileSteps[index];

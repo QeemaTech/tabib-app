@@ -21,24 +21,49 @@ class OtpBottomSheet extends StatefulWidget {
 }
 
 class _OtpBottomSheetState extends State<OtpBottomSheet> {
+  static const int _defaultResendAfter = 30;
+
   Timer? _timer;
-  int _remainingTime = 30;
+  late int _resendAfter;
+  late int _remainingTime;
   String _otpCode = '';
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
+    _resendAfter = _defaultResendAfter;
+    _remainingTime = _resendAfter;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final seconds = _resendSecondsFromState(context.read<AuthViewModel>().state);
+      setState(() {
+        _resendAfter = seconds;
+        _remainingTime = seconds;
+      });
+      _startTimer();
+    });
+  }
+
+  int _resendSecondsFromState(AuthState state) {
+    final fromRegister = state.registerModel.data?.data?.resendAfter;
+    final fromLogin = state.loginModel.data?.data?.resendAfter;
+    final seconds = fromRegister ?? fromLogin ?? _defaultResendAfter;
+    return seconds > 0 ? seconds : _defaultResendAfter;
   }
 
   void _startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       setState(() {
         if (_remainingTime > 0) {
           _remainingTime--;
         } else {
-          _timer?.cancel();
-          _remainingTime = 30;
+          timer.cancel();
+          _remainingTime = _resendAfter;
         }
       });
     });

@@ -48,6 +48,7 @@ class _CompleteProfileViewState extends State<CompleteUserProfileView> {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         AppRoutes.mainLayoutView,
                         (route) => false,
+                        arguments: 'user',
                       );
                     },
                     child: Align(

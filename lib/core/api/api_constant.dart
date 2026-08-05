@@ -20,4 +20,11 @@ class EndPoint {
   static const String patientWallet = "/patient/wallet";
   static const String doctorWallet = "/doctor/wallet";
   static const String patientProfile = "/patient/profile";
+  static const String specialties = "/specialties";
+  static const String doctorProfessionalTitles =
+      "/doctor/onboarding/professional-titles";
+  static const String doctorOnboardingProfessional =
+      "/doctor/onboarding/professional";
+  static const String doctorOnboardingDocuments =
+      "/doctor/onboarding/documents";
 }

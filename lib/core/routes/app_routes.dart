@@ -123,15 +123,9 @@ class Routes {
           builder: (context) => const PatientPersonalInfoView(),
         );
       case AppRoutes.completeProfileView:
-        final role = settings.arguments as String? ?? "user";
-        if (role == "user") {
-          return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => getIt<CompletePatientProfileViewModel>(),
-              child: const CompleteUserProfileView(),
-            ),
-          );
-        } else {
+        final role = settings.arguments as String? ?? 'user';
+        final isDoctor = role == 'doctor' || role == 'doc';
+        if (isDoctor) {
           return MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => getIt<CompleteDocProfileCubit>(),
@@ -139,6 +133,12 @@ class Routes {
             ),
           );
         }
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => getIt<CompletePatientProfileViewModel>(),
+            child: const CompleteUserProfileView(),
+          ),
+        );
 
       default:
         return null;

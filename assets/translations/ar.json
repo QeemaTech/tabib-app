@@ -59,10 +59,19 @@
         "chooseMainSpecialization": "اختر التخصص الرئيسي",
         "subSpecializations": "التخصصات الفرعية",
         "chooseSubSpecializations": "اختر التخصصات الفرعية",
+        "chooseMainFirst": "اختر التخصص الرئيسي أولاً",
+        "noSubSpecialties": "لا توجد تخصصات فرعية",
         "professionalTitle": "المسمى المهني",
         "consultant": "استشاري",
         "yearsOfExperience": "سنوات الخبرة",
-        "yearsExperiencePlaceholder": "8 سنوات"
+        "yearsExperiencePlaceholder": "8 سنوات",
+        "yearsCount": "{} سنة",
+        "consultationFee": "رسوم الاستشارة",
+        "consultationFeeHint": "أدخل رسوم الاستشارة",
+        "durationChat": "مدة المحادثة (دقائق)",
+        "durationVoice": "مدة المكالمة الصوتية (دقائق)",
+        "durationVideo": "مدة مكالمة الفيديو (دقائق)",
+        "durationHint": "أدخل المدة بالدقائق"
       },
       "stepTwo": {
         "completeYourProfile": "أكمل ملفك",
@@ -77,6 +86,9 @@
         "uploadFile": "رفع الملف",
         "submitForReview": "إرسال للمراجعة",
         "canEditLater": "يمكنك تعديل هذه البيانات لاحقًا من ملفك الطبي."
+      },
+      "validation": {
+        "fillRequired": "يرجى تعبئة جميع الحقول المطلوبة"
       }
     },
     "completePatientProfile": {

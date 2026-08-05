@@ -59,10 +59,19 @@
         "chooseMainSpecialization": "Choose Main Specialization",
         "subSpecializations": "Sub-Specializations",
         "chooseSubSpecializations": "Choose Sub-Specializations",
+        "chooseMainFirst": "Choose a main specialty first",
+        "noSubSpecialties": "No sub-specialties available",
         "professionalTitle": "Professional Title",
         "consultant": "Consultant",
         "yearsOfExperience": "Years of Experience",
-        "yearsExperiencePlaceholder": "8 Years"
+        "yearsExperiencePlaceholder": "8 Years",
+        "yearsCount": "{} years",
+        "consultationFee": "Consultation Fee",
+        "consultationFeeHint": "Enter consultation fee",
+        "durationChat": "Chat Duration (minutes)",
+        "durationVoice": "Voice Duration (minutes)",
+        "durationVideo": "Video Duration (minutes)",
+        "durationHint": "Enter duration in minutes"
       },
       "stepTwo": {
         "completeYourProfile": "Complete Your Profile",
@@ -77,6 +86,9 @@
         "uploadFile": "Upload File",
         "submitForReview": "Submit for Review",
         "canEditLater": "You can edit this data later from your medical profile."
+      },
+      "validation": {
+        "fillRequired": "Please fill in all required fields"
       }
     },
     "completePatientProfile": {

@@ -4,10 +4,15 @@ import 'package:retrofit/retrofit.dart';
 import 'package:tabib_app/core/api/api_constant.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
+import 'package:tabib_app/features/auth/data/models/request/submit_doctor_professional_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/auth/data/models/response/doctor_documents_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/doctor_professional_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/patient_health_profile_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/professional_titles_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/specialties_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
 import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
@@ -108,4 +113,27 @@ abstract class ApiClient {
   Future<PatientProfileResponse> updatePatientProfile(
     @Body() UpdatePatientProfileRequest request,
   );
+
+  @GET(EndPoint.specialties)
+  Future<SpecialtiesResponse> getSpecialties({
+    @Query('parentId') String? parentId,
+  });
+
+  @GET(EndPoint.doctorProfessionalTitles)
+  Future<ProfessionalTitlesResponse> getProfessionalTitles();
+
+  @PATCH(EndPoint.doctorOnboardingProfessional)
+  Future<DoctorProfessionalResponse> submitDoctorProfessional(
+    @Body() SubmitDoctorProfessionalRequest request,
+  );
+
+  @MultiPart()
+  @POST(EndPoint.doctorOnboardingDocuments)
+  Future<DoctorDocumentsResponse> submitDoctorDocuments({
+    @Part(name: 'educationalCertificate')
+    required MultipartFile educationalCertificate,
+    @Part(name: 'identityProof') required MultipartFile identityProof,
+    @Part(name: 'medicalLicense') required MultipartFile medicalLicense,
+    @Part(name: 'profilePicture') required MultipartFile profilePicture,
+  });
 }

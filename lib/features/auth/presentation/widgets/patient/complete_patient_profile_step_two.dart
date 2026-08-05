@@ -55,6 +55,7 @@ class _CompletepatientProfileStepTwoState
           Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.mainLayoutView,
             (route) => false,
+            arguments: 'user',
           );
         } else if (state.medicalInfoState.isError) {
           CustomToast.error(
