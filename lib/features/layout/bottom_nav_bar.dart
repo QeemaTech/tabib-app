@@ -11,6 +11,8 @@ import 'package:tabib_app/features/patients/presentation/views/patients_view.dar
 import 'package:tabib_app/features/profile/presentation/views/profile_view.dart';
 import 'package:tabib_app/features/records/presentation/views/records_view.dart';
 import 'package:tabib_app/features/reservations/presentation/views/reservations_view.dart';
+import 'package:tabib_app/features/wallet/presentation/views/doc/doct_wallet.dart';
+import 'package:tabib_app/features/wallet/presentation/views/patient/patient_wallet.dart';
 
 class MainLayout extends StatefulWidget {
   final String role;
@@ -33,12 +35,14 @@ class _MainLayoutState extends State<MainLayout> {
             HomeView(role: widget.role),
             const ReservationsView(),
             const PatientsView(),
+            const DocWalletView(),
             ProfileView(role: widget.role),
           ]
         : [
             HomeView(role: widget.role),
             const AppointmentsView(),
             const RecordsView(),
+            const PatientWalletView(),
             ProfileView(role: widget.role),
           ];
 
@@ -76,6 +80,17 @@ class _MainLayoutState extends State<MainLayout> {
                 color: theme.primaryColor,
               ),
               label: 'layout.navBar.patients'.tr(),
+            ),
+            BottomNavigationBarItem(
+              icon: CustomImageView(
+                imagePath: AssetsManager.moneys,
+                color: theme.textColor300,
+              ),
+              activeIcon: CustomImageView(
+                imagePath: AssetsManager.moneys,
+                color: theme.primaryColor,
+              ),
+              label: 'layout.navBar.wallet'.tr(),
             ),
             BottomNavigationBarItem(
               icon: CustomImageView(
@@ -122,6 +137,17 @@ class _MainLayoutState extends State<MainLayout> {
                 color: theme.primaryColor,
               ),
               label: 'layout.navBar.records'.tr(),
+            ),
+            BottomNavigationBarItem(
+              icon: CustomImageView(
+                imagePath: AssetsManager.walletInactive,
+                color: theme.textColor300,
+              ),
+              activeIcon: CustomImageView(
+                imagePath: AssetsManager.walletActive,
+                color: theme.primaryColor,
+              ),
+              label: 'layout.navBar.wallet'.tr(),
             ),
             BottomNavigationBarItem(
               icon: CustomImageView(

@@ -124,8 +124,16 @@
       "profile": "الملف الشخصي",
       "reservations": "الحجوزات",
       "records": "السجلات",
-      "messages": "الرسائل"
+      "messages": "الرسائل",
+      "wallet": "المحفظة"
     }
+  },
+  "wallet": {
+    "title": "محفظتي",
+    "availableBalance": "الرصيد المتاح",
+    "balanceHint": "استخدم رصيدك لدفع تكاليف الاستشارات",
+    "walletSummary": "ملخص المحفظة",
+    "summaryDescription": "الرصيد الحالي في حسابك"
   },
   "common": {
     "more": "المزيد",

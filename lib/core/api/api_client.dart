@@ -17,6 +17,7 @@ import 'package:tabib_app/features/home/data/models/response/book_appointment_re
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
+import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
 
 part 'api_client.g.dart';
 
@@ -82,4 +83,10 @@ abstract class ApiClient {
     @Path('id') String id,
     @Body() CancelAppointmentRequest request,
   );
+
+  @GET(EndPoint.patientWallet)
+  Future<WalletResponse> getPatientWallet();
+
+  @GET(EndPoint.doctorWallet)
+  Future<WalletResponse> getDoctorWallet();
 }

@@ -124,8 +124,16 @@
       "profile": "Profile",
       "reservations": "Reservations",
       "records": "Records",
-      "messages": "Messages"
+      "messages": "Messages",
+      "wallet": "Wallet"
     }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "availableBalance": "Available Balance",
+    "balanceHint": "Use your balance to pay for consultations",
+    "walletSummary": "Wallet Summary",
+    "summaryDescription": "Current balance in your account"
   },
   "common": {
     "more": "More",
