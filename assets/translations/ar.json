@@ -286,6 +286,16 @@
     "male": "ذكر",
     "female": "أنثى",
     "experiences": "الخبرات",
+    "personal": {
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "birthDate": "تاريخ الميلاد",
+      "gender": "الجنس",
+      "height": "الطول",
+      "weight": "الوزن",
+      "bloodType": "فصيلة الدم",
+      "verified": "حساب موثق"
+    },
     "doctor": {
       "earnings": "الأرباح",
       "patients": "المرضى",

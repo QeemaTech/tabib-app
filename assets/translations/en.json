@@ -286,6 +286,16 @@
     "male": "Male",
     "female": "Female",
     "experiences": "Experiences",
+    "personal": {
+      "phone": "Phone",
+      "email": "Email",
+      "birthDate": "Birth Date",
+      "gender": "Gender",
+      "height": "Height",
+      "weight": "Weight",
+      "bloodType": "Blood Type",
+      "verified": "Verified account"
+    },
     "doctor": {
       "earnings": "Earnings",
       "patients": "Patients",

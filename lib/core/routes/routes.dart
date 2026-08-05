@@ -15,4 +15,5 @@ class AppRoutes{
   static const String patientDetailsView="patientDetailsView";
   static const String patientsAppointmentDetailsView="patientsAppointmentDetailsView";
   static const String createReportView="createReportView";
+  static const String patientPersonalInfoView="patientPersonalInfoView";
 }
