@@ -6,7 +6,16 @@ import '../../../../core/extension/app_extension.dart';
 import 'accepts_doctor_reviews.dart';
 
 class RequestReviewDocCard extends StatelessWidget {
-  const RequestReviewDocCard({super.key});
+  final String patientName;
+  final String subtitle;
+  final String timeLabel;
+
+  const RequestReviewDocCard({
+    super.key,
+    this.patientName = 'A. Marwa Al-Sudani',
+    this.subtitle = 'Disclosure - Persistent headache and neck pain',
+    this.timeLabel = 'Tomorrow - 9:30 AM',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +46,25 @@ class RequestReviewDocCard extends StatelessWidget {
       ),
       child: Column(
         spacing: 16,
-          children: [
-            Row(
-              spacing: 10,
-              children: [
-                
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 2,
-                  children: [
-                    Text(
-                      "A. Marwa Al-Sudani",
-                      style: theme.bold18.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: theme.primaryColor500,
+        children: [
+          Row(
+            spacing: 10,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 2,
+                children: [
+                  Text(
+                    patientName,
+                    style: theme.bold18.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: theme.primaryColor500,
                       fontSize: 14,
                     ),
                   ),
-
                   Text(
-                    "Disclosure - Persistent headache and neck pain",
+                    subtitle,
                     style: theme.bold12.copyWith(
                       color: theme.textColor300,
                       fontSize: 10,
@@ -71,14 +78,13 @@ class RequestReviewDocCard extends StatelessWidget {
                         size: 18,
                       ),
                       Text(
-                        'Tomorrow - 9:30 AM',
+                        timeLabel,
                         style: theme.bold12.copyWith(color: theme.textColor300),
                       ),
                     ],
                   ),
                 ],
               ),
-              
               CustomImageView(imagePath: AssetsManager.edit),
             ],
           ),

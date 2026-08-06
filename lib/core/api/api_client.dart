@@ -20,6 +20,7 @@ import 'package:tabib_app/features/appointments/data/models/response/patient_app
 import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
 import 'package:tabib_app/features/home/data/models/response/book_appointment_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
+import 'package:tabib_app/features/home/data/models/response/doctor_dashboard_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
@@ -106,6 +107,9 @@ abstract class ApiClient {
 
   @GET(EndPoint.doctorWallet)
   Future<WalletResponse> getDoctorWallet();
+
+  @GET(EndPoint.doctorDashboard)
+  Future<DoctorDashboardResponse> getDoctorDashboard();
 
   @GET(EndPoint.patientProfile)
   Future<PatientProfileResponse> getPatientProfile();

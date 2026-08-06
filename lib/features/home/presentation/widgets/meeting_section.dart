@@ -8,11 +8,16 @@ import '../../../../core/constant/assets_manager.dart';
 import 'avilable_doc.dart';
 
 class MeetingSection extends StatelessWidget {
-  const MeetingSection({super.key});
+  final String? patientName;
+
+  const MeetingSection({super.key, this.patientName});
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
+    final displayName = (patientName != null && patientName!.isNotEmpty)
+        ? patientName!
+        : "appointments.drName".tr();
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: ShapeDecoration(
@@ -45,7 +50,7 @@ class MeetingSection extends StatelessWidget {
           CustomAppBarProfile(
             title: "home.doctor.sessionStartsNow",
             subTitle: "home.doctor.sessionDescription",
-            subTitleArgs: ["appointments.drName".tr()],
+            subTitleArgs: [displayName],
             trailing: AvailableDoc(),
           ),
           Column(

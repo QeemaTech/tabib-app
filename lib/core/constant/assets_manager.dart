@@ -1,5 +1,6 @@
 const String svgBase = "assets/svgs";
 const String imageBase = "assets/images";
+const String lottieBase = "assets/animations";
 
 class AssetsManager {
   AssetsManager._();
@@ -52,4 +53,23 @@ class AssetsManager {
   // Images
   static const String doctor = "$imageBase/doc.png";
   static const String user = "$imageBase/user.png";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Lotties
+  static const String loading = "$lottieBase/loading.lottie";
+
 }

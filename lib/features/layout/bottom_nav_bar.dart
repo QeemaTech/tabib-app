@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
+import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/appointments_view.dart';
+import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_view_model.dart';
 import 'package:tabib_app/features/home/presentation/views/home_view.dart';
 import 'package:tabib_app/features/layout/view_model/layout_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/views/patients_view.dart';
@@ -83,11 +85,11 @@ class _MainLayoutState extends State<MainLayout> {
             ),
             BottomNavigationBarItem(
               icon: CustomImageView(
-                imagePath: AssetsManager.moneys,
+                imagePath: AssetsManager.walletActive,
                 color: theme.textColor300,
               ),
               activeIcon: CustomImageView(
-                imagePath: AssetsManager.moneys,
+                imagePath: AssetsManager.walletInactive,
                 color: theme.primaryColor,
               ),
               label: 'layout.navBar.wallet'.tr(),
@@ -163,7 +165,7 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ];
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: theme.backgroundColor,
       body: SafeArea(
         child: Padding(
@@ -179,5 +181,19 @@ class _MainLayoutState extends State<MainLayout> {
         items: items,
       ),
     );
+
+    if (!isDoctor) {
+      return scaffold;
+    }
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<DoctorDashboardViewModel>()..loadDashboard(),
+        ),
+      ],
+      child: scaffold,
+    );
   }
 }
+

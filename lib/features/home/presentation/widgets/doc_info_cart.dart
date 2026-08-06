@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
+import 'package:tabib_app/features/home/domain/entities/doctor_dashboard_stats_entity.dart';
 import '../../../../core/constant/assets_manager.dart';
 import '../../../../core/extension/app_extension.dart';
 
 class DocDashboard extends StatelessWidget {
-  const DocDashboard({super.key});
+  final DoctorDashboardStatsEntity stats;
+
+  const DocDashboard({super.key, required this.stats});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class DocDashboard extends StatelessWidget {
             Expanded(
               child: DashboardCard(
                 title: "home.doctor.appointmentsToday".tr(),
-                value: '12',
+                value: '${stats.todayCount}',
                 icon: AssetsManager.appointmentsActive,
                 iconBackgroundColor: const Color(0xFFE9EBF1),
               ),
@@ -26,7 +29,7 @@ class DocDashboard extends StatelessWidget {
             Expanded(
               child: DashboardCard(
                 title: "home.doctor.pendingRequests".tr(),
-                value: '12',
+                value: '${stats.pendingCount}',
                 icon: AssetsManager.security,
                 iconBackgroundColor: const Color(0xFFFEF9F0),
               ),
@@ -37,19 +40,20 @@ class DocDashboard extends StatelessWidget {
           spacing: 6,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          
             Expanded(
               child: DashboardCard(
                 title: "home.doctor.completeConsultations".tr(),
-                value: '12',
+                value: '${stats.completedCount}',
                 icon: AssetsManager.tickCircle,
                 iconBackgroundColor: const Color(0xFFEAF8F6),
               ),
             ),
-              Expanded(
+            Expanded(
               child: DashboardCard(
                 title: "home.doctor.profitsToday".tr(),
-                value: '12',
+                value: stats.earnings == stats.earnings.roundToDouble()
+                    ? '${stats.earnings.toInt()}'
+                    : '${stats.earnings}',
                 icon: AssetsManager.emptyWallet,
                 iconBackgroundColor: const Color(0xFFE4FFEB),
               ),

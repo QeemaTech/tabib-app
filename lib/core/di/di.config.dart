@@ -50,6 +50,10 @@ import '../../features/auth/presentation/view_model/doc/complete_doc_profile_cub
     as _i380;
 import '../../features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart'
     as _i765;
+import '../../features/home/data/data_source/doctor_dashboard_data_source.dart'
+    as _i25;
+import '../../features/home/data/data_source/doctor_dashboard_data_source_impl.dart'
+    as _i204;
 import '../../features/home/data/data_source/doctor_details_data_source.dart'
     as _i10;
 import '../../features/home/data/data_source/doctor_details_data_source_impl.dart'
@@ -62,12 +66,16 @@ import '../../features/home/data/data_source/search_doctors_data_source.dart'
     as _i960;
 import '../../features/home/data/data_source/search_doctors_data_source_impl.dart'
     as _i556;
+import '../../features/home/data/repo/doctor_dashboard_repo_impl.dart' as _i157;
 import '../../features/home/data/repo/doctor_details_repo_impl.dart' as _i1007;
 import '../../features/home/data/repo/patient_home_repo_impl.dart' as _i455;
 import '../../features/home/data/repo/search_doctors_repo_impl.dart' as _i232;
+import '../../features/home/domain/repo/doctor_dashboard_repo.dart' as _i845;
 import '../../features/home/domain/repo/doctor_details_repo.dart' as _i806;
 import '../../features/home/domain/repo/patient_home_repo.dart' as _i845;
 import '../../features/home/domain/repo/search_doctors_repo.dart' as _i824;
+import '../../features/home/presentation/view_model/doctor_dashboard_view_model.dart'
+    as _i720;
 import '../../features/home/presentation/view_model/doctor_details_view_model.dart'
     as _i93;
 import '../../features/home/presentation/view_model/patient_home_view_model.dart'
@@ -75,13 +83,22 @@ import '../../features/home/presentation/view_model/patient_home_view_model.dart
 import '../../features/home/presentation/view_model/search_doctors_view_model.dart'
     as _i53;
 import '../../features/layout/view_model/layout_view_model.dart' as _i566;
+import '../../features/profile/data/data_source/doctor_profile_data_source.dart'
+    as _i566;
+import '../../features/profile/data/data_source/doctor_profile_data_source_impl.dart'
+    as _i344;
 import '../../features/profile/data/data_source/patient_profile_data_source.dart'
     as _i311;
 import '../../features/profile/data/data_source/patient_profile_data_source_impl.dart'
     as _i762;
+import '../../features/profile/data/repo/doctor_profile_repo_impl.dart'
+    as _i1050;
 import '../../features/profile/data/repo/patient_profile_repo_impl.dart'
     as _i544;
+import '../../features/profile/domain/repo/doctor_profile_repo.dart' as _i64;
 import '../../features/profile/domain/repo/patient_profile_repo.dart' as _i407;
+import '../../features/profile/presentation/view_model/doctor_profile_view_model.dart'
+    as _i162;
 import '../../features/profile/presentation/view_model/patient_profile_view_model.dart'
     as _i369;
 import '../../features/wallet/data/data_source/wallet_data_source.dart'
@@ -117,6 +134,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i277.ApiClient>(
       () => apiModule.provideApiClient(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i25.DoctorDashboardDataSource>(
+      () => _i204.DoctorDashboardDataSourceImpl(gh<_i277.ApiClient>()),
+    );
     gh.lazySingleton<_i10.DoctorDetailsDataSource>(
       () => _i276.DoctorDetailsDataSourceImpl(gh<_i277.ApiClient>()),
     );
@@ -143,6 +163,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i407.PatientProfileRepo>(
       () => _i544.PatientProfileRepoImpl(gh<_i311.PatientProfileDataSource>()),
     );
+    gh.lazySingleton<_i566.DoctorProfileDataSource>(
+      () => _i344.DoctorProfileDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.lazySingleton<_i845.DoctorDashboardRepo>(
+      () => _i157.DoctorDashboardRepoImpl(gh<_i25.DoctorDashboardDataSource>()),
+    );
     gh.lazySingleton<_i217.RemoteDataSource>(
       () => _i52.RemoteDataSourceImpl(gh<_i277.ApiClient>()),
     );
@@ -154,6 +180,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i914.WalletDataSource>(
       () => _i474.WalletDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.factory<_i720.DoctorDashboardViewModel>(
+      () => _i720.DoctorDashboardViewModel(
+        doctorDashboardRepo: gh<_i845.DoctorDashboardRepo>(),
+      ),
     );
     gh.lazySingleton<_i541.PatientHealthProfileRepo>(
       () => _i49.PatientHealthProfileRepoImpl(
@@ -171,6 +202,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i226.WalletViewModel>(
       () => _i226.WalletViewModel(walletRepo: gh<_i413.WalletRepo>()),
+    );
+    gh.lazySingleton<_i64.DoctorProfileRepo>(
+      () => _i1050.DoctorProfileRepoImpl(gh<_i566.DoctorProfileDataSource>()),
     );
     gh.lazySingleton<_i170.AuthRepo>(
       () => _i984.AuthRepoImpl(gh<_i217.RemoteDataSource>()),
@@ -197,6 +231,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i369.PatientProfileViewModel>(
       () => _i369.PatientProfileViewModel(
         patientProfileRepo: gh<_i407.PatientProfileRepo>(),
+      ),
+    );
+    gh.factory<_i162.DoctorProfileViewModel>(
+      () => _i162.DoctorProfileViewModel(
+        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
       ),
     );
     gh.factory<_i765.CompletePatientProfileViewModel>(
