@@ -83,6 +83,15 @@ import '../../features/home/presentation/view_model/patient_home_view_model.dart
 import '../../features/home/presentation/view_model/search_doctors_view_model.dart'
     as _i53;
 import '../../features/layout/view_model/layout_view_model.dart' as _i566;
+import '../../features/patients/data/data_source/doctor_patients_data_source.dart'
+    as _i1062;
+import '../../features/patients/data/data_source/doctor_patients_data_source_impl.dart'
+    as _i960;
+import '../../features/patients/data/repo/doctor_patients_repo_impl.dart'
+    as _i269;
+import '../../features/patients/domain/repo/doctor_patients_repo.dart' as _i471;
+import '../../features/patients/presentation/view_model/doctor_patients_view_model.dart'
+    as _i838;
 import '../../features/profile/data/data_source/doctor_profile_data_source.dart'
     as _i566;
 import '../../features/profile/data/data_source/doctor_profile_data_source_impl.dart'
@@ -142,6 +151,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i275.AppointmentsDataSource>(
       () => _i47.AppointmentsDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.lazySingleton<_i1062.DoctorPatientsDataSource>(
+      () => _i960.DoctorPatientsDataSourceImpl(gh<_i277.ApiClient>()),
     );
     gh.lazySingleton<_i577.DoctorOnboardingDataSource>(
       () => _i651.DoctorOnboardingDataSourceImpl(gh<_i277.ApiClient>()),
@@ -233,6 +245,9 @@ extension GetItInjectableX on _i174.GetIt {
         patientProfileRepo: gh<_i407.PatientProfileRepo>(),
       ),
     );
+    gh.lazySingleton<_i471.DoctorPatientsRepo>(
+      () => _i269.DoctorPatientsRepoImpl(gh<_i1062.DoctorPatientsDataSource>()),
+    );
     gh.factory<_i162.DoctorProfileViewModel>(
       () => _i162.DoctorProfileViewModel(
         doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
@@ -242,6 +257,11 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i765.CompletePatientProfileViewModel(
         imagePicker: gh<_i772.ImagePickerServices>(),
         patientHealthProfileRepo: gh<_i541.PatientHealthProfileRepo>(),
+      ),
+    );
+    gh.factory<_i838.DoctorPatientsViewModel>(
+      () => _i838.DoctorPatientsViewModel(
+        doctorPatientsRepo: gh<_i471.DoctorPatientsRepo>(),
       ),
     );
     gh.factory<_i486.AppointmentsViewModel>(

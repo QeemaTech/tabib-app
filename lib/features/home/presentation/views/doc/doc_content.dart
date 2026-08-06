@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
-import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/home/domain/entities/doctor_dashboard_entity.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_state.dart';

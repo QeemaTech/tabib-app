@@ -391,11 +391,12 @@
   "patients": {
     "filters": {
       "all": "All",
-      "lastVisit": "Last visit",
-      "needReview": "Needs review",
+      "recent": "Recent",
+      "followUp": "Follow-up",
       "stable": "Stable"
     },
     "viewProfile": "View Profile",
+    "empty": "No patients found",
     "ageGender": "{} years - {}",
     "lastVisitTime": "{} Last visit",
     "appointmentDetails": {

@@ -24,6 +24,7 @@ import 'package:tabib_app/features/home/data/models/response/doctor_dashboard_re
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
+import 'package:tabib_app/features/patients/data/models/response/doctor_patients_response.dart';
 import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
 import 'package:tabib_app/features/profile/data/models/response/doctor_profile_response.dart';
 import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
@@ -110,6 +111,12 @@ abstract class ApiClient {
 
   @GET(EndPoint.doctorDashboard)
   Future<DoctorDashboardResponse> getDoctorDashboard();
+
+  @GET(EndPoint.doctorPatients)
+  Future<DoctorPatientsResponse> getDoctorPatients({
+    @Query('search') String? search,
+    @Query('filter') String? filter,
+  });
 
   @GET(EndPoint.patientProfile)
   Future<PatientProfileResponse> getPatientProfile();

@@ -391,11 +391,12 @@
   "patients": {
     "filters": {
       "all": "الكل",
-      "lastVisit": "اخر زيارة",
-      "needReview": "يحتاج مراجعة",
+      "recent": "الأخيرة",
+      "followUp": "متابعة",
       "stable": "مستقر"
     },
     "viewProfile": "عرض الملف",
+    "empty": "لا يوجد مرضى",
     "ageGender": "{} سنة - {}",
     "lastVisitTime": "{} آخر زيارة",
     "appointmentDetails": {
