@@ -148,7 +148,7 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: CustomTextFormField(
-                                validator: AppValidator.phone,
+                              //  validator: AppValidator.phone,
                                 hintText: "auth.signUp.enterPhone".tr(),
                                 controller: phoneController,
                                 padding: const EdgeInsets.only(

@@ -1,0 +1,40 @@
+import 'package:injectable/injectable.dart';
+import 'package:tabib_app/core/error_handling/result.dart';
+import 'package:tabib_app/features/reservations/data/data_source/doctor_appointments_data_source.dart';
+import 'package:tabib_app/features/reservations/data/mapper/doctor_appointments_mapper.dart';
+import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
+import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
+import 'package:tabib_app/features/reservations/domain/repo/doctor_appointments_repo.dart';
+
+@LazySingleton(as: DoctorAppointmentsRepo)
+class DoctorAppointmentsRepoImpl implements DoctorAppointmentsRepo {
+  final DoctorAppointmentsDataSource dataSource;
+
+  DoctorAppointmentsRepoImpl(this.dataSource);
+
+  @override
+  Future<Result<List<DoctorAppointmentEntity>>> getAppointments({
+    String? status,
+  }) async {
+    final response = await dataSource.getAppointments(status: status);
+    switch (response) {
+      case Success<DoctorAppointmentsResponse>():
+        return Success(response.data.toEntity());
+      case Failure<DoctorAppointmentsResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<DoctorAppointmentEntity>> getAppointmentDetails(
+    String id,
+  ) async {
+    final response = await dataSource.getAppointmentDetails(id);
+    switch (response) {
+      case Success<DoctorAppointmentDetailsResponse>():
+        return Success(response.data.toEntity());
+      case Failure<DoctorAppointmentDetailsResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+}

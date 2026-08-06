@@ -19,6 +19,7 @@ import 'package:tabib_app/features/home/presentation/view_model/doctor_details_v
 import 'package:tabib_app/features/home/presentation/view_model/search_doctors_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/views/patient_details_view.dart';
 import 'package:tabib_app/features/reservations/presentation/views/create_report_view.dart';
+import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointment_details_view_model.dart';
 import '../../features/auth/presentation/view/patient/complete_user_profile_view.dart';
 import '../../features/home/presentation/views/user/doctor_details_view.dart';
 import '../../features/home/presentation/views/user/see_more_specialization.dart';
@@ -118,8 +119,14 @@ class Routes {
           builder: (context) => const PatientDetailsView(),
         );
       case AppRoutes.patientsAppointmentDetailsView:
+        final appointmentId = settings.arguments as String? ?? '';
         return MaterialPageRoute(
-          builder: (context) => const PatientsAppointmentDetailsView(),
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<DoctorAppointmentDetailsViewModel>()
+              ..loadDetails(appointmentId),
+            child: const PatientsAppointmentDetailsView(),
+          ),
         );
       case AppRoutes.createReportView:
         return MaterialPageRoute(

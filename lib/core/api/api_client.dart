@@ -28,6 +28,7 @@ import 'package:tabib_app/features/patients/data/models/response/doctor_patients
 import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
 import 'package:tabib_app/features/profile/data/models/response/doctor_profile_response.dart';
 import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
+import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
 
 part 'api_client.g.dart';
@@ -117,6 +118,16 @@ abstract class ApiClient {
     @Query('search') String? search,
     @Query('filter') String? filter,
   });
+
+  @GET(EndPoint.doctorAppointments)
+  Future<DoctorAppointmentsResponse> getDoctorAppointments({
+    @Query('status') String? status,
+  });
+
+  @GET(EndPoint.doctorAppointmentDetails)
+  Future<DoctorAppointmentDetailsResponse> getDoctorAppointmentDetails(
+    @Path('id') String id,
+  );
 
   @GET(EndPoint.patientProfile)
   Future<PatientProfileResponse> getPatientProfile();
