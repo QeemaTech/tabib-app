@@ -1,10 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import '../widgets/custom_expansion_tile.dart';
-import '../widgets/patient_report_header.dart';
-import '../widgets/report_input_widgets.dart';
+import 'package:tabib_app/features/reservations/presentation/view_model/create_report_state.dart';
+import 'package:tabib_app/features/reservations/presentation/view_model/create_report_view_model.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/create_report_form.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/custom_expansion_tile.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/patient_report_header.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/report_input_widgets.dart';
 
 class CreateReportView extends StatelessWidget {
   const CreateReportView({super.key});
@@ -13,6 +18,8 @@ class CreateReportView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     final isAr = context.locale.languageCode == 'ar';
+    final appointmentId =
+        ModalRoute.of(context)?.settings.arguments as String? ?? '';
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -28,129 +35,115 @@ class CreateReportView extends StatelessWidget {
           ),
         ),
         title: Text(
-          "reservations.createReport".tr(),
+          'reservations.createReport'.tr(),
           style: theme.bold18.copyWith(color: theme.textColor600),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      body: BlocConsumer<CreateReportViewModel, CreateReportState>(
+        listenWhen: (previous, current) =>
+            previous.submitState != current.submitState,
+        listener: (context, state) {
+          final submitState = state.submitState;
+          if (submitState.isLoaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('reservations.createReport'.tr())),
+            );
+            context.pop();
+          } else if (submitState.isError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  submitState.errorMessage ?? 'errors.unknown'.tr(),
+                ),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final detailsState = state.detailsState;
+          if (detailsState.isLoading || detailsState.isInitial) {
+            return const _CreateReportLoadingWidget();
+          }
+          if (detailsState.isError) {
+            return _CreateReportErrorWidget(
+              message: detailsState.errorMessage ?? '',
+              appointmentId: appointmentId,
+            );
+          }
+          final appointment = detailsState.data;
+          if (appointment == null) {
+            return _CreateReportErrorWidget(
+              message: 'errors.unknown'.tr(),
+              appointmentId: appointmentId,
+            );
+          }
+          return CreateReportForm(appointment: appointment);
+        },
+      ),
+    );
+  }
+}
+
+class _CreateReportLoadingWidget extends StatelessWidget {
+  const _CreateReportLoadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             const PatientReportHeader(
-              name: "أ. أحمد رمضان",
-              id: "9232345",
-              date: "18 يناير الاثنين",
-              time: "10:30 م",
+              name: 'Patient Name',
+              id: '000000',
+              date: 'Date',
+              time: 'Time',
               image: AssetsManager.doctor,
             ),
             const SizedBox(height: 16),
             CustomExpansionTile(
-              title: "reservations.visitInfo".tr(),
+              title: 'reservations.visitInfo'.tr(),
               iconPath: AssetsManager.stethoscope,
               children: [
-                ReportFieldLabel(label: "reservations.visitType".tr()),
-                ReportDropdown(value: "reservations.consultation".tr()),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReportFieldLabel(label: "reservations.bloodPressure".tr()),
-                          const ReportTextField(hint: "120/80"),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReportFieldLabel(label: "reservations.temperature".tr()),
-                          const ReportTextField(hint: "36.6"),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                ReportFieldLabel(label: 'reservations.visitType'.tr()),
+                const ReportTextField(hint: 'reservations.consultation'),
               ],
             ),
-            const SizedBox(height: 12),
-            CustomExpansionTile(
-              title: "reservations.diagnosis".tr(),
-              iconPath: AssetsManager.health,
-              children: [
-                ReportFieldLabel(label: "reservations.finalDiagnosis".tr()),
-                ReportTextField(
-                  hint: "reservations.diagnosisDetails".tr(),
-                  maxLines: 4,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            CustomExpansionTile(
-              title: "reservations.treatmentPlan".tr(),
-              iconPath: AssetsManager.alba,
-              children: [
-                ReportFieldLabel(label: "reservations.addMedications".tr()),
-                ReportTextField(hint: "reservations.itemName".tr()),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReportFieldLabel(label: "reservations.dose".tr()),
-                          ReportTextField(hint: "reservations.dose".tr()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReportFieldLabel(label: "reservations.frequency".tr()),
-                          ReportTextField(hint: "reservations.frequency".tr()),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                ReportFieldLabel(label: "reservations.duration".tr()),
-                ReportTextField(hint: "reservations.duration".tr()),
-              ],
-            ),
-            const SizedBox(height: 12),
-            CustomExpansionTile(
-              title: "reservations.requiredTests".tr(),
-              iconPath: AssetsManager.document,
-              children: [
-                ReportTextField(hint: "reservations.tests".tr()),
-              ],
-            ),
-            const SizedBox(height: 12),
-            CustomExpansionTile(
-              title: "reservations.followUpDate".tr(),
-              iconPath: AssetsManager.appointments,
-              children: [
-                ReportTextField(hint: "reservations.chooseDate".tr()),
-              ],
-            ),
-            const SizedBox(height: 12),
-            CustomExpansionTile(
-              title: "reservations.medicalNotes".tr(),
-              iconPath: AssetsManager.report,
-              children: [
-                ReportTextField(hint: "reservations.notes".tr(), maxLines: 3),
-              ],
-            ),
-            const SizedBox(height: 24),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CreateReportErrorWidget extends StatelessWidget {
+  final String message;
+  final String appointmentId;
+
+  const _CreateReportErrorWidget({
+    required this.message,
+    required this.appointmentId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            message.isNotEmpty ? message : 'errors.unknown'.tr(),
+            textAlign: TextAlign.center,
+            style: theme.regular14.copyWith(color: theme.textColor300),
+          ),
+          IconButton(
+            onPressed: () => context.read<CreateReportViewModel>().retry(),
+            icon: Icon(Icons.refresh, color: theme.primaryColor),
+          ),
+        ],
       ),
     );
   }

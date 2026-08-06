@@ -12,7 +12,8 @@ class ReportFieldLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         label.tr(),
-        style: context.appTheme.regular14.copyWith(color: context.appTheme.textColor300),
+        style: context.appTheme.regular14
+            .copyWith(color: context.appTheme.textColor300),
       ),
     );
   }
@@ -21,55 +22,47 @@ class ReportFieldLabel extends StatelessWidget {
 class ReportTextField extends StatelessWidget {
   final String hint;
   final int maxLines;
-  const ReportTextField({super.key, required this.hint, this.maxLines = 1});
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+
+  const ReportTextField({
+    super.key,
+    required this.hint,
+    this.maxLines = 1,
+    this.controller,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return TextField(
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: theme.textColor100),
+    );
+    return TextFormField(
+      controller: controller,
       maxLines: maxLines,
+      validator: validator,
+      style: theme.regular14.copyWith(color: theme.textColor600),
       decoration: InputDecoration(
         hintText: hint.tr(),
-        hintStyle: theme.regular14.copyWith(color: Colors.grey[400]),
+        hintStyle: theme.regular14.copyWith(color: theme.textColor200),
         filled: true,
         fillColor: theme.whiteColor,
-        border: OutlineInputBorder(
+        border: border,
+        enabledBorder: border,
+        focusedBorder: border,
+        errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[200]!),
+          borderSide: BorderSide(color: theme.primaryColor500),
         ),
-        enabledBorder: OutlineInputBorder(
+        focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[200]!),
+          borderSide: BorderSide(color: theme.primaryColor500),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-    );
-  }
-}
-
-class ReportDropdown extends StatelessWidget {
-  final String value;
-  const ReportDropdown({super.key, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.appTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: theme.whiteColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(Icons.keyboard_arrow_down, color: Colors.grey[400]),
-          Text(
-            value.tr(),
-            style: theme.regular14.copyWith(color: theme.textColor600),
-          ),
-        ],
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }

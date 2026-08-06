@@ -23,6 +23,8 @@ class EndPoint {
   static const String doctorPatients = "/doctor/patients";
   static const String doctorAppointments = "/doctor/appointments";
   static const String doctorAppointmentDetails = "/doctor/appointments/{id}";
+  static const String doctorAppointmentReport =
+      "/doctor/appointments/{id}/report";
   static const String patientProfile = "/patient/profile";
   static const String doctorProfile = "/doctor/profile";
   static const String specialties = "/specialties";

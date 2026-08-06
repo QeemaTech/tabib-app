@@ -2,8 +2,12 @@ import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/reservations/data/data_source/doctor_appointments_data_source.dart';
 import 'package:tabib_app/features/reservations/data/mapper/doctor_appointments_mapper.dart';
+import 'package:tabib_app/features/reservations/data/mapper/doctor_report_mapper.dart';
+import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
+import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
 import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
+import 'package:tabib_app/features/reservations/domain/entities/doctor_report_entity.dart';
 import 'package:tabib_app/features/reservations/domain/repo/doctor_appointments_repo.dart';
 
 @LazySingleton(as: DoctorAppointmentsRepo)
@@ -34,6 +38,20 @@ class DoctorAppointmentsRepoImpl implements DoctorAppointmentsRepo {
       case Success<DoctorAppointmentDetailsResponse>():
         return Success(response.data.toEntity());
       case Failure<DoctorAppointmentDetailsResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<DoctorReportEntity>> createReport(
+    String appointmentId,
+    CreateDoctorReportRequest request,
+  ) async {
+    final response = await dataSource.createReport(appointmentId, request);
+    switch (response) {
+      case Success<CreateDoctorReportResponse>():
+        return Success(response.data.toEntity());
+      case Failure<CreateDoctorReportResponse>():
         return Failure(response.errorMessage);
     }
   }

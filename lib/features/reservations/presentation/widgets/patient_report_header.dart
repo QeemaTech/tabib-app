@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/utilities/custom_image_view.dart';
 
 class PatientReportHeader extends StatelessWidget {
   final String name;
   final String id;
   final String date;
   final String time;
-  final String image;
+  final String? image;
 
   const PatientReportHeader({
     super.key,
@@ -14,7 +16,7 @@ class PatientReportHeader extends StatelessWidget {
     required this.id,
     required this.date,
     required this.time,
-    required this.image,
+    this.image,
   });
 
   @override
@@ -25,38 +27,47 @@ class PatientReportHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.whiteColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[100]!),
+        border: Border.all(color: theme.textColor100),
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              image,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
+          CustomImageView(
+            imagePath: (image != null && image!.trim().isNotEmpty)
+                ? image
+                : AssetsManager.doctor,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+            radius: BorderRadius.circular(12),
           ),
           const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: theme.bold18.copyWith(fontSize: 16, color: theme.textColor600),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "ID: #$id",
-                style: theme.regular14.copyWith(color: theme.textColor300),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            "$date • $time",
-            style: theme.regular12.copyWith(color: theme.textColor300),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.bold18
+                      .copyWith(fontSize: 16, color: theme.textColor600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'ID: #$id',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.regular14.copyWith(color: theme.textColor300),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$date • $time',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.regular12.copyWith(color: theme.textColor300),
+                ),
+              ],
+            ),
           ),
         ],
       ),

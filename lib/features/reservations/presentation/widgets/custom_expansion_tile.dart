@@ -26,6 +26,7 @@ class CustomExpansionTile extends StatelessWidget {
           border: Border.all(color: Colors.grey[100]!),
         ),
         child: ExpansionTile(
+          maintainState: true,
           trailing: Icon(
             Icons.keyboard_arrow_down,
             color: theme.textColor300,

@@ -63,7 +63,10 @@ class DoctorReservationListCard extends StatelessWidget {
               label: 'reservations.createReportBtn'.tr(),
               iconPath: AssetsManager.report,
               onTap: () {
-                Navigator.of(context).pushNamed(AppRoutes.createReportView);
+                Navigator.of(context).pushNamed(
+                  AppRoutes.createReportView,
+                  arguments: appointment.id,
+                );
               },
             ),
           ],
