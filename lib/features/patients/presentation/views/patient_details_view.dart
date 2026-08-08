@@ -1,10 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/core/theme/app_theme/theme_extension.dart';
+import 'package:tabib_app/features/patients/presentation/view_model/patient_file_state.dart';
+import 'package:tabib_app/features/patients/presentation/view_model/patient_file_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/expandable_section.dart';
+import 'package:tabib_app/features/patients/presentation/widgets/patient_details_content.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/patient_info_card.dart';
+import 'package:tabib_app/features/patients/presentation/widgets/patient_info_details.dart';
 
 class PatientDetailsView extends StatelessWidget {
   const PatientDetailsView({super.key});
@@ -18,249 +23,90 @@ class PatientDetailsView extends StatelessWidget {
         backgroundColor: theme.whiteColor,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: theme.textColor600, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           'patients.details.title'.tr(),
           style: theme.bold18.copyWith(color: theme.textColor600),
         ),
       ),
-      body: SingleChildScrollView(
+      body: BlocBuilder<PatientFileViewModel, PatientFileState>(
+        builder: (context, state) {
+          final fileState = state.fileState;
+          if (fileState.isLoading || fileState.isInitial) {
+            return const _PatientDetailsLoadingWidget();
+          }
+          if (fileState.isError) {
+            return _PatientDetailsErrorWidget(
+              message: fileState.errorMessage ?? '----',
+            );
+          }
+          final data = fileState.data;
+          if (data == null) {
+            return const _PatientDetailsErrorWidget(message: '----');
+          }
+          return PatientDetailsContent(file: data);
+        },
+      ),
+    );
+  }
+}
+
+class _PatientDetailsLoadingWidget extends StatelessWidget {
+  const _PatientDetailsLoadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const PatientInfoCard(name: "أ. أحمد رمضان", id: "232345"),
+            const PatientInfoCard(name: '----', id: '----'),
             const SizedBox(height: 24),
             ExpandableSection(
               title: 'patients.details.patientInfo'.tr(),
               backgroundColor: const Color(0xFFE9EBF1),
               iconPath: AssetsManager.patientsActive,
-              child: _buildPatientInfo(theme, const Color(0xFFE9EBF1)),
-            ),
-            ExpandableSection(
-              title: 'patients.details.medicalOverview'.tr(),
-              iconPath: AssetsManager.stethoscope,
-              backgroundColor: const Color(0xFFE9EBF1),
-              child: _buildMedicalOverview(theme, const Color(0xFFE9EBF1)),
-            ),
-            ExpandableSection(
-              title: 'patients.details.visitHistory'.tr(),
-              iconPath: AssetsManager.history,
-              backgroundColor: const Color(0xFFE9EBF1),
-              child: _buildVisitHistory(theme, const Color(0xFFE9EBF1)),
-            ),
-            ExpandableSection(
-              title: 'patients.details.latestExaminations'.tr(),
-              iconPath: AssetsManager.health,
-              backgroundColor: const Color(0xFFEAF8F6),
-              child: _buildLatestExaminations(theme, const Color(0xFFEAF8F6)),
-            ),
-            ExpandableSection(
-              title: 'patients.details.medicalNotes'.tr(),
-              backgroundColor: const Color(0xFFFEF9F0),
-              iconPath: AssetsManager.document,
-              child: _buildMedicalNotes(theme, const Color(0xFFFEF9F0)),
+              child: const PatientInfoDetails(
+                gender: '----',
+                birthDate: '----',
+                height: '----',
+                weight: '----',
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildPatientInfo(AppThemeExtension theme, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
+class _PatientDetailsErrorWidget extends StatelessWidget {
+  final String message;
+
+  const _PatientDetailsErrorWidget({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildInfoRow('patients.details.gender'.tr(), 'profile.male'.tr(), theme),
-          _buildInfoRow('patients.details.birthDate'.tr(), "1 يناير (25 سنة)", theme),
-          _buildInfoRow('patients.details.height'.tr(), "155 ${'patients.details.cm'.tr()}", theme),
-          _buildInfoRow('patients.details.weight'.tr(), "60 ${'patients.details.kg'.tr()}", theme),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value, AppThemeExtension theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          const SizedBox(width: 8),
           Text(
-            "$label: ",
+            message,
+            textAlign: TextAlign.center,
             style: theme.regular14.copyWith(color: theme.textColor300),
           ),
-          Text(
-            value,
-            style: theme.medium16.copyWith(color: theme.textColor600),
+          IconButton(
+            onPressed: () => context.read<PatientFileViewModel>().retry(),
+            icon: Icon(Icons.refresh, color: theme.primaryColor),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildMedicalOverview(AppThemeExtension theme, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'patients.details.previousDiagnoses'.tr(),
-            style: theme.regular14.copyWith(color: theme.textColor300),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.end,
-            children: [
-              _buildChip('patients.details.highBloodPressure'.tr(), theme),
-              _buildChip('patients.details.highBloodPressure'.tr(), theme),
-              _buildChip('patients.details.asthma'.tr(), theme),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Text(
-                "${'patients.details.bloodGroup'.tr()}: ",
-                style: theme.regular14.copyWith(color: theme.textColor300),
-              ),
-              Text(
-                "O+",
-                style: theme.medium16.copyWith(color: theme.textColor600),
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Text(
-                'patients.details.allergies'.tr(),
-                style: theme.regular14.copyWith(color: theme.textColor300),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "${'patients.details.penicillin'.tr()}، ${'patients.details.latex'.tr()}",
-                style: theme.medium16.copyWith(color: Colors.red),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChip(String label, AppThemeExtension theme) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: theme.primaryColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: theme.medium13.copyWith(color: theme.primaryColor),
-      ),
-    );
-  }
-
-  Widget _buildVisitHistory(AppThemeExtension theme, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          _buildVisitItem(
-            'patients.details.annualCheckup'.tr(),
-            '18 مايو، الاثنين',
-            '10:30 م',
-            theme,
-          ),
-          const Divider(),
-          _buildVisitItem(
-            'patients.details.annualCheckup'.tr(),
-            '18 مايو، الاثنين',
-            '10:30 م',
-            theme,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVisitItem(String title, String date, String time, AppThemeExtension theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: theme.bold18.copyWith(fontSize: 14.0)),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-               Text(
-                "$date - $time",
-                style: theme.regular12.copyWith(color: theme.textColor300),
-              ),
-              TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.arrow_forward_ios, size: 14),
-                label: Text('patients.details.viewDetails'.tr()),
-                style: TextButton.styleFrom(
-                  iconAlignment: IconAlignment.end,
-                  foregroundColor: theme.primaryColor,
-                  padding: EdgeInsets.zero,
-                ),
-              ),
-             
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLatestExaminations(AppThemeExtension theme, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: _buildVisitItem(
-        'patients.details.mriScan'.tr(),
-        '18 مايو، الاثنين',
-        '10:30 م',
-        theme,
-      ),
-    );
-  }
-
-  Widget _buildMedicalNotes(AppThemeExtension theme, Color backgroundColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        'patients.details.dummyNotes'.tr(),
-        textAlign: TextAlign.start,
-        style: theme.regular14.copyWith(color: theme.textColor600),
       ),
     );
   }

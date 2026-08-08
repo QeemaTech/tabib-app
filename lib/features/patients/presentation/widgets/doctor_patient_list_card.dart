@@ -35,7 +35,7 @@ class DoctorPatientListCard extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               AppRoutes.patientDetailsView,
-              arguments: patient.id,
+              arguments: patient.lastVisit?.appointmentId ?? '',
             );
           },
         ),

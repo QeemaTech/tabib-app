@@ -25,6 +25,7 @@ import 'package:tabib_app/features/home/data/models/response/doctor_details_resp
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
 import 'package:tabib_app/features/patients/data/models/response/doctor_patients_response.dart';
+import 'package:tabib_app/features/patients/data/models/response/patient_file_response.dart';
 import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
 import 'package:tabib_app/features/profile/data/models/response/doctor_profile_response.dart';
 import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
@@ -157,6 +158,7 @@ abstract class ApiClient {
   @GET(EndPoint.doctorAppointments)
   Future<DoctorAppointmentsResponse> getDoctorAppointments({
     @Query('status') String? status,
+    @Query('date') String? date,
   });
 
   @GET(EndPoint.doctorAppointmentDetails)
@@ -168,6 +170,11 @@ abstract class ApiClient {
   Future<CreateDoctorReportResponse> createDoctorAppointmentReport(
     @Path('id') String id,
     @Body() CreateDoctorReportRequest request,
+  );
+
+  @GET(EndPoint.doctorAppointmentPatientFile)
+  Future<PatientFileResponse> getDoctorAppointmentPatientFile(
+    @Path('id') String id,
   );
 
   @GET(EndPoint.patientProfile)

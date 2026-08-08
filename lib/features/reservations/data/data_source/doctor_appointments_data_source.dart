@@ -6,6 +6,7 @@ import 'package:tabib_app/features/reservations/data/models/response/doctor_appo
 abstract interface class DoctorAppointmentsDataSource {
   Future<Result<DoctorAppointmentsResponse>> getAppointments({
     String? status,
+    String? date,
   });
 
   Future<Result<DoctorAppointmentDetailsResponse>> getAppointmentDetails(

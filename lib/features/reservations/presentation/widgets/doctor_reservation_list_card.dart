@@ -44,6 +44,11 @@ class DoctorReservationListCard extends StatelessWidget {
           imageUrl: imageUrl,
           actions: [
             ReservationActionButton(
+              label: 'patients.viewProfile'.tr(),
+              iconPath: AssetsManager.records,
+              onTap: () => _openPatientFile(context),
+            ),
+            ReservationActionButton(
               label: 'reservations.bookingDetails'.tr(),
               iconPath: AssetsManager.report,
               onTap: () => _openDetails(context),
@@ -59,6 +64,11 @@ class DoctorReservationListCard extends StatelessWidget {
           time: time,
           imageUrl: imageUrl,
           actions: [
+            ReservationActionButton(
+              label: 'patients.viewProfile'.tr(),
+              iconPath: AssetsManager.records,
+              onTap: () => _openPatientFile(context),
+            ),
             ReservationActionButton(
               label: 'reservations.createReportBtn'.tr(),
               iconPath: AssetsManager.report,
@@ -91,14 +101,13 @@ class DoctorReservationListCard extends StatelessWidget {
           imageUrl: imageUrl,
           actions: [
             ReservationActionButton(
-              label: 'reservations.startSession'.tr(),
-              iconPath: AssetsManager.video,
-              isFilled: true,
-              onTap: () {},
+              label: 'patients.viewProfile'.tr(),
+              iconPath: AssetsManager.records,
+              onTap: () => _openPatientFile(context),
             ),
             ReservationActionButton(
               label: 'reservations.bookingDetails'.tr(),
-              iconPath: AssetsManager.records,
+              iconPath: AssetsManager.report,
               onTap: () => _openDetails(context),
             ),
           ],
@@ -109,6 +118,13 @@ class DoctorReservationListCard extends StatelessWidget {
   void _openDetails(BuildContext context) {
     Navigator.of(context).pushNamed(
       AppRoutes.patientsAppointmentDetailsView,
+      arguments: appointment.id,
+    );
+  }
+
+  void _openPatientFile(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.patientDetailsView,
       arguments: appointment.id,
     );
   }

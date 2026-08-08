@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
@@ -11,11 +12,18 @@ class DoctorAppointmentsViewModel extends Cubit<DoctorAppointmentsState> {
   final DoctorAppointmentsRepo doctorAppointmentsRepo;
 
   DoctorAppointmentsViewModel({required this.doctorAppointmentsRepo})
-      : super(const DoctorAppointmentsState());
+      : super(DoctorAppointmentsState());
 
   void onFilterChanged(DoctorAppointmentsFilter filter) {
     if (state.filter == filter) return;
     emit(state.copyWith(filter: filter));
+    loadAppointments();
+  }
+
+  void onDaySelected(DateTime day) {
+    final dateOnly = DateTime(day.year, day.month, day.day);
+    if (dateOnly == state.selectedDate) return;
+    emit(state.copyWith(selectedDate: dateOnly));
     loadAppointments();
   }
 
@@ -24,8 +32,13 @@ class DoctorAppointmentsViewModel extends Cubit<DoctorAppointmentsState> {
       emit(state.copyWith(appointmentsState: BaseState.loading()));
     }
 
+    final date = state.filter == DoctorAppointmentsFilter.all
+        ? DateFormat('yyyy-MM-dd').format(state.selectedDate)
+        : null;
+
     final result = await doctorAppointmentsRepo.getAppointments(
       status: state.apiStatus,
+      date: date,
     );
 
     switch (result) {

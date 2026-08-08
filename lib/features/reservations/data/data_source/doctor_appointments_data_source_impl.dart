@@ -16,9 +16,10 @@ class DoctorAppointmentsDataSourceImpl implements DoctorAppointmentsDataSource {
   @override
   Future<Result<DoctorAppointmentsResponse>> getAppointments({
     String? status,
+    String? date,
   }) {
     return executeApi(
-      () => apiClient.getDoctorAppointments(status: status),
+      () => apiClient.getDoctorAppointments(status: status, date: date),
     );
   }
 

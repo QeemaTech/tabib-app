@@ -19,8 +19,12 @@ class DoctorAppointmentsRepoImpl implements DoctorAppointmentsRepo {
   @override
   Future<Result<List<DoctorAppointmentEntity>>> getAppointments({
     String? status,
+    String? date,
   }) async {
-    final response = await dataSource.getAppointments(status: status);
+    final response = await dataSource.getAppointments(
+      status: status,
+      date: date,
+    );
     switch (response) {
       case Success<DoctorAppointmentsResponse>():
         return Success(response.data.toEntity());

@@ -49,7 +49,14 @@ class _ReservationsViewBody extends StatelessWidget {
               },
             ),
             if (state.filter == DoctorAppointmentsFilter.all) ...[
-              const CalendarSection(),
+              CalendarSection(
+                selectedDay: state.selectedDate,
+                onDaySelected: (day) {
+                  context
+                      .read<DoctorAppointmentsViewModel>()
+                      .onDaySelected(day);
+                },
+              ),
               OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),

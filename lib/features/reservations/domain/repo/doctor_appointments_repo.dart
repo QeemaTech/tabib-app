@@ -6,6 +6,7 @@ import 'package:tabib_app/features/reservations/domain/entities/doctor_report_en
 abstract interface class DoctorAppointmentsRepo {
   Future<Result<List<DoctorAppointmentEntity>>> getAppointments({
     String? status,
+    String? date,
   });
 
   Future<Result<DoctorAppointmentEntity>> getAppointmentDetails(String id);
