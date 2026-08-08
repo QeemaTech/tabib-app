@@ -18,14 +18,13 @@ class WalletViewModel extends Cubit<WalletState> {
     WalletRole role, {
     bool showLoading = true,
   }) async {
+    if (role != WalletRole.patient) return;
+
     if (showLoading) {
       emit(state.copyWith(walletState: BaseState.loading()));
     }
 
-    final result = switch (role) {
-      WalletRole.patient => await walletRepo.getPatientWallet(),
-      WalletRole.doctor => await walletRepo.getDoctorWallet(),
-    };
+    final result = await walletRepo.getPatientWallet();
 
     switch (result) {
       case Success<WalletEntity>():

@@ -31,6 +31,9 @@ import '../../features/patients/presentation/views/patient_appointment_details_v
 import '../../features/profile/presentation/views/doc/doctor_personal_info_view.dart';
 import '../../features/profile/presentation/views/user/patient_personal_info_view.dart';
 import '../../features/records/presentation/views/prescription_details_view.dart';
+import 'package:tabib_app/features/wallet/presentation/utils/doctor_withdraw_args.dart';
+import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdraw_view.dart';
+import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdrawal_details_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -146,6 +149,23 @@ class Routes {
       case AppRoutes.doctorPersonalInfoView:
         return MaterialPageRoute(
           builder: (context) => const DoctorPersonalInfoView(),
+        );
+      case AppRoutes.doctorWithdrawView:
+        final args = settings.arguments;
+        if (args is! DoctorWithdrawArgs) {
+          return MaterialPageRoute(
+            builder: (context) => const Scaffold(
+              body: Center(child: Text('Missing withdraw arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => DoctorWithdrawView(args: args),
+        );
+      case AppRoutes.doctorWithdrawalDetailsView:
+        final id = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          builder: (context) => DoctorWithdrawalDetailsView(withdrawalId: id),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';

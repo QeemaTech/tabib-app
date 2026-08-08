@@ -145,7 +145,59 @@
     "availableBalance": "الرصيد المتاح",
     "balanceHint": "استخدم رصيدك لدفع تكاليف الاستشارات",
     "walletSummary": "ملخص المحفظة",
-    "summaryDescription": "الرصيد الحالي في حسابك"
+    "summaryDescription": "الرصيد الحالي في حسابك",
+    "doctor": {
+      "balanceHint": "اسحب أرباحك إلى حسابك البنكي",
+      "pendingBalance": "الرصيد المعلق",
+      "heldBalance": "الرصيد المحجوز",
+      "paidOutBalance": "المدفوع",
+      "totalEarned": "إجمالي الأرباح",
+      "withdraw": "سحب",
+      "submitWithdraw": "طلب سحب",
+      "withdrawSuccess": "تم إرسال طلب السحب",
+      "cannotWithdraw": "السحب غير متاح حالياً",
+      "minimumWithdrawalHint": "الحد الأدنى للسحب: {amount} {currency}",
+      "availableHint": "المتاح: {amount} {currency}",
+      "amount": "المبلغ",
+      "amountRequired": "أدخل المبلغ",
+      "amountInvalid": "أدخل مبلغاً صالحاً",
+      "amountBelowMinimum": "المبلغ أقل من الحد الأدنى للسحب",
+      "amountExceedsBalance": "المبلغ يتجاوز الرصيد المتاح",
+      "iban": "رقم الآيبان",
+      "ibanRequired": "أدخل رقم الآيبان",
+      "ibanInvalid": "أدخل رقم آيبان صالحاً",
+      "withdrawalDetails": "تفاصيل السحب",
+      "rejectionReason": "سبب الرفض",
+      "transferReference": "مرجع التحويل",
+      "createdAt": "تاريخ الإنشاء",
+      "relatedTransactions": "الحركات المرتبطة",
+      "cancelWithdrawal": "إلغاء السحب",
+      "cancelConfirm": "هل أنت متأكد من إلغاء طلب السحب؟",
+      "cancelSuccess": "تم إلغاء طلب السحب",
+      "emptyTransactions": "لا توجد حركات بعد",
+      "emptyWithdrawals": "لا توجد طلبات سحب بعد",
+      "sections": {
+        "overview": "نظرة عامة",
+        "transactions": "الحركات",
+        "withdrawals": "السحوبات"
+      },
+      "txTypes": {
+        "earning": "ربح",
+        "adjustment": "تعديل",
+        "withdrawalHold": "حجز سحب",
+        "withdrawalRelease": "تحرير سحب",
+        "payoutCompleted": "اكتمل الدفع"
+      },
+      "statuses": {
+        "pending": "قيد الانتظار",
+        "approved": "موافق عليه",
+        "processing": "قيد المعالجة",
+        "completed": "مكتمل",
+        "rejected": "مرفوض",
+        "failed": "فشل",
+        "cancelled": "ملغى"
+      }
+    }
   },
   "common": {
     "more": "المزيد",

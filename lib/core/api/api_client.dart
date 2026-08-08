@@ -31,7 +31,12 @@ import 'package:tabib_app/features/profile/data/models/response/patient_profile_
 import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
 import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
 import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
+import 'package:tabib_app/features/wallet/data/models/request/create_withdrawal_request.dart';
+import 'package:tabib_app/features/wallet/data/models/response/doctor_wallet_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
+import 'package:tabib_app/features/wallet/data/models/response/wallet_transactions_response.dart';
+import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawal_details_response.dart';
+import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawals_response.dart';
 
 part 'api_client.g.dart';
 
@@ -110,7 +115,35 @@ abstract class ApiClient {
   Future<WalletResponse> getPatientWallet();
 
   @GET(EndPoint.doctorWallet)
-  Future<WalletResponse> getDoctorWallet();
+  Future<DoctorWalletResponse> getDoctorWallet();
+
+  @GET(EndPoint.doctorWalletTransactions)
+  Future<WalletTransactionsResponse> getDoctorWalletTransactions({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
+
+  @GET(EndPoint.doctorWalletWithdrawals)
+  Future<WalletWithdrawalsResponse> getDoctorWalletWithdrawals({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
+
+  @GET(EndPoint.doctorWalletWithdrawalById)
+  Future<WalletWithdrawalDetailsResponse> getDoctorWalletWithdrawalById(
+    @Path('id') String id,
+  );
+
+  @POST(EndPoint.doctorWalletWithdrawals)
+  Future<CreateWithdrawalResponse> createDoctorWalletWithdrawal(
+    @Header('Idempotency-Key') String idempotencyKey,
+    @Body() CreateWithdrawalRequest request,
+  );
+
+  @DELETE(EndPoint.doctorWalletWithdrawalById)
+  Future<CreateWithdrawalResponse> cancelDoctorWalletWithdrawal(
+    @Path('id') String id,
+  );
 
   @GET(EndPoint.doctorDashboard)
   Future<DoctorDashboardResponse> getDoctorDashboard();

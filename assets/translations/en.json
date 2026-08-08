@@ -145,7 +145,59 @@
     "availableBalance": "Available Balance",
     "balanceHint": "Use your balance to pay for consultations",
     "walletSummary": "Wallet Summary",
-    "summaryDescription": "Current balance in your account"
+    "summaryDescription": "Current balance in your account",
+    "doctor": {
+      "balanceHint": "Withdraw your earnings to your bank account",
+      "pendingBalance": "Pending balance",
+      "heldBalance": "Held balance",
+      "paidOutBalance": "Paid out",
+      "totalEarned": "Total earned",
+      "withdraw": "Withdraw",
+      "submitWithdraw": "Request withdrawal",
+      "withdrawSuccess": "Withdrawal request submitted",
+      "cannotWithdraw": "Withdrawals are not available right now",
+      "minimumWithdrawalHint": "Minimum withdrawal: {amount} {currency}",
+      "availableHint": "Available: {amount} {currency}",
+      "amount": "Amount",
+      "amountRequired": "Enter an amount",
+      "amountInvalid": "Enter a valid amount",
+      "amountBelowMinimum": "Amount is below the minimum withdrawal",
+      "amountExceedsBalance": "Amount exceeds available balance",
+      "iban": "IBAN",
+      "ibanRequired": "Enter your IBAN",
+      "ibanInvalid": "Enter a valid IBAN",
+      "withdrawalDetails": "Withdrawal details",
+      "rejectionReason": "Rejection reason",
+      "transferReference": "Transfer reference",
+      "createdAt": "Created at",
+      "relatedTransactions": "Related transactions",
+      "cancelWithdrawal": "Cancel withdrawal",
+      "cancelConfirm": "Are you sure you want to cancel this withdrawal?",
+      "cancelSuccess": "Withdrawal cancelled",
+      "emptyTransactions": "No transactions yet",
+      "emptyWithdrawals": "No withdrawals yet",
+      "sections": {
+        "overview": "Overview",
+        "transactions": "Transactions",
+        "withdrawals": "Withdrawals"
+      },
+      "txTypes": {
+        "earning": "Earning",
+        "adjustment": "Adjustment",
+        "withdrawalHold": "Withdrawal hold",
+        "withdrawalRelease": "Withdrawal release",
+        "payoutCompleted": "Payout completed"
+      },
+      "statuses": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "processing": "Processing",
+        "completed": "Completed",
+        "rejected": "Rejected",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      }
+    }
   },
   "common": {
     "more": "More",
