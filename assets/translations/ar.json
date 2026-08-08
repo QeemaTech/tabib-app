@@ -213,7 +213,44 @@
     "yearsOldMale": "{} سنة - ذكر",
     "yearsOldFemale": "{} سنة - أنثى",
     "lastVisitAt": "{} آخر زيارة",
-    "kids": "أطفال"
+    "kids": "أطفال",
+    "retry": "إعادة المحاولة"
+  },
+  "schedule": {
+    "title": "أوقات العمل",
+    "workingHours": "أوقات العمل",
+    "weekTitle": "الجدول الأسبوعي",
+    "weekHint": "حدد الأيام والنوافذ الزمنية التي يمكن للمرضى الحجز خلالها.",
+    "off": "إجازة",
+    "active": "متاح",
+    "inactive": "إجازة",
+    "dayActive": "متاح في هذا اليوم",
+    "startTime": "البداية",
+    "endTime": "النهاية",
+    "addWindow": "إضافة فترة عمل",
+    "save": "حفظ",
+    "clearDay": "مسح اليوم",
+    "saved": "تم تحديث الجدول",
+    "minutesShort": "د",
+    "previewTitle": "معاينة المواعيد",
+    "previewHint": "عرض المواعيد المتاحة المتولدة لتاريخ محدد.",
+    "previewLoad": "عرض",
+    "previewEmptyHint": "اختر تاريخًا لمعاينة المواعيد المتاحة.",
+    "previewNoSlots": "لا توجد مواعيد في هذا التاريخ.",
+    "days": {
+      "sunday": "الأحد",
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت"
+    },
+    "validation": {
+      "needWindow": "أضف فترة عمل واحدة على الأقل.",
+      "invalidWindow": "وقت النهاية يجب أن يكون بعد وقت البداية.",
+      "overlap": "فترات العمل لا يمكن أن تتداخل."
+    }
   },
   "appointments": {
     "confirmed": "مؤكد",

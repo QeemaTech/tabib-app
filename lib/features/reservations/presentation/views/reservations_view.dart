@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/core/widgets/filter_chips.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
@@ -70,8 +71,9 @@ class _ReservationsViewBody extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                onPressed: () {},
-                label: Text('appointments.addAppointment'.tr()),
+                onPressed: () =>
+                    context.pushName(AppRoutes.doctorScheduleView),
+                label: Text('schedule.workingHours'.tr()),
                 icon: const Icon(Icons.add_circle_outline),
               ),
             ],

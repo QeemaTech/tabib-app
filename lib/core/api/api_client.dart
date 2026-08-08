@@ -32,6 +32,10 @@ import 'package:tabib_app/features/profile/data/models/response/patient_profile_
 import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
 import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
 import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
+import 'package:tabib_app/features/schedule/data/models/request/replace_week_schedule_request.dart';
+import 'package:tabib_app/features/schedule/data/models/request/update_day_schedule_request.dart';
+import 'package:tabib_app/features/schedule/data/models/response/doctor_schedule_response.dart';
+import 'package:tabib_app/features/schedule/data/models/response/schedule_preview_response.dart';
 import 'package:tabib_app/features/wallet/data/models/request/create_withdrawal_request.dart';
 import 'package:tabib_app/features/wallet/data/models/response/doctor_wallet_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
@@ -175,6 +179,30 @@ abstract class ApiClient {
   @GET(EndPoint.doctorAppointmentPatientFile)
   Future<PatientFileResponse> getDoctorAppointmentPatientFile(
     @Path('id') String id,
+  );
+
+  @GET(EndPoint.doctorSchedule)
+  Future<DoctorScheduleResponse> getDoctorSchedule();
+
+  @PUT(EndPoint.doctorSchedule)
+  Future<DoctorScheduleResponse> replaceDoctorSchedule(
+    @Body() ReplaceWeekScheduleRequest request,
+  );
+
+  @GET(EndPoint.doctorSchedulePreview)
+  Future<SchedulePreviewResponse> getDoctorSchedulePreview({
+    @Query('date') required String date,
+  });
+
+  @PATCH(EndPoint.doctorScheduleDay)
+  Future<DoctorScheduleResponse> updateDoctorScheduleDay(
+    @Path('dayOfWeek') int dayOfWeek,
+    @Body() UpdateDayScheduleRequest request,
+  );
+
+  @DELETE(EndPoint.doctorScheduleDay)
+  Future<DoctorScheduleResponse> deleteDoctorScheduleDay(
+    @Path('dayOfWeek') int dayOfWeek,
   );
 
   @GET(EndPoint.patientProfile)

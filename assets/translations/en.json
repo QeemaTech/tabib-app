@@ -213,7 +213,44 @@
     "yearsOldMale": "{} years - Male",
     "yearsOldFemale": "{} years - Female",
     "lastVisitAt": "{} Last visit",
-    "kids": "Kids"
+    "kids": "Kids",
+    "retry": "Retry"
+  },
+  "schedule": {
+    "title": "Working Hours",
+    "workingHours": "Working Hours",
+    "weekTitle": "Weekly schedule",
+    "weekHint": "Set the days and time windows patients can book.",
+    "off": "Off",
+    "active": "Active",
+    "inactive": "Off",
+    "dayActive": "Available this day",
+    "startTime": "Start",
+    "endTime": "End",
+    "addWindow": "Add time window",
+    "save": "Save",
+    "clearDay": "Clear day",
+    "saved": "Schedule updated",
+    "minutesShort": "m",
+    "previewTitle": "Preview slots",
+    "previewHint": "See generated appointment slots for a date.",
+    "previewLoad": "Load",
+    "previewEmptyHint": "Pick a date to preview available slots.",
+    "previewNoSlots": "No slots for this date.",
+    "days": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
+    "validation": {
+      "needWindow": "Add at least one time window.",
+      "invalidWindow": "End time must be after start time.",
+      "overlap": "Time windows cannot overlap."
+    }
   },
   "appointments": {
     "confirmed": "Confirmed",

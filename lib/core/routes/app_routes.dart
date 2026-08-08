@@ -35,6 +35,8 @@ import '../../features/records/presentation/views/prescription_details_view.dart
 import 'package:tabib_app/features/wallet/presentation/utils/doctor_withdraw_args.dart';
 import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdraw_view.dart';
 import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdrawal_details_view.dart';
+import 'package:tabib_app/features/schedule/presentation/view_model/doctor_schedule_view_model.dart';
+import 'package:tabib_app/features/schedule/presentation/views/doctor_schedule_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -173,6 +175,14 @@ class Routes {
         final id = settings.arguments as String? ?? '';
         return MaterialPageRoute(
           builder: (context) => DoctorWithdrawalDetailsView(withdrawalId: id),
+        );
+      case AppRoutes.doctorScheduleView:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) =>
+                getIt<DoctorScheduleViewModel>()..loadSchedule(),
+            child: const DoctorScheduleView(),
+          ),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';

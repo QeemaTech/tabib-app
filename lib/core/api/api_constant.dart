@@ -31,6 +31,9 @@ class EndPoint {
       "/doctor/appointments/{id}/report";
   static const String doctorAppointmentPatientFile =
       "/doctor/appointments/{id}/patient-file";
+  static const String doctorSchedule = "/doctor/schedule";
+  static const String doctorSchedulePreview = "/doctor/schedule/preview";
+  static const String doctorScheduleDay = "/doctor/schedule/{dayOfWeek}";
   static const String patientProfile = "/patient/profile";
   static const String doctorProfile = "/doctor/profile";
   static const String specialties = "/specialties";
