@@ -34,31 +34,34 @@ class PatientInfoCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-           CustomImageView(
+          CustomImageView(
             imagePath: imagePath ?? AssetsManager.user,
             height: 60,
             width: 60,
             radius: BorderRadius.circular(30),
           ),
           const SizedBox(width: 12),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: theme.bold18.copyWith(color: theme.textColor600),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "${'patients.details.id'.tr()}: #$id",
-                style: theme.regular14.copyWith(color: theme.textColor300),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.bold18.copyWith(color: theme.textColor600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "${'patients.details.id'.tr()}: #$id",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.regular14.copyWith(color: theme.textColor300),
+                ),
+              ],
+            ),
           ),
-         
         ],
       ),
     );

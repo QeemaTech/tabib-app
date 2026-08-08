@@ -22,6 +22,8 @@ extension DoctorAppointmentDetailsResponseMapper
           currency: '',
           durationChatHours: 0,
           durationCallMinutes: 0,
+          complaint: '',
+          symptoms: '',
           notes: '',
           cancelReason: '',
           createdAt: '',
@@ -51,6 +53,9 @@ extension DoctorAppointmentDetailsResponseMapper
             phone: '',
             countryCode: '',
             email: '',
+            gender: '',
+            medicalComplaint: '',
+            medicalSymptoms: '',
           ),
           actions: DoctorAppointmentActionsEntity(
             canAccessChat: false,
@@ -75,6 +80,8 @@ extension DoctorAppointmentItemResponseMapper on DoctorAppointmentItemResponse {
       currency: currency ?? '',
       durationChatHours: durationChatHours ?? 0,
       durationCallMinutes: durationCallMinutes ?? 0,
+      complaint: complaint ?? '',
+      symptoms: symptoms ?? '',
       notes: notes ?? '',
       cancelReason: cancelReason ?? '',
       createdAt: createdAt ?? '',
@@ -106,6 +113,9 @@ extension DoctorAppointmentItemResponseMapper on DoctorAppointmentItemResponse {
             phone: '',
             countryCode: '',
             email: '',
+            gender: '',
+            medicalComplaint: '',
+            medicalSymptoms: '',
           ),
       actions: actions?.toEntity() ??
           const DoctorAppointmentActionsEntity(
@@ -121,6 +131,7 @@ extension DoctorAppointmentItemResponseMapper on DoctorAppointmentItemResponse {
 extension DoctorAppointmentPatientResponseMapper
     on DoctorAppointmentPatientResponse {
   DoctorAppointmentPatientEntity toEntity() {
+    final info = medicalInfo;
     return DoctorAppointmentPatientEntity(
       id: id ?? '',
       fullNameAr: fullNameAr ?? '',
@@ -129,6 +140,11 @@ extension DoctorAppointmentPatientResponseMapper
       phone: phone ?? '',
       countryCode: countryCode ?? '',
       email: email ?? '',
+      gender: info?.gender ?? '',
+      heightCm: info?.heightCm?.toDouble(),
+      weightKg: info?.weightKg?.toDouble(),
+      medicalComplaint: info?.complaint ?? '',
+      medicalSymptoms: info?.symptoms ?? '',
     );
   }
 }

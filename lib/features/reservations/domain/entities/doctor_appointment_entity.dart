@@ -11,6 +11,8 @@ class DoctorAppointmentEntity extends Equatable {
   final String currency;
   final int durationChatHours;
   final int durationCallMinutes;
+  final String complaint;
+  final String symptoms;
   final String notes;
   final String cancelReason;
   final String createdAt;
@@ -32,6 +34,8 @@ class DoctorAppointmentEntity extends Equatable {
     required this.currency,
     required this.durationChatHours,
     required this.durationCallMinutes,
+    required this.complaint,
+    required this.symptoms,
     required this.notes,
     required this.cancelReason,
     required this.createdAt,
@@ -55,6 +59,8 @@ class DoctorAppointmentEntity extends Equatable {
         currency,
         durationChatHours,
         durationCallMinutes,
+        complaint,
+        symptoms,
         notes,
         cancelReason,
         createdAt,
@@ -75,6 +81,11 @@ class DoctorAppointmentPatientEntity extends Equatable {
   final String phone;
   final String countryCode;
   final String email;
+  final String gender;
+  final double? heightCm;
+  final double? weightKg;
+  final String medicalComplaint;
+  final String medicalSymptoms;
 
   const DoctorAppointmentPatientEntity({
     required this.id,
@@ -84,6 +95,11 @@ class DoctorAppointmentPatientEntity extends Equatable {
     required this.phone,
     required this.countryCode,
     required this.email,
+    required this.gender,
+    this.heightCm,
+    this.weightKg,
+    required this.medicalComplaint,
+    required this.medicalSymptoms,
   });
 
   bool get hasAvatar => avatarUrl != null && avatarUrl!.trim().isNotEmpty;
@@ -102,6 +118,11 @@ class DoctorAppointmentPatientEntity extends Equatable {
         phone,
         countryCode,
         email,
+        gender,
+        heightCm,
+        weightKg,
+        medicalComplaint,
+        medicalSymptoms,
       ];
 }
 

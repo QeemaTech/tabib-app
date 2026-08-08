@@ -18,7 +18,7 @@ class AppointmentDetailsContent extends StatelessWidget {
     final languageCode = context.locale.languageCode;
     final patient = appointment.patient;
     final dateParts = formatAppointmentDate(appointment.date, languageCode);
-    final notes = appointment.notes.trim();
+    final noteTexts = _symptomNotes(appointment);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -34,11 +34,11 @@ class AppointmentDetailsContent extends StatelessWidget {
             title: 'patients.appointmentDetails.patientInfo'.tr(),
             backgroundColor: const Color(0xFFE9EBF1),
             iconPath: AssetsManager.patientsActive,
-            child: const PatientInfoDetails(
-              gender: '—',
+            child: PatientInfoDetails(
+              gender: _genderLabel(patient.gender),
               birthDate: '—',
-              height: '—',
-              weight: '—',
+              height: _heightLabel(patient.heightCm),
+              weight: _weightLabel(patient.weightKg),
             ),
           ),
           ExpandableSection(
@@ -60,10 +60,17 @@ class AppointmentDetailsContent extends StatelessWidget {
             iconPath: AssetsManager.document,
             child: Column(
               children: [
-                if (notes.isNotEmpty)
+                if (noteTexts.isEmpty)
                   MedicalNoteCard(
-                    note: notes,
+                    note: '—',
                     date: dateParts.noteDateLabel,
+                  )
+                else
+                  ...noteTexts.map(
+                    (note) => MedicalNoteCard(
+                      note: note,
+                      date: dateParts.noteDateLabel,
+                    ),
                   ),
               ],
             ),
@@ -72,6 +79,42 @@ class AppointmentDetailsContent extends StatelessWidget {
       ),
     );
   }
+}
+
+String _genderLabel(String gender) {
+  switch (gender.toUpperCase()) {
+    case 'MALE':
+      return 'profile.male'.tr();
+    case 'FEMALE':
+      return 'profile.female'.tr();
+    default:
+      return gender.isEmpty ? '—' : gender;
+  }
+}
+
+String _heightLabel(double? heightCm) {
+  if (heightCm == null) return '—';
+  return '${heightCm.toStringAsFixed(heightCm % 1 == 0 ? 0 : 1)} ${'patients.details.cm'.tr()}';
+}
+
+String _weightLabel(double? weightKg) {
+  if (weightKg == null) return '—';
+  return '${weightKg.toStringAsFixed(weightKg % 1 == 0 ? 0 : 1)} ${'patients.details.kg'.tr()}';
+}
+
+List<String> _symptomNotes(DoctorAppointmentEntity appointment) {
+  final values = <String>[
+    appointment.complaint.trim(),
+    appointment.symptoms.trim(),
+    appointment.notes.trim(),
+    appointment.patient.medicalComplaint.trim(),
+    appointment.patient.medicalSymptoms.trim(),
+  ];
+  final unique = <String>{};
+  for (final value in values) {
+    if (value.isNotEmpty) unique.add(value);
+  }
+  return unique.toList();
 }
 
 class AppointmentDateParts {
@@ -104,13 +147,15 @@ AppointmentDateParts formatAppointmentDate(
       noteDateLabel: '',
     );
   }
+  // Appointment `date` is a calendar day — keep UTC components to avoid day shift.
+  final dateOnly = DateTime.utc(parsed.year, parsed.month, parsed.day);
   final locale = languageCode.startsWith('ar') ? 'ar' : 'en';
-  final dayName = DateFormat.EEEE(locale).format(parsed);
-  final monthName = DateFormat.MMM(locale).format(parsed);
-  final dayNumber = DateFormat.d(locale).format(parsed);
-  final dateLabel = DateFormat.yMMMMd(locale).format(parsed);
+  final dayName = DateFormat.EEEE(locale).format(dateOnly);
+  final monthName = DateFormat.MMM(locale).format(dateOnly);
+  final dayNumber = DateFormat.d(locale).format(dateOnly);
+  final dateLabel = DateFormat.yMMMMd(locale).format(dateOnly);
   final noteDateLabel =
-      '${DateFormat.yMMMd(locale).format(parsed)} • ${DateFormat.EEEE(locale).format(parsed)}';
+      '${DateFormat.yMMMd(locale).format(dateOnly)} • ${DateFormat.EEEE(locale).format(dateOnly)}';
   return AppointmentDateParts(
     dateLabel: dateLabel,
     dayName: dayName,

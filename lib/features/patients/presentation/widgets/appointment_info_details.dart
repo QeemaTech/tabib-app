@@ -36,19 +36,32 @@ class AppointmentInfoDetails extends StatelessWidget {
             width: 24,
             color: theme.textColor300,
           ),
-          const Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "$day، $date",
-                style: theme.medium16.copyWith(color: theme.textColor600, fontSize: 14),
-              ),
-              Text(
-                time,
-                style: theme.regular14.copyWith(color: theme.textColor300, fontSize: 13),
-              ),
-            ],
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "$day، $date",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: theme.medium16.copyWith(
+                    color: theme.textColor600,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  time,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.regular14.copyWith(
+                    color: theme.textColor300,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(width: 12),
           Container(

@@ -63,6 +63,10 @@ class DoctorAppointmentItemResponse {
   final int? durationChatHours;
   @JsonKey(name: 'durationCallMinutes')
   final int? durationCallMinutes;
+  @JsonKey(name: 'complaint')
+  final String? complaint;
+  @JsonKey(name: 'symptoms')
+  final String? symptoms;
   @JsonKey(name: 'notes')
   final String? notes;
   @JsonKey(name: 'cancelReason')
@@ -93,6 +97,8 @@ class DoctorAppointmentItemResponse {
     this.currency,
     this.durationChatHours,
     this.durationCallMinutes,
+    this.complaint,
+    this.symptoms,
     this.notes,
     this.cancelReason,
     this.createdAt,
@@ -111,7 +117,7 @@ class DoctorAppointmentItemResponse {
       _$DoctorAppointmentItemResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class DoctorAppointmentPatientResponse {
   @JsonKey(name: 'id')
   final String? id;
@@ -127,6 +133,8 @@ class DoctorAppointmentPatientResponse {
   final String? countryCode;
   @JsonKey(name: 'email')
   final String? email;
+  @JsonKey(name: 'medicalInfo')
+  final DoctorAppointmentPatientMedicalInfoResponse? medicalInfo;
 
   DoctorAppointmentPatientResponse({
     this.id,
@@ -136,6 +144,7 @@ class DoctorAppointmentPatientResponse {
     this.phone,
     this.countryCode,
     this.email,
+    this.medicalInfo,
   });
 
   factory DoctorAppointmentPatientResponse.fromJson(
@@ -145,6 +154,36 @@ class DoctorAppointmentPatientResponse {
 
   Map<String, dynamic> toJson() =>
       _$DoctorAppointmentPatientResponseToJson(this);
+}
+
+@JsonSerializable()
+class DoctorAppointmentPatientMedicalInfoResponse {
+  @JsonKey(name: 'gender')
+  final String? gender;
+  @JsonKey(name: 'heightCm')
+  final num? heightCm;
+  @JsonKey(name: 'weightKg')
+  final num? weightKg;
+  @JsonKey(name: 'complaint')
+  final String? complaint;
+  @JsonKey(name: 'symptoms')
+  final String? symptoms;
+
+  DoctorAppointmentPatientMedicalInfoResponse({
+    this.gender,
+    this.heightCm,
+    this.weightKg,
+    this.complaint,
+    this.symptoms,
+  });
+
+  factory DoctorAppointmentPatientMedicalInfoResponse.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$DoctorAppointmentPatientMedicalInfoResponseFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$DoctorAppointmentPatientMedicalInfoResponseToJson(this);
 }
 
 @JsonSerializable()

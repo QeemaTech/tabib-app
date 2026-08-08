@@ -28,32 +28,61 @@ class PatientInfoDetails extends StatelessWidget {
       child: Column(
         spacing: 5,
         children: [
-          _buildInfoItem(
-            context,
-            'patients.details.birthDate'.tr(),
-            birthDate,
+          _PatientInfoRow(
+            label: 'patients.details.birthDate'.tr(),
+            value: birthDate,
           ),
-          _buildInfoItem(context, 'patients.details.gender'.tr(), gender),
-          _buildInfoItem(context, 'patients.details.weight'.tr(), weight),
-          _buildInfoItem(context, 'patients.details.height'.tr(), height),
+          _PatientInfoRow(
+            label: 'patients.details.gender'.tr(),
+            value: gender,
+          ),
+          _PatientInfoRow(
+            label: 'patients.details.weight'.tr(),
+            value: weight,
+          ),
+          _PatientInfoRow(
+            label: 'patients.details.height'.tr(),
+            value: height,
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildInfoItem(BuildContext context, String label, String value) {
+class _PatientInfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _PatientInfoRow({
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final theme = context.appTheme;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          value,
-          style: theme.medium16.copyWith(color: theme.textColor600, fontSize: 13),
+        Expanded(
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.end,
+            style: theme.medium16.copyWith(
+              color: theme.textColor600,
+              fontSize: 13,
+            ),
+          ),
         ),
         const SizedBox(width: 4),
         Text(
           ':$label',
-          style: theme.regular14.copyWith(color: theme.textColor300, fontSize: 13),
+          style: theme.regular14.copyWith(
+            color: theme.textColor300,
+            fontSize: 13,
+          ),
         ),
       ],
     );
