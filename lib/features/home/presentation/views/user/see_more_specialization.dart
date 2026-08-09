@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/features/home/presentation/widgets/special_item.dart';
+import 'package:tabib_app/core/routes/routes.dart';
+import 'package:tabib_app/features/auth/domain/entities/specialty_entity.dart';
+import 'package:tabib_app/features/home/presentation/view_model/specialties_state.dart';
+import 'package:tabib_app/features/home/presentation/view_model/specialties_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/search_bar_widget.dart';
-
-class SpecializationsData {
-  final String title;
-  final String imageUrl;
-
-  SpecializationsData({required this.title, required this.imageUrl});
-}
+import 'package:tabib_app/features/home/presentation/widgets/special_item.dart';
 
 class SeeMoreSpecializationView extends StatelessWidget {
   const SeeMoreSpecializationView({super.key});
@@ -18,12 +16,6 @@ class SeeMoreSpecializationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    final List<SpecializationsData> specializations = [
-      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
-      SpecializationsData(title: "common.kids".tr(), imageUrl: AssetsManager.doctor),
-    ];
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -43,31 +35,125 @@ class SeeMoreSpecializationView extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: SearchBarWidget(
               hintText: 'home.search.specHint'.tr(),
+              onChanged: context.read<SpecialtiesViewModel>().onSearchChanged,
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.9,
-              ),
-              itemCount: specializations.length,
-              itemBuilder: (context, index) {
-                return SpecialItem(
-                  title: specializations[index].title,
-                  image: specializations[index].imageUrl,
+            child: BlocBuilder<SpecialtiesViewModel, SpecialtiesState>(
+              builder: (context, state) {
+                final specialtiesState = state.specialtiesState;
+                if (specialtiesState.isLoading || specialtiesState.isInitial) {
+                  return const _SpecialtiesLoadingWidget();
+                }
+                if (specialtiesState.isError) {
+                  return _SpecialtiesErrorWidget(
+                    message: specialtiesState.errorMessage ?? '',
+                  );
+                }
+                return _SpecialtiesSuccessWidget(
+                  specialties: state.filteredSpecialties(
+                    context.locale.languageCode,
+                  ),
                 );
               },
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SpecialtiesLoadingWidget extends StatelessWidget {
+  const _SpecialtiesLoadingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return Center(
+      child: CircularProgressIndicator(color: theme.primaryColor),
+    );
+  }
+}
+
+class _SpecialtiesErrorWidget extends StatelessWidget {
+  final String message;
+
+  const _SpecialtiesErrorWidget({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: theme.regular14.copyWith(color: theme.textColor300),
+          ),
+          IconButton(
+            onPressed: () => context.read<SpecialtiesViewModel>().retry(),
+            icon: Icon(Icons.refresh, color: theme.primaryColor),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SpecialtiesSuccessWidget extends StatelessWidget {
+  final List<SpecialtyEntity> specialties;
+
+  const _SpecialtiesSuccessWidget({required this.specialties});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    final languageCode = context.locale.languageCode;
+
+    if (specialties.isEmpty) {
+      return Center(
+        child: Text(
+          'home.search.empty'.tr(),
+          style: theme.regular14.copyWith(color: theme.textColor300),
+        ),
+      );
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.9,
+      ),
+      itemCount: specialties.length,
+      itemBuilder: (context, index) {
+        final specialty = specialties[index];
+        final iconUrl = specialty.iconUrl;
+        return InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              AppRoutes.searchView,
+              arguments: specialty.id,
+            );
+          },
+          child: SpecialItem(
+            title: specialty.localizedName(languageCode),
+            image: (iconUrl != null && iconUrl.isNotEmpty)
+                ? iconUrl
+                : AssetsManager.skinDoc,
+          ),
+        );
+      },
     );
   }
 }
