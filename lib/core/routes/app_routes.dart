@@ -12,6 +12,7 @@ import 'package:tabib_app/features/auth/presentation/view_model/auth_constants.d
 import 'package:tabib_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/doc/complete_doc_profile_cubit.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/chat_list_view_model.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_details_view.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_list_view.dart';
 import 'package:tabib_app/features/home/presentation/views/user/search_view.dart';
@@ -124,7 +125,12 @@ class Routes {
           ),
         );
       case AppRoutes.chatListView:
-        return MaterialPageRoute(builder: (context) => const ChatListView());
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<ChatListViewModel>()..loadConsultations(),
+            child: const ChatListView(),
+          ),
+        );
       case AppRoutes.chatDetailsView:
         return MaterialPageRoute(builder: (context) => const ChatDetailsView());
       case AppRoutes.patientDetailsView:

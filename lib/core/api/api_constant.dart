@@ -1,5 +1,6 @@
 class EndPoint {
   static const String baseUrl = "https://tabeeb.nodeteam.site/api/v1/";
+  static const String socketUrl = "https://tabeeb.nodeteam.site";
 
   EndPoint._();
 
@@ -50,4 +51,5 @@ class EndPoint {
       "/doctor/onboarding/professional";
   static const String doctorOnboardingDocuments =
       "/doctor/onboarding/documents";
+  static const String consultations = "/consultations";
 }
