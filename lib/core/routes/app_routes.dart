@@ -37,6 +37,8 @@ import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdraw
 import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdrawal_details_view.dart';
 import 'package:tabib_app/features/schedule/presentation/view_model/doctor_schedule_view_model.dart';
 import 'package:tabib_app/features/schedule/presentation/views/doctor_schedule_view.dart';
+import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
+import 'package:tabib_app/features/appointments/presentation/views/confirm_payment_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -183,6 +185,18 @@ class Routes {
                 getIt<DoctorScheduleViewModel>()..loadSchedule(),
             child: const DoctorScheduleView(),
           ),
+        );
+      case AppRoutes.confirmPaymentView:
+        final args = settings.arguments;
+        if (args is! ConfirmPaymentArgs) {
+          return MaterialPageRoute(
+            builder: (context) => const Scaffold(
+              body: Center(child: Text('Missing payment arguments')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => ConfirmPaymentView(args: args),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';

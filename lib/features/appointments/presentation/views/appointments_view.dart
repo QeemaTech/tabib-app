@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_entity.dart';
 import 'package:tabib_app/features/appointments/presentation/utils/appointment_ui_helpers.dart';
+import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointments_state.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointments_view_model.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/cancel_appointment_dialog.dart';
@@ -180,6 +182,27 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
                             context,
                             appointmentId: appointment.id,
                           )
+                      : null,
+                  onConfirmPayment: canConfirmPayment(appointment.status)
+                      ? () async {
+                          final paid = await Navigator.of(context).pushNamed(
+                            AppRoutes.confirmPaymentView,
+                            arguments: ConfirmPaymentArgs(
+                              appointmentId: appointment.id,
+                              consultationFee:
+                                  appointment.doctor.consultationFee,
+                              doctorName: appointment.doctor
+                                  .localizedName(languageCode),
+                              dateTimeText:
+                                  formatAppointmentDateTime(appointment),
+                            ),
+                          );
+                          if (paid == true && context.mounted) {
+                            await context
+                                .read<AppointmentsViewModel>()
+                                .refreshAppointments();
+                          }
+                        }
                       : null,
                 );
               },

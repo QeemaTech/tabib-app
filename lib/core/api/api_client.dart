@@ -15,8 +15,12 @@ import 'package:tabib_app/features/auth/data/models/response/register_response.d
 import 'package:tabib_app/features/auth/data/models/response/specialties_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
+import 'package:tabib_app/features/appointments/data/models/request/create_payment_request.dart';
+import 'package:tabib_app/features/appointments/data/models/request/validate_coupon_request.dart';
 import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
 import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
 import 'package:tabib_app/features/home/data/models/response/book_appointment_response.dart';
 import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
@@ -115,6 +119,16 @@ abstract class ApiClient {
   Future<CancelAppointmentResponse> cancelAppointment(
     @Path('id') String id,
     @Body() CancelAppointmentRequest request,
+  );
+
+  @POST(EndPoint.patientValidateCoupon)
+  Future<ValidateCouponResponse> validateCoupon(
+    @Body() ValidateCouponRequest request,
+  );
+
+  @POST(EndPoint.patientPayments)
+  Future<CreatePaymentResponse> createPayment(
+    @Body() CreatePaymentRequest request,
   );
 
   @GET(EndPoint.patientWallet)

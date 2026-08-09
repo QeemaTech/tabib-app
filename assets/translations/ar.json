@@ -279,7 +279,20 @@
     "cancelReasonHint": "أدخل سبب الإلغاء",
     "cancelConfirm": "تأكيد",
     "cancelSuccess": "تم إلغاء الموعد بنجاح",
-    "cancelReasonRequired": "يرجى إدخال سبب الإلغاء"
+    "cancelReasonRequired": "يرجى إدخال سبب الإلغاء",
+    "confirmPayment": "تأكيد الدفع",
+    "confirmPaymentTitle": "تأكيد الدفع",
+    "couponHint": "هل لديك كوبون؟",
+    "couponCode": "رمز الكوبون",
+    "applyCoupon": "تطبيق",
+    "clearCoupon": "مسح",
+    "couponRequired": "يرجى إدخال رمز الكوبون",
+    "useWallet": "استخدام رصيد المحفظة",
+    "walletBalance": "الرصيد: {amount} {currency}",
+    "originalAmount": "المبلغ الأصلي",
+    "discount": "الخصم",
+    "finalAmount": "المبلغ النهائي",
+    "paySuccess": "تم إتمام الدفع بنجاح"
   },
   "records": {
     "title": "السجلات الطبية",

@@ -3,10 +3,17 @@ import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/appointments/data/data_source/appointments_data_source.dart';
 import 'package:tabib_app/features/appointments/data/mapper/cancel_appointment_mapper.dart';
 import 'package:tabib_app/features/appointments/data/mapper/patient_appointments_mapper.dart';
+import 'package:tabib_app/features/appointments/data/mapper/payment_mapper.dart';
 import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
+import 'package:tabib_app/features/appointments/data/models/request/create_payment_request.dart';
+import 'package:tabib_app/features/appointments/data/models/request/validate_coupon_request.dart';
 import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
+import 'package:tabib_app/features/appointments/domain/entities/coupon_validation_entity.dart';
 import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_entity.dart';
+import 'package:tabib_app/features/appointments/domain/entities/payment_entity.dart';
 import 'package:tabib_app/features/appointments/domain/repo/appointments_repo.dart';
 
 @LazySingleton(as: AppointmentsRepo)
@@ -39,6 +46,43 @@ class AppointmentsRepoImpl implements AppointmentsRepo {
       case Success<CancelAppointmentResponse>():
         return Success(response.data.toEntity());
       case Failure<CancelAppointmentResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<CouponValidationEntity>> validateCoupon({
+    required String code,
+    required String appointmentId,
+  }) async {
+    final response = await dataSource.validateCoupon(
+      ValidateCouponRequest(code: code, appointmentId: appointmentId),
+    );
+    switch (response) {
+      case Success<ValidateCouponResponse>():
+        return Success(response.data.toEntity());
+      case Failure<ValidateCouponResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<PaymentEntity>> createPayment({
+    required String appointmentId,
+    String? couponCode,
+    required bool useWallet,
+  }) async {
+    final response = await dataSource.createPayment(
+      CreatePaymentRequest(
+        appointmentId: appointmentId,
+        couponCode: couponCode,
+        useWallet: useWallet,
+      ),
+    );
+    switch (response) {
+      case Success<CreatePaymentResponse>():
+        return Success(response.data.toEntity());
+      case Failure<CreatePaymentResponse>():
         return Failure(response.errorMessage);
     }
   }

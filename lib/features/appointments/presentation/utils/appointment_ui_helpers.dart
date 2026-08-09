@@ -29,3 +29,7 @@ bool canCancelAppointment(String status) {
   final value = status.toUpperCase();
   return value == 'PENDING' || value == 'CONFIRMED';
 }
+
+bool canConfirmPayment(String status) {
+  return status.toUpperCase() == 'CONFIRMED';
+}

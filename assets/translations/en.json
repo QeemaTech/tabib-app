@@ -279,7 +279,20 @@
     "cancelReasonHint": "Enter cancellation reason",
     "cancelConfirm": "Confirm",
     "cancelSuccess": "Appointment cancelled successfully",
-    "cancelReasonRequired": "Please enter a cancellation reason"
+    "cancelReasonRequired": "Please enter a cancellation reason",
+    "confirmPayment": "Confirm Payment",
+    "confirmPaymentTitle": "Confirm Payment",
+    "couponHint": "Have a coupon?",
+    "couponCode": "Coupon code",
+    "applyCoupon": "Apply",
+    "clearCoupon": "Clear",
+    "couponRequired": "Please enter a coupon code",
+    "useWallet": "Use wallet balance",
+    "walletBalance": "Balance: {amount} {currency}",
+    "originalAmount": "Original amount",
+    "discount": "Discount",
+    "finalAmount": "Final amount",
+    "paySuccess": "Payment completed successfully"
   },
   "records": {
     "title": "Medical Records",

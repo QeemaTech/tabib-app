@@ -20,4 +20,5 @@ class AppRoutes{
   static const String doctorWithdrawView="doctorWithdrawView";
   static const String doctorWithdrawalDetailsView="doctorWithdrawalDetailsView";
   static const String doctorScheduleView="doctorScheduleView";
+  static const String confirmPaymentView="confirmPaymentView";
 }

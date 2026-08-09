@@ -14,6 +14,7 @@ class DoctorProfileCard extends StatelessWidget {
   final String dateTimeText;
   final String feeText;
   final VoidCallback? cancelAppointment;
+  final VoidCallback? onConfirmPayment;
 
   const DoctorProfileCard({
     super.key,
@@ -25,6 +26,7 @@ class DoctorProfileCard extends StatelessWidget {
     required this.dateTimeText,
     required this.feeText,
     this.cancelAppointment,
+    this.onConfirmPayment,
   });
 
   @override
@@ -146,47 +148,75 @@ class DoctorProfileCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CustomImageView(
-                          height: 12,
-                          imagePath: AssetsManager.appointments,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(dateTimeText, style: metaStyle),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CustomImageView(imagePath: AssetsManager.moneys),
-                        Text(feeText, style: metaStyle),
-                      ],
-                    ),
-                  ],
-                ),
-                if (cancelAppointment != null)
-                  GestureDetector(
-                    onTap: cancelAppointment,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CustomImageView(
+                            height: 12,
+                            imagePath: AssetsManager.appointments,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(dateTimeText, style: metaStyle),
+                        ],
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: 0.4),
-                        borderRadius: BorderRadius.circular(12),
+                      Row(
+                        children: [
+                          CustomImageView(imagePath: AssetsManager.moneys),
+                          Text(feeText, style: metaStyle),
+                        ],
                       ),
-                      child: Text(
-                        'appointments.cancelAppointment'.tr(),
-                        style: theme.regular12.copyWith(
-                          color: theme.primaryColor,
-                        ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (cancelAppointment != null)
+                            GestureDetector(
+                              onTap: cancelAppointment,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withValues(alpha: 0.4),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'appointments.cancelAppointment'.tr(),
+                                  style: theme.regular12.copyWith(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (onConfirmPayment != null)
+                            GestureDetector(
+                              onTap: onConfirmPayment,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.withValues(alpha: 0.4),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'appointments.confirmPayment'.tr(),
+                                  style: theme.regular12.copyWith(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                    ),
+                    ],
                   ),
+                ),
               ],
             ),
           ],
