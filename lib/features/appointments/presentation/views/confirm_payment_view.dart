@@ -20,7 +20,7 @@ class ConfirmPaymentView extends StatelessWidget {
 
     return BlocProvider(
       create: (_) => getIt<ConfirmPaymentViewModel>()
-        ..init(consultationFee: args.consultationFee)
+        ..init(consultationFee: args.bookingPrice)
         ..loadWallet(),
       child: BlocListener<ConfirmPaymentViewModel, ConfirmPaymentState>(
         listenWhen: (previous, current) =>

@@ -292,7 +292,8 @@
     "originalAmount": "المبلغ الأصلي",
     "discount": "الخصم",
     "finalAmount": "المبلغ النهائي",
-    "paySuccess": "تم إتمام الدفع بنجاح"
+    "paySuccess": "تم إتمام الدفع بنجاح",
+    "paid": "مدفوع"
   },
   "records": {
     "title": "السجلات الطبية",

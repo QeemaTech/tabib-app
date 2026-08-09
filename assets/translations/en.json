@@ -292,7 +292,8 @@
     "originalAmount": "Original amount",
     "discount": "Discount",
     "finalAmount": "Final amount",
-    "paySuccess": "Payment completed successfully"
+    "paySuccess": "Payment completed successfully",
+    "paid": "Paid"
   },
   "records": {
     "title": "Medical Records",

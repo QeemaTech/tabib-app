@@ -15,6 +15,7 @@ class DoctorProfileCard extends StatelessWidget {
   final String feeText;
   final VoidCallback? cancelAppointment;
   final VoidCallback? onConfirmPayment;
+  final bool isPaid;
 
   const DoctorProfileCard({
     super.key,
@@ -27,6 +28,7 @@ class DoctorProfileCard extends StatelessWidget {
     required this.feeText,
     this.cancelAppointment,
     this.onConfirmPayment,
+    this.isPaid = false,
   });
 
   @override
@@ -192,7 +194,27 @@ class DoctorProfileCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          if (onConfirmPayment != null)
+                          if (isPaid)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: theme.primaryColor.withValues(
+                                  alpha: 0.12,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                'appointments.paid'.tr(),
+                                style: theme.regular12.copyWith(
+                                  color: theme.primaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )
+                          else if (onConfirmPayment != null)
                             GestureDetector(
                               onTap: onConfirmPayment,
                               child: Container(

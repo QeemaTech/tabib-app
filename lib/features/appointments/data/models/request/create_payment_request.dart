@@ -6,7 +6,7 @@ part 'create_payment_request.g.dart';
 class CreatePaymentRequest {
   @JsonKey(name: 'appointmentId')
   final String? appointmentId;
-  @JsonKey(name: 'couponCode')
+  @JsonKey(name: 'couponCode', includeIfNull: false)
   final String? couponCode;
   @JsonKey(name: 'useWallet')
   final bool? useWallet;

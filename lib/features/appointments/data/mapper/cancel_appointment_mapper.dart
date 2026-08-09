@@ -11,16 +11,19 @@ extension CancelAppointmentResponseMapper on CancelAppointmentResponse {
       startTime: data?.startTime ?? '',
       endTime: data?.endTime ?? '',
       consultationType: data?.consultationType ?? '',
+      bookingPrice: 0,
+      currency: '',
       notes: data?.notes ?? '',
       cancelReason: data?.cancelReason ?? '',
       createdAt: data?.createdAt ?? '',
+      actions: PatientAppointmentActionsEntity.empty,
       doctor: data?.doctor?.toEntity() ??
           const PatientAppointmentDoctorEntity(
             id: '',
             fullNameAr: '',
             fullNameEn: '',
             avatarUrl: '',
-            consultationFee: 0,
+            bookingPrice: 0,
             specialties: [],
           ),
     );
@@ -34,7 +37,7 @@ extension CancelAppointmentDoctorDataMapper on CancelAppointmentDoctorData {
       fullNameAr: fullNameAr ?? '',
       fullNameEn: fullNameEn ?? '',
       avatarUrl: avatarUrl ?? '',
-      consultationFee: consultationFee?.toDouble() ?? 0,
+      bookingPrice: consultationFee?.toDouble() ?? 0,
       specialties: specialties ?? const [],
     );
   }

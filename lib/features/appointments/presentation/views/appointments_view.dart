@@ -176,21 +176,23 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
                   statusLabel: appointmentStatusLabel(appointment.status),
                   specialties: appointment.doctor.specialties,
                   dateTimeText: formatAppointmentDateTime(appointment),
-                  feeText: '${appointment.doctor.consultationFee}',
-                  cancelAppointment: canCancelAppointment(appointment.status)
+                  feeText: appointment.currency.isEmpty
+                      ? '${appointment.bookingPrice}'
+                      : '${appointment.bookingPrice} ${appointment.currency}',
+                  isPaid: isAppointmentPaid(appointment.actions),
+                  cancelAppointment: appointment.actions.canCancel
                       ? () => showCancelAppointmentDialog(
                             context,
                             appointmentId: appointment.id,
                           )
                       : null,
-                  onConfirmPayment: canConfirmPayment(appointment.status)
+                  onConfirmPayment: appointment.actions.canPay
                       ? () async {
                           final paid = await Navigator.of(context).pushNamed(
                             AppRoutes.confirmPaymentView,
                             arguments: ConfirmPaymentArgs(
                               appointmentId: appointment.id,
-                              consultationFee:
-                                  appointment.doctor.consultationFee,
+                              bookingPrice: appointment.bookingPrice,
                               doctorName: appointment.doctor
                                   .localizedName(languageCode),
                               dateTimeText:

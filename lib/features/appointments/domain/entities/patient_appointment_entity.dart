@@ -1,5 +1,38 @@
 import 'package:equatable/equatable.dart';
 
+class PatientAppointmentActionsEntity extends Equatable {
+  final bool canCancel;
+  final bool canPay;
+  final bool canAccessChat;
+  final bool canAccessCall;
+  final bool canReview;
+
+  const PatientAppointmentActionsEntity({
+    required this.canCancel,
+    required this.canPay,
+    required this.canAccessChat,
+    required this.canAccessCall,
+    required this.canReview,
+  });
+
+  static const empty = PatientAppointmentActionsEntity(
+    canCancel: false,
+    canPay: false,
+    canAccessChat: false,
+    canAccessCall: false,
+    canReview: false,
+  );
+
+  @override
+  List<Object?> get props => [
+        canCancel,
+        canPay,
+        canAccessChat,
+        canAccessCall,
+        canReview,
+      ];
+}
+
 class PatientAppointmentEntity extends Equatable {
   final String id;
   final String status;
@@ -7,9 +40,12 @@ class PatientAppointmentEntity extends Equatable {
   final String startTime;
   final String endTime;
   final String consultationType;
+  final double bookingPrice;
+  final String currency;
   final String notes;
   final String cancelReason;
   final String createdAt;
+  final PatientAppointmentActionsEntity actions;
   final PatientAppointmentDoctorEntity doctor;
 
   const PatientAppointmentEntity({
@@ -19,9 +55,12 @@ class PatientAppointmentEntity extends Equatable {
     required this.startTime,
     required this.endTime,
     required this.consultationType,
+    required this.bookingPrice,
+    required this.currency,
     required this.notes,
     required this.cancelReason,
     required this.createdAt,
+    required this.actions,
     required this.doctor,
   });
 
@@ -32,9 +71,12 @@ class PatientAppointmentEntity extends Equatable {
     String? startTime,
     String? endTime,
     String? consultationType,
+    double? bookingPrice,
+    String? currency,
     String? notes,
     String? cancelReason,
     String? createdAt,
+    PatientAppointmentActionsEntity? actions,
     PatientAppointmentDoctorEntity? doctor,
   }) {
     return PatientAppointmentEntity(
@@ -44,9 +86,12 @@ class PatientAppointmentEntity extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       consultationType: consultationType ?? this.consultationType,
+      bookingPrice: bookingPrice ?? this.bookingPrice,
+      currency: currency ?? this.currency,
       notes: notes ?? this.notes,
       cancelReason: cancelReason ?? this.cancelReason,
       createdAt: createdAt ?? this.createdAt,
+      actions: actions ?? this.actions,
       doctor: doctor ?? this.doctor,
     );
   }
@@ -59,9 +104,12 @@ class PatientAppointmentEntity extends Equatable {
         startTime,
         endTime,
         consultationType,
+        bookingPrice,
+        currency,
         notes,
         cancelReason,
         createdAt,
+        actions,
         doctor,
       ];
 }
@@ -71,7 +119,7 @@ class PatientAppointmentDoctorEntity extends Equatable {
   final String fullNameAr;
   final String fullNameEn;
   final String avatarUrl;
-  final double consultationFee;
+  final double bookingPrice;
   final List<String> specialties;
 
   const PatientAppointmentDoctorEntity({
@@ -79,7 +127,7 @@ class PatientAppointmentDoctorEntity extends Equatable {
     required this.fullNameAr,
     required this.fullNameEn,
     required this.avatarUrl,
-    required this.consultationFee,
+    required this.bookingPrice,
     required this.specialties,
   });
 
@@ -99,7 +147,7 @@ class PatientAppointmentDoctorEntity extends Equatable {
         fullNameAr,
         fullNameEn,
         avatarUrl,
-        consultationFee,
+        bookingPrice,
         specialties,
       ];
 }

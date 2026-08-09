@@ -17,16 +17,19 @@ extension PatientAppointmentItemResponseMapper
       startTime: startTime ?? '',
       endTime: endTime ?? '',
       consultationType: consultationType ?? '',
+      bookingPrice: bookingPrice?.toDouble() ?? 0,
+      currency: currency ?? '',
       notes: notes ?? '',
       cancelReason: cancelReason ?? '',
       createdAt: createdAt ?? '',
+      actions: actions?.toEntity() ?? PatientAppointmentActionsEntity.empty,
       doctor: doctor?.toEntity() ??
           const PatientAppointmentDoctorEntity(
             id: '',
             fullNameAr: '',
             fullNameEn: '',
             avatarUrl: '',
-            consultationFee: 0,
+            bookingPrice: 0,
             specialties: [],
           ),
     );
@@ -41,8 +44,21 @@ extension PatientAppointmentDoctorResponseMapper
       fullNameAr: fullNameAr ?? '',
       fullNameEn: fullNameEn ?? '',
       avatarUrl: avatarUrl ?? '',
-      consultationFee: consultationFee?.toDouble() ?? 0,
+      bookingPrice: bookingPrice?.toDouble() ?? 0,
       specialties: specialties ?? const [],
+    );
+  }
+}
+
+extension PatientAppointmentActionsResponseMapper
+    on PatientAppointmentActionsResponse {
+  PatientAppointmentActionsEntity toEntity() {
+    return PatientAppointmentActionsEntity(
+      canCancel: canCancel ?? false,
+      canPay: canPay ?? false,
+      canAccessChat: canAccessChat ?? false,
+      canAccessCall: canAccessCall ?? false,
+      canReview: canReview ?? false,
     );
   }
 }

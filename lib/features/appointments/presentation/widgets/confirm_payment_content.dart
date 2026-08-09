@@ -75,7 +75,7 @@ class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
                 ),
                 onClear: () {
                   _couponController.clear();
-                  vm.clearCoupon(consultationFee: args.consultationFee);
+                  vm.clearCoupon(consultationFee: args.bookingPrice);
                 },
               ),
               const SizedBox(height: 20),
