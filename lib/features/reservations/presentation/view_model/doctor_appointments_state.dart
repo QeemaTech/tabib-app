@@ -4,6 +4,8 @@ import 'package:tabib_app/features/reservations/domain/entities/doctor_appointme
 
 enum DoctorAppointmentsFilter { all, confirm, holding, completed, cancel }
 
+enum DoctorAppointmentActionType { accept, reject }
+
 DateTime _dateOnly(DateTime date) =>
     DateTime(date.year, date.month, date.day);
 
@@ -11,11 +13,15 @@ class DoctorAppointmentsState extends Equatable {
   final DoctorAppointmentsFilter filter;
   final DateTime selectedDate;
   final BaseState<List<DoctorAppointmentEntity>> appointmentsState;
+  final BaseState<DoctorAppointmentActionType> actionState;
+  final String? actionAppointmentId;
 
   DoctorAppointmentsState({
     this.filter = DoctorAppointmentsFilter.all,
     DateTime? selectedDate,
     this.appointmentsState = const BaseState(requestState: RequestState.init),
+    this.actionState = const BaseState(requestState: RequestState.init),
+    this.actionAppointmentId,
   }) : selectedDate = _dateOnly(selectedDate ?? DateTime.now());
 
   String? get apiStatus {
@@ -37,14 +43,27 @@ class DoctorAppointmentsState extends Equatable {
     DoctorAppointmentsFilter? filter,
     DateTime? selectedDate,
     BaseState<List<DoctorAppointmentEntity>>? appointmentsState,
+    BaseState<DoctorAppointmentActionType>? actionState,
+    String? actionAppointmentId,
+    bool clearActionAppointmentId = false,
   }) {
     return DoctorAppointmentsState(
       filter: filter ?? this.filter,
       selectedDate: selectedDate ?? this.selectedDate,
       appointmentsState: appointmentsState ?? this.appointmentsState,
+      actionState: actionState ?? this.actionState,
+      actionAppointmentId: clearActionAppointmentId
+          ? null
+          : (actionAppointmentId ?? this.actionAppointmentId),
     );
   }
 
   @override
-  List<Object?> get props => [filter, selectedDate, appointmentsState];
+  List<Object?> get props => [
+        filter,
+        selectedDate,
+        appointmentsState,
+        actionState,
+        actionAppointmentId,
+      ];
 }

@@ -15,4 +15,11 @@ abstract interface class DoctorAppointmentsRepo {
     String appointmentId,
     CreateDoctorReportRequest request,
   );
+
+  Future<Result<DoctorAppointmentEntity>> acceptAppointment(String id);
+
+  Future<Result<DoctorAppointmentEntity>> rejectAppointment({
+    required String id,
+    required String reason,
+  });
 }

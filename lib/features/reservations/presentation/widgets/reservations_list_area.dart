@@ -52,7 +52,11 @@ class _ReservationsLoadingWidget extends StatelessWidget {
         itemCount: 5,
         itemBuilder: (_, _) {
           if (filter == DoctorAppointmentsFilter.holding) {
-            return const RequestReviewDocCard();
+            return const RequestReviewDocCard(
+              patientName: 'Patient Name',
+              subtitle: 'Consultation',
+              timeLabel: '2026-08-10 - 09:30',
+            );
           }
           return ReservationCard(
             showTime: filter != DoctorAppointmentsFilter.completed &&

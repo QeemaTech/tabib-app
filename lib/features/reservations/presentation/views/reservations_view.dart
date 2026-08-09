@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
+import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/core/widgets/filter_chips.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
@@ -30,60 +31,85 @@ class _ReservationsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return BlocBuilder<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            const SizedBox(height: 26),
-            FilterChips(
-              filters: [
-                'appointments.filters.all'.tr(),
-                'appointments.filters.confirm'.tr(),
-                'appointments.filters.holding'.tr(),
-                'appointments.filters.completed'.tr(),
-                'appointments.filters.cancel'.tr(),
-              ],
-              onSelected: (index) {
-                context
-                    .read<DoctorAppointmentsViewModel>()
-                    .onFilterChanged(_filters[index]);
-              },
-            ),
-            if (state.filter == DoctorAppointmentsFilter.all) ...[
-              CalendarSection(
-                selectedDay: state.selectedDate,
-                onDaySelected: (day) {
+    return BlocListener<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
+      listenWhen: (previous, current) =>
+          previous.actionState != current.actionState,
+      listener: (context, state) {
+        final action = state.actionState;
+        if (action.isLoaded) {
+          final message = action.data == DoctorAppointmentActionType.reject
+              ? 'reservations.rejectSuccess'.tr()
+              : 'reservations.acceptSuccess'.tr();
+          CustomToast.show(
+            context,
+            message: message,
+            status: ToastStatus.success,
+          );
+          context.read<DoctorAppointmentsViewModel>().resetActionState();
+        } else if (action.isError) {
+          CustomToast.show(
+            context,
+            message: action.errorMessage ?? 'errors.unknown'.tr(),
+            status: ToastStatus.error,
+          );
+          context.read<DoctorAppointmentsViewModel>().resetActionState();
+        }
+      },
+      child: BlocBuilder<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              const SizedBox(height: 26),
+              FilterChips(
+                filters: [
+                  'appointments.filters.all'.tr(),
+                  'appointments.filters.confirm'.tr(),
+                  'appointments.filters.holding'.tr(),
+                  'appointments.filters.completed'.tr(),
+                  'appointments.filters.cancel'.tr(),
+                ],
+                onSelected: (index) {
                   context
                       .read<DoctorAppointmentsViewModel>()
-                      .onDaySelected(day);
+                      .onFilterChanged(_filters[index]);
                 },
               ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-                  backgroundColor: const Color(0xFFE9EBF1),
-                  side: BorderSide.none,
-                  textStyle: theme.bold18.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+              if (state.filter == DoctorAppointmentsFilter.all) ...[
+                CalendarSection(
+                  selectedDay: state.selectedDate,
+                  onDaySelected: (day) {
+                    context
+                        .read<DoctorAppointmentsViewModel>()
+                        .onDaySelected(day);
+                  },
                 ),
-                onPressed: () =>
-                    context.pushName(AppRoutes.doctorScheduleView),
-                label: Text('schedule.workingHours'.tr()),
-                icon: const Icon(Icons.add_circle_outline),
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                    backgroundColor: const Color(0xFFE9EBF1),
+                    side: BorderSide.none,
+                    textStyle: theme.bold18.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  onPressed: () =>
+                      context.pushName(AppRoutes.doctorScheduleView),
+                  label: Text('schedule.workingHours'.tr()),
+                  icon: const Icon(Icons.add_circle_outline),
+                ),
+              ],
+              const SizedBox(height: 16),
+              Expanded(
+                child: ReservationsListArea(state: state),
               ),
             ],
-            const SizedBox(height: 16),
-            Expanded(
-              child: ReservationsListArea(state: state),
-            ),
-          ],
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

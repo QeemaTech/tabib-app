@@ -475,7 +475,14 @@
     "confirmedNow": "Confirmed - Now",
     "cardiologyConsultation": "Cardiology & Vascular Consultation",
     "createReportBtn": "Create Report",
-    "cancelBtn": "Cancel"
+    "cancelBtn": "Cancel",
+    "reject": "Reject",
+    "rejectReasonTitle": "Rejection reason",
+    "rejectReasonHint": "Enter rejection reason",
+    "rejectReasonRequired": "Please enter a rejection reason",
+    "rejectConfirm": "Confirm reject",
+    "acceptSuccess": "Appointment accepted",
+    "rejectSuccess": "Appointment rejected"
   },
   "patients": {
     "filters": {

@@ -30,6 +30,7 @@ import 'package:tabib_app/features/profile/data/models/request/update_patient_pr
 import 'package:tabib_app/features/profile/data/models/response/doctor_profile_response.dart';
 import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
 import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
+import 'package:tabib_app/features/reservations/data/models/request/reject_appointment_request.dart';
 import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
 import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
 import 'package:tabib_app/features/schedule/data/models/request/replace_week_schedule_request.dart';
@@ -179,6 +180,17 @@ abstract class ApiClient {
   @GET(EndPoint.doctorAppointmentPatientFile)
   Future<PatientFileResponse> getDoctorAppointmentPatientFile(
     @Path('id') String id,
+  );
+
+  @PATCH(EndPoint.doctorAppointmentAccept)
+  Future<DoctorAppointmentDetailsResponse> acceptDoctorAppointment(
+    @Path('id') String id,
+  );
+
+  @PATCH(EndPoint.doctorAppointmentReject)
+  Future<DoctorAppointmentDetailsResponse> rejectDoctorAppointment(
+    @Path('id') String id,
+    @Body() RejectAppointmentRequest request,
   );
 
   @GET(EndPoint.doctorSchedule)

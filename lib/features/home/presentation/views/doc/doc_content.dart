@@ -1,43 +1,73 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/home/domain/entities/doctor_dashboard_entity.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_state.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_view_model.dart';
-import '../../widgets/doc_info_cart.dart';
-import '../../widgets/header_special.dart';
-import '../../widgets/meeting_section.dart';
-import '../../widgets/request_review_doc.dart';
-import '../../widgets/search_bar_widget.dart';
+import 'package:tabib_app/features/home/presentation/widgets/dashboard_reject_dialog.dart';
+import 'package:tabib_app/features/home/presentation/widgets/doc_info_cart.dart';
+import 'package:tabib_app/features/home/presentation/widgets/header_special.dart';
+import 'package:tabib_app/features/home/presentation/widgets/meeting_section.dart';
+import 'package:tabib_app/features/home/presentation/widgets/request_review_doc.dart';
+import 'package:tabib_app/features/home/presentation/widgets/search_bar_widget.dart';
 
 class DocContent extends StatelessWidget {
   const DocContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DoctorDashboardViewModel, DoctorDashboardState>(
-      buildWhen: (previous, current) =>
-          previous.dashboardState != current.dashboardState,
-      builder: (context, state) {
-        final dashboardState = state.dashboardState;
-
-        if (dashboardState.isLoading || dashboardState.isInitial) {
-          return const _DocContentLoadingWidget();
-        }
-
-        if (dashboardState.isError) {
-          return _DocContentErrorWidget(
-            message: dashboardState.errorMessage ?? '',
+    return BlocListener<DoctorDashboardViewModel, DoctorDashboardState>(
+      listenWhen: (previous, current) =>
+          previous.actionState != current.actionState,
+      listener: (context, state) {
+        final action = state.actionState;
+        if (action.isLoaded) {
+          final message = action.data == DashboardPendingActionType.reject
+              ? 'reservations.rejectSuccess'.tr()
+              : 'reservations.acceptSuccess'.tr();
+          CustomToast.show(
+            context,
+            message: message,
+            status: ToastStatus.success,
           );
+          context.read<DoctorDashboardViewModel>().resetActionState();
+        } else if (action.isError) {
+          CustomToast.show(
+            context,
+            message: action.errorMessage ?? 'errors.unknown'.tr(),
+            status: ToastStatus.error,
+          );
+          context.read<DoctorDashboardViewModel>().resetActionState();
         }
-
-        final dashboard = dashboardState.data;
-        if (dashboard == null) {
-          return const SizedBox.shrink();
-        }
-
-        return _DocContentSuccessWidget(dashboard: dashboard);
       },
+      child: BlocBuilder<DoctorDashboardViewModel, DoctorDashboardState>(
+        builder: (context, state) {
+          final dashboardState = state.dashboardState;
+
+          if (dashboardState.isLoading || dashboardState.isInitial) {
+            return const _DocContentLoadingWidget();
+          }
+
+          if (dashboardState.isError) {
+            return _DocContentErrorWidget(
+              message: dashboardState.errorMessage ?? '',
+            );
+          }
+
+          final dashboard = dashboardState.data;
+          if (dashboard == null) {
+            return const SizedBox.shrink();
+          }
+
+          return _DocContentSuccessWidget(
+            dashboard: dashboard,
+            actionAppointmentId: state.actionAppointmentId,
+            isActionLoading: state.actionState.isLoading,
+          );
+        },
+      ),
     );
   }
 }
@@ -48,7 +78,10 @@ class _DocContentLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(color: context.appTheme.primaryColor,strokeWidth: 2,),
+      child: CircularProgressIndicator(
+        color: context.appTheme.primaryColor,
+        strokeWidth: 2,
+      ),
     );
   }
 }
@@ -84,8 +117,14 @@ class _DocContentErrorWidget extends StatelessWidget {
 
 class _DocContentSuccessWidget extends StatelessWidget {
   final DoctorDashboardEntity dashboard;
+  final String? actionAppointmentId;
+  final bool isActionLoading;
 
-  const _DocContentSuccessWidget({required this.dashboard});
+  const _DocContentSuccessWidget({
+    required this.dashboard,
+    required this.actionAppointmentId,
+    required this.isActionLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +141,24 @@ class _DocContentSuccessWidget extends StatelessWidget {
           DocDashboard(stats: dashboard.stats),
           MeetingSection(patientName: patientName),
           HeaderSpecial(
-            title: "home.doctor.reviewRequests",
-            titleArgs: ["${dashboard.stats.pendingCount}"],
+            title: 'home.doctor.reviewRequests',
+            titleArgs: ['${dashboard.stats.pendingCount}'],
           ),
           ...dashboard.pendingRequests.map(
             (request) => RequestReviewDocCard(
               patientName: request.patient.fullNameAr,
               subtitle: request.consultationType,
               timeLabel: '${request.date} - ${request.startTime}',
+              imageUrl: request.patient.avatarUrl,
+              isActionLoading:
+                  isActionLoading && actionAppointmentId == request.id,
+              onAccept: () => context
+                  .read<DoctorDashboardViewModel>()
+                  .acceptAppointment(request.id),
+              onReject: () => showDashboardRejectDialog(
+                context,
+                appointmentId: request.id,
+              ),
             ),
           ),
         ],

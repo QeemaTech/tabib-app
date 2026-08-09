@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/widgets/reservation_card.dart';
 import 'package:tabib_app/features/home/presentation/widgets/request_review_doc.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
+import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_view_model.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/reject_appointment_dialog.dart';
 
 class DoctorReservationListCard extends StatelessWidget {
   final DoctorAppointmentEntity appointment;
@@ -30,10 +33,25 @@ class DoctorReservationListCard extends StatelessWidget {
 
     switch (filter) {
       case DoctorAppointmentsFilter.holding:
-        return RequestReviewDocCard(
-          patientName: name,
-          subtitle: subtitle,
-          timeLabel: time,
+        return BlocBuilder<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
+          buildWhen: (p, c) => p.actionState != c.actionState,
+          builder: (context, state) {
+            return RequestReviewDocCard(
+              patientName: name,
+              subtitle: subtitle,
+              timeLabel: '${appointment.date} - $time',
+              imageUrl: imageUrl,
+              isActionLoading: state.actionState.isLoading &&
+                  state.actionAppointmentId == appointment.id,
+              onAccept: () => context
+                  .read<DoctorAppointmentsViewModel>()
+                  .acceptAppointment(appointment.id),
+              onReject: () => showRejectAppointmentDialog(
+                context,
+                appointmentId: appointment.id,
+              ),
+            );
+          },
         );
       case DoctorAppointmentsFilter.confirm:
         return ReservationCard(

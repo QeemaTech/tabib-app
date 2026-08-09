@@ -475,7 +475,14 @@
     "confirmedNow": "مؤكدة - الآن",
     "cardiologyConsultation": "استشارة قلب وأوعية دموية",
     "createReportBtn": "انشاء تقرير",
-    "cancelBtn": "الغاء"
+    "cancelBtn": "الغاء",
+    "reject": "رفض",
+    "rejectReasonTitle": "سبب الرفض",
+    "rejectReasonHint": "أدخل سبب الرفض",
+    "rejectReasonRequired": "يرجى إدخال سبب الرفض",
+    "rejectConfirm": "تأكيد الرفض",
+    "acceptSuccess": "تم قبول الموعد",
+    "rejectSuccess": "تم رفض الموعد"
   },
   "patients": {
     "filters": {

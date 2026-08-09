@@ -4,6 +4,7 @@ import 'package:tabib_app/core/error_handling/execute_api.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/reservations/data/data_source/doctor_appointments_data_source.dart';
 import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
+import 'package:tabib_app/features/reservations/data/models/request/reject_appointment_request.dart';
 import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
 import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
 
@@ -39,6 +40,23 @@ class DoctorAppointmentsDataSourceImpl implements DoctorAppointmentsDataSource {
   ) {
     return executeApi(
       () => apiClient.createDoctorAppointmentReport(appointmentId, request),
+    );
+  }
+
+  @override
+  Future<Result<DoctorAppointmentDetailsResponse>> acceptAppointment(
+    String id,
+  ) {
+    return executeApi(() => apiClient.acceptDoctorAppointment(id));
+  }
+
+  @override
+  Future<Result<DoctorAppointmentDetailsResponse>> rejectAppointment(
+    String id,
+    RejectAppointmentRequest request,
+  ) {
+    return executeApi(
+      () => apiClient.rejectDoctorAppointment(id, request),
     );
   }
 }

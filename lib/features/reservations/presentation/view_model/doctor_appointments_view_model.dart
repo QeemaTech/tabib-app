@@ -57,6 +57,82 @@ class DoctorAppointmentsViewModel extends Cubit<DoctorAppointmentsState> {
     }
   }
 
+  Future<void> acceptAppointment(String id) async {
+    emit(
+      state.copyWith(
+        actionState: BaseState.loading(),
+        actionAppointmentId: id,
+      ),
+    );
+
+    final result = await doctorAppointmentsRepo.acceptAppointment(id);
+    switch (result) {
+      case Success<DoctorAppointmentEntity>():
+        emit(
+          state.copyWith(
+            appointmentsState: BaseState.loaded(_withoutAppointment(id)),
+            actionState: BaseState.loaded(DoctorAppointmentActionType.accept),
+            clearActionAppointmentId: true,
+          ),
+        );
+      case Failure<DoctorAppointmentEntity>():
+        emit(
+          state.copyWith(
+            actionState: BaseState.error(result.errorMessage),
+            clearActionAppointmentId: true,
+          ),
+        );
+    }
+  }
+
+  Future<void> rejectAppointment({
+    required String id,
+    required String reason,
+  }) async {
+    emit(
+      state.copyWith(
+        actionState: BaseState.loading(),
+        actionAppointmentId: id,
+      ),
+    );
+
+    final result = await doctorAppointmentsRepo.rejectAppointment(
+      id: id,
+      reason: reason,
+    );
+    switch (result) {
+      case Success<DoctorAppointmentEntity>():
+        emit(
+          state.copyWith(
+            appointmentsState: BaseState.loaded(_withoutAppointment(id)),
+            actionState: BaseState.loaded(DoctorAppointmentActionType.reject),
+            clearActionAppointmentId: true,
+          ),
+        );
+      case Failure<DoctorAppointmentEntity>():
+        emit(
+          state.copyWith(
+            actionState: BaseState.error(result.errorMessage),
+            clearActionAppointmentId: true,
+          ),
+        );
+    }
+  }
+
+  void resetActionState() {
+    emit(
+      state.copyWith(
+        actionState: const BaseState(requestState: RequestState.init),
+        clearActionAppointmentId: true,
+      ),
+    );
+  }
+
+  List<DoctorAppointmentEntity> _withoutAppointment(String id) {
+    final current = state.appointmentsState.data ?? const [];
+    return current.where((appointment) => appointment.id != id).toList();
+  }
+
   Future<void> retry() => loadAppointments();
 
   Future<void> refresh() => loadAppointments(showLoading: false);
