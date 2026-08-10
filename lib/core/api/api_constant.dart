@@ -52,4 +52,6 @@ class EndPoint {
   static const String doctorOnboardingDocuments =
       "/doctor/onboarding/documents";
   static const String consultations = "/consultations";
+  static const String consultationsStart =
+      "/consultations/{appointmentId}/start";
 }

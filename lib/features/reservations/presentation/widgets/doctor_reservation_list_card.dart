@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/widgets/reservation_card.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/request_review_doc.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
@@ -19,6 +20,8 @@ class DoctorReservationListCard extends StatelessWidget {
     required this.appointment,
     required this.filter,
   });
+
+  bool get _isConfirmed => appointment.status.toUpperCase() == 'CONFIRMED';
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +63,8 @@ class DoctorReservationListCard extends StatelessWidget {
           subTitle: subtitle,
           time: time,
           imageUrl: imageUrl,
+          isChatEnabled: _isConfirmed,
+          onChatTap: _isConfirmed ? () => _startChat(context) : null,
           actions: [
             ReservationActionButton(
               label: 'patients.viewProfile'.tr(),
@@ -117,6 +122,8 @@ class DoctorReservationListCard extends StatelessWidget {
           subTitle: subtitle,
           time: time,
           imageUrl: imageUrl,
+          isChatEnabled: _isConfirmed,
+          onChatTap: _isConfirmed ? () => _startChat(context) : null,
           actions: [
             ReservationActionButton(
               label: 'patients.viewProfile'.tr(),
@@ -131,6 +138,10 @@ class DoctorReservationListCard extends StatelessWidget {
           ],
         );
     }
+  }
+
+  void _startChat(BuildContext context) {
+    context.read<StartConsultationViewModel>().startChat(appointment.id);
   }
 
   void _openDetails(BuildContext context) {

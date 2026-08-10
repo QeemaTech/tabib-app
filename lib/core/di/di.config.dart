@@ -59,6 +59,8 @@ import '../../features/chat/data/repo/chat_repo_impl.dart' as _i328;
 import '../../features/chat/domain/repo/chat_repo.dart' as _i804;
 import '../../features/chat/presentation/view_model/chat_list_view_model.dart'
     as _i1016;
+import '../../features/chat/presentation/view_model/start_consultation_view_model.dart'
+    as _i856;
 import '../../features/home/data/data_source/doctor_dashboard_data_source.dart'
     as _i25;
 import '../../features/home/data/data_source/doctor_dashboard_data_source_impl.dart'
@@ -385,6 +387,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i1016.ChatListViewModel>(
       () => _i1016.ChatListViewModel(chatRepo: gh<_i804.ChatRepo>()),
+    );
+    gh.factory<_i856.StartConsultationViewModel>(
+      () => _i856.StartConsultationViewModel(chatRepo: gh<_i804.ChatRepo>()),
     );
     gh.factory<_i452.PatientFileViewModel>(
       () => _i452.PatientFileViewModel(

@@ -132,7 +132,11 @@ class Routes {
           ),
         );
       case AppRoutes.chatDetailsView:
-        return MaterialPageRoute(builder: (context) => const ChatDetailsView());
+        final consultationId = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => ChatDetailsView(consultationId: consultationId),
+        );
       case AppRoutes.patientDetailsView:
         final appointmentId = settings.arguments as String? ?? '';
         return MaterialPageRoute(

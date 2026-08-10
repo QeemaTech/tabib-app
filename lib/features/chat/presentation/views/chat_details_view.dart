@@ -4,7 +4,12 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/chat/presentation/widgets/chat_bubble.dart';
 
 class ChatDetailsView extends StatelessWidget {
-  const ChatDetailsView({super.key});
+  final String consultationId;
+
+  const ChatDetailsView({
+    super.key,
+    this.consultationId = '',
+  });
 
   @override
   Widget build(BuildContext context) {

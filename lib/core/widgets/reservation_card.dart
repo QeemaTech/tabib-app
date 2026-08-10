@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/core/theme/app_theme/theme_extension.dart';
-import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
+import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/utilities/custom_image_view.dart';
 
 class ReservationCard extends StatelessWidget {
   final String status;
@@ -14,6 +13,8 @@ class ReservationCard extends StatelessWidget {
   final Color? statusColor;
   final Color? statusBackgroundColor;
   final List<Widget>? actions;
+  final bool isChatEnabled;
+  final VoidCallback? onChatTap;
 
   const ReservationCard({
     super.key,
@@ -26,6 +27,8 @@ class ReservationCard extends StatelessWidget {
     this.statusBackgroundColor,
     this.actions,
     this.showTime = true,
+    this.isChatEnabled = false,
+    this.onChatTap,
   });
 
   @override
@@ -51,14 +54,13 @@ class ReservationCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                CustomImageView(
+              CustomImageView(
                 imagePath: imageUrl ?? AssetsManager.doctor,
                 height: 64,
                 width: 64,
                 radius: BorderRadius.circular(32),
               ),
               const SizedBox(width: 12),
-              
               Expanded(
                 flex: 4,
                 child: Column(
@@ -82,28 +84,44 @@ class ReservationCard extends StatelessWidget {
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                                 Icon(
+                              Icon(
                                 Icons.access_time,
                                 size: 18,
                                 color: theme.textColor300,
                               ),
-                               const SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(
                                 time!,
                                 style: theme.regular14.copyWith(
                                   color: theme.textColor300,
                                 ),
                               ),
-                             
-                           
+                              if (isChatEnabled) ...[
+                                const Spacer(),
+                                _ReservationChatIcon(
+                                  isEnabled: onChatTap != null,
+                                  onTap: onChatTap,
+                                ),
+                              ],
                             ],
                           )
-                        : const SizedBox(),
+                        : isChatEnabled
+                            ? Align(
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: _ReservationChatIcon(
+                                  isEnabled: onChatTap != null,
+                                  onTap: onChatTap,
+                                ),
+                              )
+                            : const SizedBox(),
                   ],
                 ),
               ),
-              _buildStatusBadge(theme),
-            
+              _ReservationStatusBadge(
+                status: status,
+                statusColor: statusColor,
+                statusBackgroundColor: statusBackgroundColor,
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -124,8 +142,52 @@ class ReservationCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildStatusBadge(AppThemeExtension theme) {
+class _ReservationChatIcon extends StatelessWidget {
+  final bool isEnabled;
+  final VoidCallback? onTap;
+
+  const _ReservationChatIcon({
+    required this.isEnabled,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    final color = isEnabled ? theme.primaryColor : theme.textColor100;
+
+    return GestureDetector(
+      onTap: isEnabled ? onTap : null,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 8),
+        child: CustomImageView(
+          imagePath: AssetsManager.messages,
+          height: 20,
+          width: 20,
+          color: color,
+        ),
+      ),
+    );
+  }
+}
+
+class _ReservationStatusBadge extends StatelessWidget {
+  final String status;
+  final Color? statusColor;
+  final Color? statusBackgroundColor;
+
+  const _ReservationStatusBadge({
+    required this.status,
+    this.statusColor,
+    this.statusBackgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
