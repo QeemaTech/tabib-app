@@ -54,4 +54,6 @@ class EndPoint {
   static const String consultations = "/consultations";
   static const String consultationsStart =
       "/consultations/{appointmentId}/start";
+  static const String consultationMessages =
+      "/consultations/{consultationId}/messages";
 }

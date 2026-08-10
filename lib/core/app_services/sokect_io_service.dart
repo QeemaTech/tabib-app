@@ -3,60 +3,33 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-enum SocketEvent {
-  join,
-  message,
-  sent,
-  delivered,
-  read,
-  deleted,
-  typing,
-  readAll,
-  error,
-}
-
-
-
-
 class SocketIoService {
   static const String baseUrl = 'https://tabeeb.nodeteam.site';
-  
-
-
 
   final String token;
-  late final IO.Socket _socket;
+  IO.Socket? _socket;
+  String? _activeConsultationId;
 
   static SocketIoService? _instance;
 
+  bool get isConnected => _socket?.connected ?? false;
 
-
-
-  // Connection status getter
-  bool get isConnected => _socket.connected;
+  String? get activeConsultationId => _activeConsultationId;
 
   SocketIoService._internal({required this.token});
 
-
-
-factory SocketIoService({required String token}) {
+  factory SocketIoService({required String token}) {
     _instance ??= SocketIoService._internal(token: token);
     return _instance!;
   }
 
-  // 4. Global getter if you want to access it later without passing the token again
   static SocketIoService get instance {
-    assert(_instance != null, "SocketIoService has not been initialized yet!");
+    assert(_instance != null, 'SocketIoService has not been initialized yet!');
     return _instance!;
   }
 
+  static bool get isInitialized => _instance != null;
 
-
-
-
-
-
-  // Callbacks
   VoidCallback? onConnect;
   VoidCallback? onDisconnect;
   void Function(dynamic error)? onError;
@@ -66,10 +39,9 @@ factory SocketIoService({required String token}) {
   void Function(Map<String, dynamic> payload)? onMessageDelivered;
   void Function(Map<String, dynamic> payload)? onTyping;
   void Function(Map<String, dynamic> payload)? onRead;
-  void Function(Map<String, dynamic> payload)? onReadAlled;
+  void Function(Map<String, dynamic> payload)? onReadAll;
 
-  /// Establishes the socket connection and registers event listeners for Tabeeb Chat Flow
- void connect() {
+  void connect() {
     try {
       _socket = IO.io(
         baseUrl,
@@ -77,6 +49,7 @@ factory SocketIoService({required String token}) {
             .setTransports(['websocket'])
             .setAuth({'token': token})
             .setPath('/socket.io')
+            .enableForceNew()
             .enableAutoConnect()
             .enableReconnection()
             .build(),
@@ -84,110 +57,129 @@ factory SocketIoService({required String token}) {
 
       _registerListeners();
     } catch (e) {
-      
       onError?.call(e.toString());
     }
   }
 
+  void setActiveConsultation(String consultationId) {
+    _activeConsultationId = consultationId;
+  }
+
+  void clearActiveConsultation() {
+    _activeConsultationId = null;
+  }
+
+  void clearCallbacks() {
+    onConnect = null;
+    onDisconnect = null;
+    onError = null;
+    onJoined = null;
+    onMessage = null;
+    onMessageSent = null;
+    onMessageDelivered = null;
+    onTyping = null;
+    onRead = null;
+    onReadAll = null;
+  }
+
   void _registerListeners() {
-    _socket.onConnect((data) {
-      if (kDebugMode) log('Socket Connected: ${_socket.id}');
+    final socket = _socket;
+    if (socket == null) return;
+
+    socket.onConnect((_) {
+      if (kDebugMode) log('Socket Connected: ${socket.id}');
+      final consultationId = _activeConsultationId;
+      if (consultationId != null && consultationId.isNotEmpty) {
+        joinChat(consultationId);
+      }
       onConnect?.call();
     });
 
-    _socket.onDisconnect((data) {
+    socket.onDisconnect((_) {
       if (kDebugMode) log('Socket Disconnected');
       onDisconnect?.call();
     });
 
-    _socket.onConnectError((error) {
-      
+    socket.onConnectError((error) {
       if (kDebugMode) log('Socket Connect Error: $error');
       onError?.call(error);
     });
 
-    _socket.onError((error) {
+    socket.onError((error) {
       if (kDebugMode) log('Socket Error: $error');
       onError?.call(error);
     });
 
-    // --- Chat Specific Listeners ---
-
-    // Confirmation that the client entered the consultation room[cite: 1]
-    _socket.on('chat:joined', (payload) {
+    socket.on('chat:joined', (payload) {
       if (payload is Map) {
         onJoined?.call(Map<String, dynamic>.from(payload));
       }
     });
 
-    // Confirmation for the sender that the message was saved[cite: 1]
-    _socket.on('chat:sent', (message) {
+    socket.on('chat:sent', (message) {
       if (message is Map) {
         onMessageSent?.call(Map<String, dynamic>.from(message));
       }
     });
 
-    // Incoming messages from the other participant[cite: 1]
-    _socket.on('chat:message', (message) {
+    socket.on('chat:message', (message) {
       if (message is Map) {
         onMessage?.call(Map<String, dynamic>.from(message));
       }
     });
 
-    // Message delivery notifications[cite: 1]
-    _socket.on('chat:delivered', (payload) {
+    socket.on('chat:delivered', (payload) {
       if (payload is Map) {
         onMessageDelivered?.call(Map<String, dynamic>.from(payload));
       }
     });
 
-    // Typing indicators[cite: 1]
-    _socket.on('chat:typing', (payload) {
+    socket.on('chat:typing', (payload) {
       if (payload is Map) {
         onTyping?.call(Map<String, dynamic>.from(payload));
       }
     });
 
-    // Single read receipts[cite: 1]
-    _socket.on('chat:read', (payload) {
+    socket.on('chat:read', (payload) {
       if (payload is Map) {
         onRead?.call(Map<String, dynamic>.from(payload));
       }
     });
 
-    // Read-all receipts[cite: 1]
-    _socket.on('chat:readAll', (payload) {
+    socket.on('chat:readAll', (payload) {
       if (payload is Map) {
-        onReadAlled?.call(Map<String, dynamic>.from(payload));
+        onReadAll?.call(Map<String, dynamic>.from(payload));
       }
     });
 
-    // Backend error notifications[cite: 1]
-    _socket.on('chat:error', (error) {
+    socket.on('chat:error', (error) {
       onError?.call(error);
     });
   }
 
-  /// --- Chat Emitters ---
-
-  /// Joins a specific consultation chat room[cite: 1]
   void joinChat(String consultationId) {
     _emit('chat:join', {'consultationId': consultationId});
   }
 
-  /// Sends a text message or a file message payload[cite: 1]
-  void sendMessage({required String consultationId, required String content, String? fileUrl}) {
+  void sendMessage({
+    required String consultationId,
+    required String content,
+    String? fileUrl,
+    String? fileType,
+    String? fileName,
+    int? fileSize,
+  }) {
     final payload = <String, dynamic>{
       'consultationId': consultationId,
       'content': content,
     };
-    if (fileUrl != null) {
-      payload['fileUrl'] = fileUrl;
-    }
+    if (fileUrl != null) payload['fileUrl'] = fileUrl;
+    if (fileType != null) payload['fileType'] = fileType;
+    if (fileName != null) payload['fileName'] = fileName;
+    if (fileSize != null) payload['fileSize'] = fileSize;
     _emit('chat:message', payload);
   }
 
-  /// Emits a typing state indicator[cite: 1]
   void sendTyping({required String consultationId, required bool isTyping}) {
     _emit('chat:typing', {
       'consultationId': consultationId,
@@ -195,7 +187,6 @@ factory SocketIoService({required String token}) {
     });
   }
 
-  /// Marks a single message as read[cite: 1]
   void markAsRead({required String consultationId, required String messageId}) {
     _emit('chat:read', {
       'consultationId': consultationId,
@@ -203,30 +194,31 @@ factory SocketIoService({required String token}) {
     });
   }
 
-  /// Marks all messages within the consultation as read[cite: 1]
   void markAllAsRead(String consultationId) {
     _emit('chat:readAll', {'consultationId': consultationId});
   }
 
   void _emit(String event, dynamic data) {
-    if (_socket.connected) {
-      _socket.emit(event, data);
-    } else {
-      if (kDebugMode) print('Attempted to emit "$event" while socket was disconnected.');
+    final socket = _socket;
+    if (socket != null && socket.connected) {
+      socket.emit(event, data);
+    } else if (kDebugMode) {
+      log('Attempted to emit "$event" while socket was disconnected.');
     }
   }
 
-  /// Updates the authentication token dynamically (useful during token refreshes)
   void updateToken(String newToken) {
-    _socket.auth = {'token': newToken};
+    _socket?.auth = {'token': newToken};
   }
 
-  /// Disconnects and cleans up socket listeners safely[cite: 1]
   void disconnect() {
     try {
-      _socket.clearListeners();
-      _socket.disconnect();
-      _socket.dispose();
+      clearActiveConsultation();
+      clearCallbacks();
+      _socket?.clearListeners();
+      _socket?.disconnect();
+      _socket?.dispose();
+      _socket = null;
       _instance = null;
     } catch (e) {
       onError?.call(e.toString());

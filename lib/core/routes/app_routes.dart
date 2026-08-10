@@ -12,6 +12,8 @@ import 'package:tabib_app/features/auth/presentation/view_model/auth_constants.d
 import 'package:tabib_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/doc/complete_doc_profile_cubit.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
+import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/chat_details_view_model.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_list_view_model.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_details_view.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_list_view.dart';
@@ -132,10 +134,17 @@ class Routes {
           ),
         );
       case AppRoutes.chatDetailsView:
-        final consultationId = settings.arguments as String? ?? '';
+        final args = ChatDetailsArgs.fromRouteArguments(settings.arguments);
         return MaterialPageRoute(
           settings: settings,
-          builder: (context) => ChatDetailsView(consultationId: consultationId),
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<ChatDetailsViewModel>()
+              ..init(
+                consultationId: args.consultationId,
+                participantTitle: args.title,
+              ),
+            child: const ChatDetailsView(),
+          ),
         );
       case AppRoutes.patientDetailsView:
         final appointmentId = settings.arguments as String? ?? '';

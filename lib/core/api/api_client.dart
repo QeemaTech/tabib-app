@@ -49,6 +49,7 @@ import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawal
 import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawals_response.dart';
 import 'package:tabib_app/features/chat/data/models/request/start_consultation_request.dart';
 import 'package:tabib_app/features/chat/data/models/response/consultations_response.dart';
+import 'package:tabib_app/features/chat/data/models/response/messages_response.dart';
 import 'package:tabib_app/features/chat/data/models/response/start_consultation_response.dart';
 
 part 'api_client.g.dart';
@@ -276,4 +277,11 @@ abstract class ApiClient {
     @Path('appointmentId') String appointmentId,
     @Body() StartConsultationRequest request,
   );
+
+  @GET(EndPoint.consultationMessages)
+  Future<MessagesResponse> getConsultationMessages(
+    @Path('consultationId') String consultationId, {
+    @Query('limit') int? limit,
+    @Query('before') String? before,
+  });
 }

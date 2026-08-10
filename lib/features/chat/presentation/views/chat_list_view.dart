@@ -5,6 +5,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/chat/domain/entities/consultation_entity.dart';
+import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
 import 'package:tabib_app/features/chat/presentation/utils/chat_list_ui_helpers.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_list_state.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_list_view_model.dart';
@@ -189,7 +190,11 @@ class _ChatListSuccessWidget extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 AppRoutes.chatDetailsView,
-                arguments: consultation.id,
+                arguments: ChatDetailsArgs(
+                  consultationId: consultation.id,
+                  title: consultation.participant
+                      .localizedFullName(languageCode),
+                ),
               );
             },
           );

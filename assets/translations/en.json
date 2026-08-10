@@ -451,7 +451,10 @@
   "chat": {
     "title": "Messages",
     "hint": "Type your message here...",
-    "noMessages": "No messages yet"
+    "noMessages": "No messages yet",
+    "typing": "Typing...",
+    "reconnecting": "Reconnecting...",
+    "joining": "Joining chat..."
   },
   "reservations": {
     "title": "Reservations",

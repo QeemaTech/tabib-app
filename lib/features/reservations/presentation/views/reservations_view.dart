@@ -7,6 +7,7 @@ import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/core/widgets/filter_chips.dart';
+import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_state.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_view_model.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
@@ -75,9 +76,18 @@ class _ReservationsViewBody extends StatelessWidget {
               final consultation = startState.data;
               context.read<StartConsultationViewModel>().reset();
               if (consultation != null && consultation.id.isNotEmpty) {
+                final languageCode = context.locale.languageCode;
+                final title = languageCode.startsWith('ar')
+                    ? consultation.patient.fullNameAr
+                    : (consultation.patient.fullNameAr.isNotEmpty
+                        ? consultation.patient.fullNameAr
+                        : consultation.patient.id);
                 Navigator.of(context).pushNamed(
                   AppRoutes.chatDetailsView,
-                  arguments: consultation.id,
+                  arguments: ChatDetailsArgs(
+                    consultationId: consultation.id,
+                    title: title,
+                  ),
                 );
               }
             } else if (startState.isError) {
