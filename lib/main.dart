@@ -9,9 +9,15 @@ import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/routes/initial_app_route.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/tabib_app.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   await EasyLocalization.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   configureDependencies();

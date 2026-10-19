@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468171936689",
+    "project_id": "tabeeb-app-a976c",
+    "storage_bucket": "tabeeb-app-a976c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468171936689:android:4cae831e6ba7b412562390",
+        "android_client_info": {
+          "package_name": "com.qeema.tabeeb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWP7pi9cIcfDtM_dSYsObyM1rAa5iFpwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
