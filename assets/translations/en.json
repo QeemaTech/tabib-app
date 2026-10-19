@@ -456,6 +456,18 @@
     "reconnecting": "Reconnecting...",
     "joining": "Joining chat..."
   },
+  "calls": {
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "waitingPeer": "Waiting for the other participant...",
+    "callEnded": "Call ended",
+    "duration": "Duration: {}",
+    "done": "Done",
+    "missingRoom": "Call room is not available",
+    "invalidToken": "Invalid call credentials",
+    "startVideo": "Start video call",
+    "startVoice": "Start voice call"
+  },
   "reservations": {
     "title": "Reservations",
     "createReport": "Create Report",

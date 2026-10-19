@@ -56,4 +56,6 @@ class EndPoint {
       "/consultations/{appointmentId}/start";
   static const String consultationMessages =
       "/consultations/{consultationId}/messages";
+  static const String agoraToken = "/agora/token";
+  static const String endCall = "/calls/{callId}/end";
 }

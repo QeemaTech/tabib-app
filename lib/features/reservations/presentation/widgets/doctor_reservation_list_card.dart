@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/widgets/reservation_card.dart';
+import 'package:tabib_app/features/calls/presentation/utils/video_call_args.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/request_review_doc.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
@@ -22,6 +23,19 @@ class DoctorReservationListCard extends StatelessWidget {
   });
 
   bool get _isConfirmed => appointment.status.toUpperCase() == 'CONFIRMED';
+
+  String get _consultationType => appointment.consultationType.toUpperCase();
+
+  bool get _isCallType =>
+      _consultationType == 'CHAT' || _consultationType == 'CHAT';
+
+  bool get _canStartCall =>
+      _isConfirmed && _isCallType && appointment.actions.canAccessCall;
+
+  bool get _canStartChat =>
+      _isConfirmed &&
+      _consultationType == 'CHAT' &&
+      appointment.actions.canAccessChat;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +77,11 @@ class DoctorReservationListCard extends StatelessWidget {
           subTitle: subtitle,
           time: time,
           imageUrl: imageUrl,
-          isChatEnabled: _isConfirmed,
-          onChatTap: _isConfirmed ? () => _startChat(context) : null,
+          isCallEnabled: _canStartCall,
+          onCallTap: _canStartCall ? () => _startCall(context, name) : null,
+          callIconPath: AssetsManager.video,
+          isChatEnabled: _canStartChat,
+          onChatTap: _canStartChat ? () => _startChat(context) : null,
           actions: [
             ReservationActionButton(
               label: 'patients.viewProfile'.tr(),
@@ -122,8 +139,11 @@ class DoctorReservationListCard extends StatelessWidget {
           subTitle: subtitle,
           time: time,
           imageUrl: imageUrl,
-          isChatEnabled: _isConfirmed,
-          onChatTap: _isConfirmed ? () => _startChat(context) : null,
+          isCallEnabled: _canStartCall,
+          onCallTap: _canStartCall ? () => _startCall(context, name) : null,
+          callIconPath: AssetsManager.video,
+          isChatEnabled: _canStartChat,
+          onChatTap: _canStartChat ? () => _startChat(context) : null,
           actions: [
             ReservationActionButton(
               label: 'patients.viewProfile'.tr(),
@@ -138,6 +158,17 @@ class DoctorReservationListCard extends StatelessWidget {
           ],
         );
     }
+  }
+
+  void _startCall(BuildContext context, String peerName) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.videoCallView,
+      arguments: VideoCallArgs(
+        appointmentId: appointment.id,
+        callType: _consultationType,
+        peerName: peerName,
+      ),
+    );
   }
 
   void _startChat(BuildContext context) {

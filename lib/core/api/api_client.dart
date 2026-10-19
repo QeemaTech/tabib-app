@@ -47,6 +47,9 @@ import 'package:tabib_app/features/wallet/data/models/response/wallet_response.d
 import 'package:tabib_app/features/wallet/data/models/response/wallet_transactions_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawal_details_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawals_response.dart';
+import 'package:tabib_app/features/calls/data/models/request/agora_token_request.dart';
+import 'package:tabib_app/features/calls/data/models/response/agora_token_response.dart';
+import 'package:tabib_app/features/calls/data/models/response/end_call_response.dart';
 import 'package:tabib_app/features/chat/data/models/request/start_consultation_request.dart';
 import 'package:tabib_app/features/chat/data/models/response/consultations_response.dart';
 import 'package:tabib_app/features/chat/data/models/response/messages_response.dart';
@@ -284,4 +287,10 @@ abstract class ApiClient {
     @Query('limit') int? limit,
     @Query('before') String? before,
   });
+
+  @POST(EndPoint.agoraToken)
+  Future<AgoraTokenResponse> getAgoraToken(@Body() AgoraTokenRequest request);
+
+  @POST(EndPoint.endCall)
+  Future<EndCallResponse> endCall(@Path('callId') String callId);
 }

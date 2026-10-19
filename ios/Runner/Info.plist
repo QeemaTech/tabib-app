@@ -68,5 +68,10 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to the microphone for voice and video calls.</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to the camera for video calls.</string>	
 	</dict>
 </plist>

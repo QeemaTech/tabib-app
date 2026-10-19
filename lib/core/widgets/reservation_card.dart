@@ -15,6 +15,9 @@ class ReservationCard extends StatelessWidget {
   final List<Widget>? actions;
   final bool isChatEnabled;
   final VoidCallback? onChatTap;
+  final bool isCallEnabled;
+  final VoidCallback? onCallTap;
+  final String callIconPath;
 
   const ReservationCard({
     super.key,
@@ -29,21 +32,33 @@ class ReservationCard extends StatelessWidget {
     this.showTime = true,
     this.isChatEnabled = false,
     this.onChatTap,
+    this.isCallEnabled = false,
+    this.onCallTap,
+    this.callIconPath = AssetsManager.video,
   });
+
+  bool get _hasSessionIcons => isChatEnabled || isCallEnabled;
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
+    final sessionIcons = _ReservationSessionIcons(
+      isChatEnabled: isChatEnabled,
+      onChatTap: onChatTap,
+      isCallEnabled: isCallEnabled,
+      onCallTap: onCallTap,
+      callIconPath: callIconPath,
+    );
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.whiteColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: theme.textColor100.withOpacity(0.2)),
+        border: Border.all(color: theme.textColor100.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -96,22 +111,16 @@ class ReservationCard extends StatelessWidget {
                                   color: theme.textColor300,
                                 ),
                               ),
-                              if (isChatEnabled) ...[
+                              if (_hasSessionIcons) ...[
                                 const Spacer(),
-                                _ReservationChatIcon(
-                                  isEnabled: onChatTap != null,
-                                  onTap: onChatTap,
-                                ),
+                                sessionIcons,
                               ],
                             ],
                           )
-                        : isChatEnabled
+                        : _hasSessionIcons
                             ? Align(
                                 alignment: AlignmentDirectional.centerEnd,
-                                child: _ReservationChatIcon(
-                                  isEnabled: onChatTap != null,
-                                  onTap: onChatTap,
-                                ),
+                                child: sessionIcons,
                               )
                             : const SizedBox(),
                   ],
@@ -144,11 +153,50 @@ class ReservationCard extends StatelessWidget {
   }
 }
 
-class _ReservationChatIcon extends StatelessWidget {
+class _ReservationSessionIcons extends StatelessWidget {
+  final bool isChatEnabled;
+  final VoidCallback? onChatTap;
+  final bool isCallEnabled;
+  final VoidCallback? onCallTap;
+  final String callIconPath;
+
+  const _ReservationSessionIcons({
+    required this.isChatEnabled,
+    required this.onChatTap,
+    required this.isCallEnabled,
+    required this.onCallTap,
+    required this.callIconPath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isCallEnabled)
+          _ReservationActionIcon(
+            imagePath: callIconPath,
+            isEnabled: onCallTap != null,
+            onTap: onCallTap,
+          ),
+        if (isChatEnabled)
+          _ReservationActionIcon(
+            imagePath: AssetsManager.messages,
+            isEnabled: onChatTap != null,
+            onTap: onChatTap,
+          ),
+      ],
+    );
+  }
+}
+
+class _ReservationActionIcon extends StatelessWidget {
+  final String imagePath;
   final bool isEnabled;
   final VoidCallback? onTap;
 
-  const _ReservationChatIcon({
+  const _ReservationActionIcon({
+    required this.imagePath,
     required this.isEnabled,
     this.onTap,
   });
@@ -164,7 +212,7 @@ class _ReservationChatIcon extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsetsDirectional.only(start: 8),
         child: CustomImageView(
-          imagePath: AssetsManager.messages,
+          imagePath: imagePath,
           height: 20,
           width: 20,
           color: color,

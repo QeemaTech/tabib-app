@@ -43,6 +43,9 @@ import 'package:tabib_app/features/schedule/presentation/view_model/doctor_sched
 import 'package:tabib_app/features/schedule/presentation/views/doctor_schedule_view.dart';
 import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
 import 'package:tabib_app/features/appointments/presentation/views/confirm_payment_view.dart';
+import 'package:tabib_app/features/calls/presentation/utils/video_call_args.dart';
+import 'package:tabib_app/features/calls/presentation/view_model/video_call_view_model.dart';
+import 'package:tabib_app/features/calls/presentation/views/video_call_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -220,6 +223,20 @@ class Routes {
         }
         return MaterialPageRoute(
           builder: (context) => ConfirmPaymentView(args: args),
+        );
+      case AppRoutes.videoCallView:
+        final args = VideoCallArgs.fromRouteArguments(settings.arguments);
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<VideoCallViewModel>()
+              ..startCall(
+                appointmentId: args.appointmentId,
+                callType: args.callType,
+                peerName: args.peerName,
+              ),
+            child: const VideoCallView(),
+          ),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';
