@@ -13,17 +13,18 @@ class ConfirmPaymentState extends Equatable {
   final double finalAmount;
   final String? appliedCouponCode;
   final bool useWallet;
+  final String payerAccountNo;
 
   const ConfirmPaymentState({
     this.walletState = const BaseState(requestState: RequestState.init),
-    this.validateCouponState =
-        const BaseState(requestState: RequestState.init),
+    this.validateCouponState = const BaseState(requestState: RequestState.init),
     this.paymentState = const BaseState(requestState: RequestState.init),
     this.originalAmount = 0,
     this.discountAmount = 0,
     this.finalAmount = 0,
     this.appliedCouponCode,
     this.useWallet = false,
+    this.payerAccountNo = '',
   });
 
   ConfirmPaymentState copyWith({
@@ -36,6 +37,7 @@ class ConfirmPaymentState extends Equatable {
     String? appliedCouponCode,
     bool clearAppliedCoupon = false,
     bool? useWallet,
+    String? payerAccountNo,
   }) {
     return ConfirmPaymentState(
       walletState: walletState ?? this.walletState,
@@ -48,18 +50,20 @@ class ConfirmPaymentState extends Equatable {
           ? null
           : (appliedCouponCode ?? this.appliedCouponCode),
       useWallet: useWallet ?? this.useWallet,
+      payerAccountNo: payerAccountNo ?? this.payerAccountNo,
     );
   }
 
   @override
   List<Object?> get props => [
-        walletState,
-        validateCouponState,
-        paymentState,
-        originalAmount,
-        discountAmount,
-        finalAmount,
-        appliedCouponCode,
-        useWallet,
-      ];
+    walletState,
+    validateCouponState,
+    paymentState,
+    originalAmount,
+    discountAmount,
+    finalAmount,
+    appliedCouponCode,
+    useWallet,
+    payerAccountNo,
+  ];
 }

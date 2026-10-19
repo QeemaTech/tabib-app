@@ -1,17 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/payment_amount_row.dart';
 
 class PaymentAmountSummary extends StatelessWidget {
   final double originalAmount;
   final double discountAmount;
   final double finalAmount;
+  final String currency;
 
   const PaymentAmountSummary({
     super.key,
     required this.originalAmount,
     required this.discountAmount,
     required this.finalAmount,
+    required this.currency,
   });
 
   @override
@@ -28,55 +31,33 @@ class PaymentAmountSummary extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _AmountRow(
+          PaymentAmountRow(
             label: 'appointments.originalAmount'.tr(),
-            value: format.format(originalAmount),
+            value: _format(format, originalAmount),
           ),
           if (discountAmount > 0) ...[
             const SizedBox(height: 8),
-            _AmountRow(
+            PaymentAmountRow(
               label: 'appointments.discount'.tr(),
-              value: '- ${format.format(discountAmount)}',
+              value: '- ${_format(format, discountAmount)}',
             ),
           ],
           const SizedBox(height: 8),
           Divider(color: theme.textColor100.withValues(alpha: 0.3)),
           const SizedBox(height: 8),
-          _AmountRow(
+          PaymentAmountRow(
             label: 'appointments.finalAmount'.tr(),
-            value: format.format(finalAmount),
+            value: _format(format, finalAmount),
             emphasize: true,
           ),
         ],
       ),
     );
   }
-}
 
-class _AmountRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool emphasize;
-
-  const _AmountRow({
-    required this.label,
-    required this.value,
-    this.emphasize = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.appTheme;
-    final style = emphasize
-        ? theme.medium16.copyWith(color: theme.primaryColor)
-        : theme.regular14.copyWith(color: theme.textColor300);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: style),
-        Text(value, style: style),
-      ],
-    );
+  String _format(NumberFormat format, double amount) {
+    final value = format.format(amount);
+    if (currency.isEmpty) return value;
+    return '$value $currency';
   }
 }

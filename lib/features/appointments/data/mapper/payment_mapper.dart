@@ -24,15 +24,14 @@ extension CreatePaymentResponseMapper on CreatePaymentResponse {
       paymentId: data?.paymentId ?? '',
       status: data?.status ?? '',
       amount: data?.amount?.toDouble() ?? 0,
+      currency: data?.currency ?? '',
       discountAmount: data?.discountAmount?.toDouble() ?? 0,
       walletUsed: data?.walletUsed?.toDouble() ?? 0,
       gatewayRef: data?.gatewayRef ?? '',
-      invoice: data?.invoice?.toEntity() ??
-          const PaymentInvoiceEntity(
-            id: '',
-            invoiceNumber: '',
-            pdfUrl: '',
-          ),
+      paymentUrl: data?.paymentUrl ?? '',
+      invoice:
+          data?.invoice?.toEntity() ??
+          const PaymentInvoiceEntity(id: '', invoiceNumber: '', pdfUrl: ''),
     );
   }
 }

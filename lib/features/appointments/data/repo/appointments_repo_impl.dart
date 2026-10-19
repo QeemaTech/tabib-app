@@ -71,12 +71,14 @@ class AppointmentsRepoImpl implements AppointmentsRepo {
     required String appointmentId,
     String? couponCode,
     required bool useWallet,
+    required String payerAccountNo,
   }) async {
     final response = await dataSource.createPayment(
       CreatePaymentRequest(
         appointmentId: appointmentId,
         couponCode: couponCode,
         useWallet: useWallet,
+        payerAccountNo: payerAccountNo,
       ),
     );
     switch (response) {

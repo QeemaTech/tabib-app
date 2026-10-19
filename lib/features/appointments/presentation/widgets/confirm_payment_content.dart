@@ -7,6 +7,7 @@ import 'package:tabib_app/features/appointments/presentation/view_model/confirm_
 import 'package:tabib_app/features/appointments/presentation/view_model/confirm_payment_view_model.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/payment_amount_summary.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/payment_coupon_section.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/payment_payer_account_field.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/payment_wallet_toggle.dart';
 
 class ConfirmPaymentContent extends StatefulWidget {
@@ -20,16 +21,19 @@ class ConfirmPaymentContent extends StatefulWidget {
 
 class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
   late final TextEditingController _couponController;
+  late final TextEditingController _payerAccountController;
 
   @override
   void initState() {
     super.initState();
     _couponController = TextEditingController();
+    _payerAccountController = TextEditingController();
   }
 
   @override
   void dispose() {
     _couponController.dispose();
+    _payerAccountController.dispose();
     super.dispose();
   }
 
@@ -42,7 +46,9 @@ class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
       builder: (context, state) {
         final vm = context.read<ConfirmPaymentViewModel>();
         final wallet = state.walletState.data;
+        final coupon = state.validateCouponState.data;
         final isPaying = state.paymentState.isLoading;
+        final canPay = state.payerAccountNo.isNotEmpty && !isPaying;
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -63,12 +69,15 @@ class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
                 originalAmount: state.originalAmount,
                 discountAmount: state.discountAmount,
                 finalAmount: state.finalAmount,
+                currency: args.currency,
               ),
               const SizedBox(height: 20),
               PaymentCouponSection(
                 controller: _couponController,
                 isLoading: state.validateCouponState.isLoading,
                 hasAppliedCoupon: state.appliedCouponCode != null,
+                discountType: coupon?.discountType,
+                discountValue: coupon?.discountValue,
                 onApply: () => vm.validateCoupon(
                   code: _couponController.text,
                   appointmentId: args.appointmentId,
@@ -77,6 +86,11 @@ class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
                   _couponController.clear();
                   vm.clearCoupon(consultationFee: args.bookingPrice);
                 },
+              ),
+              const SizedBox(height: 20),
+              PaymentPayerAccountField(
+                controller: _payerAccountController,
+                onChanged: vm.setPayerAccountNo,
               ),
               const SizedBox(height: 20),
               PaymentWalletToggle(
@@ -98,14 +112,15 @@ class _ConfirmPaymentContentState extends State<ConfirmPaymentContent> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: isPaying
-                      ? null
-                      : () => vm.confirmPayment(
-                            appointmentId: args.appointmentId,
-                          ),
+                  onPressed: canPay
+                      ? () =>
+                            vm.confirmPayment(appointmentId: args.appointmentId)
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.primaryColor,
                     foregroundColor: theme.whiteColor,
+                    disabledBackgroundColor: theme.textColor100,
+                    disabledForegroundColor: theme.whiteColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),

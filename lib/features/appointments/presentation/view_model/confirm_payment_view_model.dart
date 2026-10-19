@@ -107,21 +107,36 @@ class ConfirmPaymentViewModel extends Cubit<ConfirmPaymentState> {
     emit(state.copyWith(useWallet: value));
   }
 
+  void setPayerAccountNo(String value) {
+    emit(state.copyWith(payerAccountNo: value.trim()));
+  }
+
   Future<void> confirmPayment({required String appointmentId}) async {
+    final payerAccountNo = state.payerAccountNo.trim();
+    if (payerAccountNo.isEmpty) {
+      emit(
+        state.copyWith(
+          paymentState: BaseState.error(
+            'appointments.payerAccountRequired'.tr(),
+          ),
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(paymentState: BaseState.loading()));
     final result = await appointmentsRepo.createPayment(
       appointmentId: appointmentId,
       couponCode: state.appliedCouponCode,
       useWallet: state.useWallet,
+      payerAccountNo: payerAccountNo,
     );
     switch (result) {
       case Success<PaymentEntity>():
         emit(state.copyWith(paymentState: BaseState.loaded(result.data)));
       case Failure<PaymentEntity>():
         emit(
-          state.copyWith(
-            paymentState: BaseState.error(result.errorMessage),
-          ),
+          state.copyWith(paymentState: BaseState.error(result.errorMessage)),
         );
     }
   }

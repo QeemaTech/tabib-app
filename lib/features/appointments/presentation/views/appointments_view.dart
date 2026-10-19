@@ -197,6 +197,7 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
                                   .localizedName(languageCode),
                               dateTimeText:
                                   formatAppointmentDateTime(appointment),
+                              currency: appointment.currency,
                             ),
                           );
                           if (paid == true && context.mounted) {

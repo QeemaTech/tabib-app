@@ -7,6 +7,8 @@ class PaymentCouponSection extends StatelessWidget {
   final TextEditingController controller;
   final bool isLoading;
   final bool hasAppliedCoupon;
+  final String? discountType;
+  final double? discountValue;
   final VoidCallback onApply;
   final VoidCallback onClear;
 
@@ -15,6 +17,8 @@ class PaymentCouponSection extends StatelessWidget {
     required this.controller,
     required this.isLoading,
     required this.hasAppliedCoupon,
+    this.discountType,
+    this.discountValue,
     required this.onApply,
     required this.onClear,
   });
@@ -70,14 +74,29 @@ class PaymentCouponSection extends StatelessWidget {
                       hasAppliedCoupon
                           ? 'appointments.clearCoupon'.tr()
                           : 'appointments.applyCoupon'.tr(),
-                      style: theme.regular12.copyWith(
-                        color: theme.whiteColor,
-                      ),
+                      style: theme.regular12.copyWith(color: theme.whiteColor),
                     ),
             ),
           ],
         ),
+        if (hasAppliedCoupon &&
+            discountType != null &&
+            discountValue != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            _discountLabel(discountType!, discountValue!),
+            style: theme.regular12.copyWith(color: theme.primaryColor),
+          ),
+        ],
       ],
     );
+  }
+
+  String _discountLabel(String type, double value) {
+    final formatted = NumberFormat('#,##0.##').format(value);
+    if (type == 'PERCENTAGE') {
+      return 'appointments.couponPercent'.tr(namedArgs: {'value': formatted});
+    }
+    return 'appointments.couponFixed'.tr(namedArgs: {'value': formatted});
   }
 }

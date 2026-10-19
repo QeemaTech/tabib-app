@@ -9,10 +9,7 @@ class CreatePaymentResponse {
   @JsonKey(name: 'data')
   final CreatePaymentDataResponse? data;
 
-  CreatePaymentResponse({
-    this.success,
-    this.data,
-  });
+  CreatePaymentResponse({this.success, this.data});
 
   factory CreatePaymentResponse.fromJson(Map<String, dynamic> json) =>
       _$CreatePaymentResponseFromJson(json);
@@ -28,12 +25,16 @@ class CreatePaymentDataResponse {
   final String? status;
   @JsonKey(name: 'amount')
   final num? amount;
+  @JsonKey(name: 'currency')
+  final String? currency;
   @JsonKey(name: 'discountAmount')
   final num? discountAmount;
   @JsonKey(name: 'walletUsed')
   final num? walletUsed;
   @JsonKey(name: 'gatewayRef')
   final String? gatewayRef;
+  @JsonKey(name: 'paymentUrl')
+  final String? paymentUrl;
   @JsonKey(name: 'invoice')
   final PaymentInvoiceResponse? invoice;
 
@@ -41,9 +42,11 @@ class CreatePaymentDataResponse {
     this.paymentId,
     this.status,
     this.amount,
+    this.currency,
     this.discountAmount,
     this.walletUsed,
     this.gatewayRef,
+    this.paymentUrl,
     this.invoice,
   });
 
@@ -62,11 +65,7 @@ class PaymentInvoiceResponse {
   @JsonKey(name: 'pdfUrl')
   final String? pdfUrl;
 
-  PaymentInvoiceResponse({
-    this.id,
-    this.invoiceNumber,
-    this.pdfUrl,
-  });
+  PaymentInvoiceResponse({this.id, this.invoiceNumber, this.pdfUrl});
 
   factory PaymentInvoiceResponse.fromJson(Map<String, dynamic> json) =>
       _$PaymentInvoiceResponseFromJson(json);

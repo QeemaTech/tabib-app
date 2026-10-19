@@ -15,6 +15,14 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   configureDependencies();
+
+
+
+
+
+
+
+
   final initialAppRoute = await initRouteApp();
   runApp(
     EasyLocalization(

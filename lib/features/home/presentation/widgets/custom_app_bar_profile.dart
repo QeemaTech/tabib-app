@@ -25,50 +25,56 @@ class CustomAppBarProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: CustomImageView(
-        imagePath: AssetsManager.user,
-        height: 56,
-        width: 56,
-        radius: BorderRadius.circular(50),
-        onTap: onProfileImageClicked,
-      ),
-
-      title: Text(
-        title.tr(),
-        style: theme.medium16.copyWith(
-          fontSize: 18,
-          fontWeight: FontWeight.w700,
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: CustomImageView(
+          imagePath: AssetsManager.user,
+          height: 56,
+          width: 56,
+          radius: BorderRadius.circular(50),
+          onTap: onProfileImageClicked,
         ),
-      ),
 
-      subtitle: Text(
-        subTitle.tr(args: subTitleArgs ?? []),
-        style: theme.bold12.copyWith(fontWeight: FontWeight.w600, fontSize: 14),
-      ),
-
-      trailing:
-          trailing ??
-          SizedBox(
-            width: 80,
-            child: Row(
-              spacing: 8,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CustomImageView(
-                  onTap: onMessageClicked,
-                  imagePath: AssetsManager.messages,
-                  height: 24,
-                ),
-                CustomImageView(
-                  onTap: onNotificationClicked,
-                  imagePath: AssetsManager.notification,
-                  height: 24,
-                ),
-              ],
-            ),
+        title: Text(
+          title.tr(),
+          style: theme.medium16.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
           ),
+        ),
+
+        subtitle: Text(
+          subTitle.tr(args: subTitleArgs ?? []),
+          style: theme.bold12.copyWith(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+
+        trailing:
+            trailing ??
+            SizedBox(
+              width: 80,
+              child: Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomImageView(
+                    onTap: onMessageClicked,
+                    imagePath: AssetsManager.messages,
+                    height: 24,
+                  ),
+                  CustomImageView(
+                    onTap: onNotificationClicked,
+                    imagePath: AssetsManager.notification,
+                    height: 24,
+                  ),
+                ],
+              ),
+            ),
+      ),
     );
   }
 }

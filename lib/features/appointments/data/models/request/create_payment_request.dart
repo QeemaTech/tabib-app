@@ -10,11 +10,14 @@ class CreatePaymentRequest {
   final String? couponCode;
   @JsonKey(name: 'useWallet')
   final bool? useWallet;
+  @JsonKey(name: 'payerAccountNo')
+  final String? payerAccountNo;
 
   CreatePaymentRequest({
     this.appointmentId,
     this.couponCode,
     this.useWallet,
+    this.payerAccountNo,
   });
 
   factory CreatePaymentRequest.fromJson(Map<String, dynamic> json) =>

@@ -20,5 +20,6 @@ abstract interface class AppointmentsRepo {
     required String appointmentId,
     String? couponCode,
     required bool useWallet,
+    required String payerAccountNo,
   });
 }
