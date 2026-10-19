@@ -66,9 +66,13 @@ class UserProfileContent extends StatelessWidget {
               onTap: () {},
             ),
             ElevatedButton(
-              onPressed: () {
-                AppLocalStorage.clearAllSecuredData();
+              onPressed: () async {
+                await context.read<PatientProfileViewModel>().logout();
+                await AppLocalStorage.clearAllSecuredData();
                 CachedUserRole.uiRole = 'user';
+                if (!context.mounted) {
+                  return;
+                }
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   AppRoutes.welcomeView,
                   (route) => false,

@@ -5,6 +5,7 @@ import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
+import 'package:tabib_app/core/services/fcm_service.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
@@ -108,6 +109,9 @@ class AuthViewModel extends Cubit<AuthState> {
           key: LocalKeys.role,
           value: uiRole,
         );
+
+        await FcmService.requestNotificationPermission();
+        await authRepo.registerDevice();
 
         emit(
           state.copyWith(

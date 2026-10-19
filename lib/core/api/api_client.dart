@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tabib_app/core/api/api_constant.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/auth/data/models/request/register_device_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/submit_doctor_professional_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
@@ -13,7 +14,9 @@ import 'package:tabib_app/features/auth/data/models/response/doctor_professional
 import 'package:tabib_app/features/auth/data/models/response/patient_health_profile_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/professional_titles_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/register_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/unregister_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/specialties_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
@@ -71,6 +74,16 @@ abstract class ApiClient {
 
   @POST(EndPoint.verifyOtp)
   Future<VerifyOtpResponse> verifyOtp(@Body() VerifyOtpRequest request);
+
+  @POST(EndPoint.registerDevice)
+  Future<RegisterDeviceResponse> registerDevice(
+    @Body() RegisterDeviceRequest request,
+  );
+
+  @DELETE(EndPoint.registerDevice)
+  Future<UnregisterDeviceResponse> unregisterDevice(
+    @Body() RegisterDeviceRequest request,
+  );
 
   @MultiPart()
   @PUT(EndPoint.patientHealthProfile)

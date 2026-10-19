@@ -2,11 +2,15 @@ import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
+import 'package:tabib_app/core/services/fcm_service.dart';
 import 'package:tabib_app/features/auth/data/data_source/remote_data_source.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/auth/data/models/request/register_device_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/auth/data/models/response/register_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/unregister_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 import 'package:tabib_app/features/auth/domain/repo/auth_repo.dart';
 
@@ -67,6 +71,49 @@ class AuthRepoImpl implements AuthRepo {
       case Failure<VerifyOtpResponse>():
         return Failure(response.errorMessage);
     }
+  }
+
+  @override
+  Future<Result<RegisterDeviceResponse>> registerDevice() async {
+    final request = await _deviceRequest();
+    if (request == null) {
+      return Success(RegisterDeviceResponse(success: true));
+    }
+    final response = await remoteDataSource.registerDevice(request);
+    switch (response) {
+      case Success<RegisterDeviceResponse>():
+        return Success(response.data);
+      case Failure<RegisterDeviceResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  @override
+  Future<Result<UnregisterDeviceResponse>> unregisterDevice() async {
+    final request = await _deviceRequest();
+    if (request == null) {
+      return Success(UnregisterDeviceResponse(success: true));
+    }
+    final response = await remoteDataSource.unregisterDevice(request);
+    switch (response) {
+      case Success<UnregisterDeviceResponse>():
+        return Success(response.data);
+      case Failure<UnregisterDeviceResponse>():
+        return Failure(response.errorMessage);
+    }
+  }
+
+  Future<RegisterDeviceRequest?> _deviceRequest() async {
+    final fcmToken =
+        await FcmService.cachedToken() ?? await FcmService.currentToken();
+    if (fcmToken == null || fcmToken.isEmpty) {
+      return null;
+    }
+    return RegisterDeviceRequest(
+      fcmToken: fcmToken,
+      platform: FcmService.platform.toUpperCase(),
+      deviceName: '',
+    );
   }
 
   void _saveToken(String token, String refreshToken) async {

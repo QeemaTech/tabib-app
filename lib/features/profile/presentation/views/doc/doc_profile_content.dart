@@ -81,12 +81,19 @@ class DocProfileContent extends StatelessWidget {
                 onTap: () {},
               ),
 
-              ElevatedButton(onPressed: () async {
-               await AppLocalStorage.clearAllSecuredData();
-               if (context.mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.loginView,  (route) => false);
-               }
-              }, child: Text("logout")),
+              ElevatedButton(
+                onPressed: () async {
+                  await context.read<DoctorProfileViewModel>().logout();
+                  await AppLocalStorage.clearAllSecuredData();
+                  if (context.mounted) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.loginView,
+                      (route) => false,
+                    );
+                  }
+                },
+                child: const Text('logout'),
+              ),
             ],
           ),
         ],

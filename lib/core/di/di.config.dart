@@ -29,6 +29,8 @@ import '../../features/appointments/presentation/view_model/appointments_view_mo
     as _i486;
 import '../../features/appointments/presentation/view_model/confirm_payment_view_model.dart'
     as _i975;
+import '../../features/appointments/presentation/view_model/patient_invoices_view_model.dart'
+    as _i565;
 import '../../features/appointments/presentation/view_model/payment_success_view_model.dart'
     as _i325;
 import '../../features/auth/data/data_source/doctor_onboarding_data_source.dart'
@@ -315,18 +317,8 @@ extension GetItInjectableX on _i174.GetIt {
         doctorOnboardingRepo: gh<_i313.DoctorOnboardingRepo>(),
       ),
     );
-    gh.factory<_i369.PatientProfileViewModel>(
-      () => _i369.PatientProfileViewModel(
-        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
-      ),
-    );
     gh.lazySingleton<_i471.DoctorPatientsRepo>(
       () => _i269.DoctorPatientsRepoImpl(gh<_i1062.DoctorPatientsDataSource>()),
-    );
-    gh.factory<_i162.DoctorProfileViewModel>(
-      () => _i162.DoctorProfileViewModel(
-        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
-      ),
     );
     gh.lazySingleton<_i305.PatientFileRepo>(
       () => _i822.PatientFileRepoImpl(gh<_i846.PatientFileDataSource>()),
@@ -377,13 +369,30 @@ extension GetItInjectableX on _i174.GetIt {
         appointmentsRepo: gh<_i201.AppointmentsRepo>(),
       ),
     );
+    gh.factory<_i565.PatientInvoicesViewModel>(
+      () => _i565.PatientInvoicesViewModel(
+        appointmentsRepo: gh<_i201.AppointmentsRepo>(),
+      ),
+    );
     gh.factory<_i325.PaymentSuccessViewModel>(
       () => _i325.PaymentSuccessViewModel(
         appointmentsRepo: gh<_i201.AppointmentsRepo>(),
       ),
     );
+    gh.factory<_i162.DoctorProfileViewModel>(
+      () => _i162.DoctorProfileViewModel(
+        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
+    );
     gh.factory<_i1025.AuthViewModel>(
       () => _i1025.AuthViewModel(gh<_i170.AuthRepo>()),
+    );
+    gh.factory<_i369.PatientProfileViewModel>(
+      () => _i369.PatientProfileViewModel(
+        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
     );
     gh.factory<_i452.PatientFileViewModel>(
       () => _i452.PatientFileViewModel(

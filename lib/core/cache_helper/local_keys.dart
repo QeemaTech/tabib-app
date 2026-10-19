@@ -7,4 +7,5 @@ class LocalKeys {
   static const String token = "token";
   static const String refreshToken = "refreshToken";
   static const String role = "role";
+  static const String fcmToken = "fcmToken";
 }

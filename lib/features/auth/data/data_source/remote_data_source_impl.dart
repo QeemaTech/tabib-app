@@ -4,9 +4,12 @@ import 'package:tabib_app/core/error_handling/execute_api.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/features/auth/data/data_source/remote_data_source.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/auth/data/models/request/register_device_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/auth/data/models/response/register_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/auth/data/models/response/unregister_device_response.dart';
 import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
 
 @LazySingleton(as: RemoteDataSource)
@@ -30,4 +33,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<Result<VerifyOtpResponse>> verifyOtp(VerifyOtpRequest request) =>
       executeApi(() => apiClient.verifyOtp(request));
+
+  @override
+  Future<Result<RegisterDeviceResponse>> registerDevice(
+    RegisterDeviceRequest request,
+  ) => executeApi(() => apiClient.registerDevice(request));
+
+  @override
+  Future<Result<UnregisterDeviceResponse>> unregisterDevice(
+    RegisterDeviceRequest request,
+  ) => executeApi(() => apiClient.unregisterDevice(request));
 }

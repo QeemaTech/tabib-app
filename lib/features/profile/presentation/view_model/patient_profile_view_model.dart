@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
+import 'package:tabib_app/features/auth/domain/repo/auth_repo.dart';
 import 'package:tabib_app/features/profile/domain/entities/patient_profile_entity.dart';
 import 'package:tabib_app/features/profile/domain/repo/patient_profile_repo.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_state.dart';
@@ -9,9 +10,12 @@ import 'package:tabib_app/features/profile/presentation/view_model/patient_profi
 @injectable
 class PatientProfileViewModel extends Cubit<PatientProfileState> {
   final PatientProfileRepo patientProfileRepo;
+  final AuthRepo authRepo;
 
-  PatientProfileViewModel({required this.patientProfileRepo})
-      : super(const PatientProfileState());
+  PatientProfileViewModel({
+    required this.patientProfileRepo,
+    required this.authRepo,
+  }) : super(const PatientProfileState());
 
   Future<void> loadProfile({bool showLoading = true}) async {
     if (showLoading) {
@@ -33,6 +37,10 @@ class PatientProfileViewModel extends Cubit<PatientProfileState> {
   Future<void> retry() => loadProfile();
 
   Future<void> refreshProfile() => loadProfile(showLoading: false);
+
+  Future<void> logout() async {
+    await authRepo.unregisterDevice();
+  }
 
   Future<void> updateProfile({
     required String fullNameAr,
