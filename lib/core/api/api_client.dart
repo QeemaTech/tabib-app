@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
@@ -21,6 +23,7 @@ import 'package:tabib_app/features/appointments/data/models/response/cancel_appo
 import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointment_details_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_invoice_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/patient_invoices_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
 import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
@@ -138,8 +141,20 @@ abstract class ApiClient {
     @Body() CreatePaymentRequest request,
   );
 
+  @GET(EndPoint.patientInvoices)
+  Future<PatientInvoicesResponse> getPatientInvoices({
+    @Query('page') required int page,
+    @Query('limit') required int limit,
+  });
+
   @GET(EndPoint.patientInvoice)
   Future<PatientInvoiceResponse> getPatientInvoice(@Path('id') String id);
+
+  @GET(EndPoint.patientInvoiceDownload)
+  @DioResponseType(ResponseType.bytes)
+  Future<HttpResponse<Uint8List>> downloadPatientInvoice(
+    @Path('id') String id,
+  );
 
   @GET(EndPoint.patientWallet)
   Future<WalletResponse> getPatientWallet();

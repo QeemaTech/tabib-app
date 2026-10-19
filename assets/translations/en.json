@@ -315,6 +315,9 @@
     "complaint": "Complaint",
     "symptoms": "Symptoms",
     "notes": "Notes",
+    "invoicesTitle": "Invoices",
+    "invoicesEmpty": "No invoices yet",
+    "downloadFailed": "Could not download the invoice",
     "invoiceOpenFailed": "Payment completed, but the invoice link could not be opened",
     "paid": "Paid"
   },
@@ -417,6 +420,8 @@
     "title": "Profile",
     "personalInfo": "Personal Information",
     "personalSubtitle": "Name, ID, Phone, Age",
+    "invoices": "Invoices",
+    "invoicesSubtitle": "Payment receipts",
     "medicalProfile": "Medical Profile",
     "medicalSubtitle": "Chronic diseases, Allergies, Medications",
     "settings": "Settings",

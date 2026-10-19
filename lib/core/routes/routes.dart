@@ -23,4 +23,5 @@ class AppRoutes{
   static const String confirmPaymentView="confirmPaymentView";
   static const String paymentSuccessView="paymentSuccessView";
   static const String appointmentDetailsView="appointmentDetailsView";
+  static const String patientInvoicesView="patientInvoicesView";
 }

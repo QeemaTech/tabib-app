@@ -40,6 +40,7 @@ import 'package:tabib_app/features/schedule/presentation/view_model/doctor_sched
 import 'package:tabib_app/features/schedule/presentation/views/doctor_schedule_view.dart';
 import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
 import 'package:tabib_app/features/appointments/presentation/views/appointment_details_view.dart';
+import 'package:tabib_app/features/appointments/presentation/views/patient_invoices_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/confirm_payment_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/payment_success_view.dart';
 
@@ -208,6 +209,10 @@ class Routes {
         final invoiceId = settings.arguments as String? ?? '';
         return MaterialPageRoute(
           builder: (context) => PaymentSuccessView(invoiceId: invoiceId),
+        );
+      case AppRoutes.patientInvoicesView:
+        return MaterialPageRoute(
+          builder: (context) => const PatientInvoicesView(),
         );
       case AppRoutes.appointmentDetailsView:
         final appointmentId = settings.arguments as String? ?? '';

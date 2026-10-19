@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:injectable/injectable.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:tabib_app/core/api/api_client.dart';
 import 'package:tabib_app/core/error_handling/execute_api.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
@@ -10,6 +13,7 @@ import 'package:tabib_app/features/appointments/data/models/response/cancel_appo
 import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointment_details_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_invoice_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/patient_invoices_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
 
@@ -58,5 +62,20 @@ class AppointmentsDataSourceImpl implements AppointmentsDataSource {
   @override
   Future<Result<PatientInvoiceResponse>> getInvoice(String id) {
     return executeApi(() => apiClient.getPatientInvoice(id));
+  }
+
+  @override
+  Future<Result<PatientInvoicesResponse>> getInvoices({
+    required int page,
+    required int limit,
+  }) {
+    return executeApi(
+      () => apiClient.getPatientInvoices(page: page, limit: limit),
+    );
+  }
+
+  @override
+  Future<Result<HttpResponse<Uint8List>>> downloadInvoice(String id) {
+    return executeApi(() => apiClient.downloadPatientInvoice(id));
   }
 }

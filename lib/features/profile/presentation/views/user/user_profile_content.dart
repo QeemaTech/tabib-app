@@ -46,6 +46,14 @@ class UserProfileContent extends StatelessWidget {
               },
             ),
             ProfileMenuItem(
+              title: 'profile.invoices'.tr(),
+              subtitle: 'profile.invoicesSubtitle'.tr(),
+              icon: Icons.receipt_long_outlined,
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.patientInvoicesView);
+              },
+            ),
+            ProfileMenuItem(
               title: 'profile.medicalProfile'.tr(),
               subtitle: 'profile.medicalSubtitle'.tr(),
               icon: Icons.favorite_border,

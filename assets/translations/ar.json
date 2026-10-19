@@ -315,6 +315,9 @@
     "complaint": "الشكوى",
     "symptoms": "الأعراض",
     "notes": "ملاحظات",
+    "invoicesTitle": "الفواتير",
+    "invoicesEmpty": "لا توجد فواتير",
+    "downloadFailed": "تعذر تنزيل الفاتورة",
     "invoiceOpenFailed": "تم الدفع، لكن تعذر فتح رابط الفاتورة",
     "paid": "مدفوع"
   },
@@ -417,6 +420,8 @@
     "title": "الملف الشخصي",
     "personalInfo": "المعلومات الشخصية",
     "personalSubtitle": "الاسم، الهوية، الهاتف، العمر",
+    "invoices": "الفواتير",
+    "invoicesSubtitle": "إيصالات الدفع",
     "medicalProfile": "الملف الطبي",
     "medicalSubtitle": "الأمراض المزمنة، الحساسية، الأدوية",
     "settings": "الإعدادات",

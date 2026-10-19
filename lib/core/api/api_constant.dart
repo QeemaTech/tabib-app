@@ -21,7 +21,10 @@ class EndPoint {
   static const String patientValidateCoupon =
       "/patient/payments/validate-coupon";
   static const String patientPayments = "/patient/payments";
+  static const String patientInvoices = "/patient/invoices";
   static const String patientInvoice = "/patient/invoices/{id}";
+  static const String patientInvoiceDownload =
+      "/patient/invoices/{id}/download";
   static const String patientWallet = "/patient/wallet";
   static const String doctorWallet = "/doctor/wallet";
   static const String doctorWalletTransactions = "/doctor/wallet/transactions";
