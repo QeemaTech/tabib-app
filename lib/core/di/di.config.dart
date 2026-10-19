@@ -23,10 +23,14 @@ import '../../features/appointments/data/repo/appointments_repo_impl.dart'
     as _i611;
 import '../../features/appointments/domain/repo/appointments_repo.dart'
     as _i201;
+import '../../features/appointments/presentation/view_model/appointment_details_view_model.dart'
+    as _i364;
 import '../../features/appointments/presentation/view_model/appointments_view_model.dart'
     as _i486;
 import '../../features/appointments/presentation/view_model/confirm_payment_view_model.dart'
     as _i975;
+import '../../features/appointments/presentation/view_model/payment_success_view_model.dart'
+    as _i325;
 import '../../features/auth/data/data_source/doctor_onboarding_data_source.dart'
     as _i577;
 import '../../features/auth/data/data_source/doctor_onboarding_data_source_impl.dart'
@@ -363,8 +367,18 @@ extension GetItInjectableX on _i174.GetIt {
         doctorAppointmentsRepo: gh<_i763.DoctorAppointmentsRepo>(),
       ),
     );
+    gh.factory<_i364.AppointmentDetailsViewModel>(
+      () => _i364.AppointmentDetailsViewModel(
+        appointmentsRepo: gh<_i201.AppointmentsRepo>(),
+      ),
+    );
     gh.factory<_i486.AppointmentsViewModel>(
       () => _i486.AppointmentsViewModel(
+        appointmentsRepo: gh<_i201.AppointmentsRepo>(),
+      ),
+    );
+    gh.factory<_i325.PaymentSuccessViewModel>(
+      () => _i325.PaymentSuccessViewModel(
         appointmentsRepo: gh<_i201.AppointmentsRepo>(),
       ),
     );

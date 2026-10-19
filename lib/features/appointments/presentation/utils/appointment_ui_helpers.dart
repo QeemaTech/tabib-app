@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_details_entity.dart';
 import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_entity.dart';
 
 String appointmentStatusLabel(String status) {
@@ -23,6 +24,17 @@ String formatAppointmentDateTime(PatientAppointmentEntity appointment) {
   final datePart =
       rawDate.contains('T') ? rawDate.split('T').first : rawDate;
   return '$datePart | ${appointment.startTime}';
+}
+
+String formatAppointmentDetailsWhen(PatientAppointmentDetailsEntity details) {
+  final rawDate = details.date;
+  final datePart = rawDate.contains('T') ? rawDate.split('T').first : rawDate;
+  final start = details.startTime;
+  final end = details.endTime;
+  final time = end.isEmpty || end == start ? start : '$start - $end';
+  if (datePart.isEmpty) return time;
+  if (time.isEmpty) return datePart;
+  return '$datePart | $time';
 }
 
 bool isAppointmentPaid(PatientAppointmentActionsEntity actions) {

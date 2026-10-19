@@ -39,7 +39,9 @@ import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdraw
 import 'package:tabib_app/features/schedule/presentation/view_model/doctor_schedule_view_model.dart';
 import 'package:tabib_app/features/schedule/presentation/views/doctor_schedule_view.dart';
 import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
+import 'package:tabib_app/features/appointments/presentation/views/appointment_details_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/confirm_payment_view.dart';
+import 'package:tabib_app/features/appointments/presentation/views/payment_success_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -201,6 +203,24 @@ class Routes {
         }
         return MaterialPageRoute(
           builder: (context) => ConfirmPaymentView(args: args),
+        );
+      case AppRoutes.paymentSuccessView:
+        final invoiceId = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          builder: (context) => PaymentSuccessView(invoiceId: invoiceId),
+        );
+      case AppRoutes.appointmentDetailsView:
+        final appointmentId = settings.arguments as String? ?? '';
+        if (appointmentId.isEmpty) {
+          return MaterialPageRoute(
+            builder: (context) => const Scaffold(
+              body: Center(child: Text('Missing appointment id')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) =>
+              AppointmentDetailsView(appointmentId: appointmentId),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';

@@ -4,11 +4,17 @@ import 'package:tabib_app/features/appointments/data/models/request/create_payme
 import 'package:tabib_app/features/appointments/data/models/request/validate_coupon_request.dart';
 import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/patient_appointment_details_response.dart';
+import 'package:tabib_app/features/appointments/data/models/response/patient_invoice_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
 import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
 
 abstract interface class AppointmentsDataSource {
   Future<Result<PatientAppointmentsResponse>> getAppointments();
+
+  Future<Result<PatientAppointmentDetailsResponse>> getAppointmentDetails(
+    String id,
+  );
 
   Future<Result<CancelAppointmentResponse>> cancelAppointment({
     required String id,
@@ -22,4 +28,6 @@ abstract interface class AppointmentsDataSource {
   Future<Result<CreatePaymentResponse>> createPayment(
     CreatePaymentRequest request,
   );
+
+  Future<Result<PatientInvoiceResponse>> getInvoice(String id);
 }

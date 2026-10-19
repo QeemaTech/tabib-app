@@ -167,46 +167,56 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
               separatorBuilder: (_, _) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final appointment = appointments[index];
-                return DoctorProfileCard(
-                  avatarUrl: appointment.doctor.avatarUrl,
-                  doctorName: appointment.doctor.localizedName(languageCode),
-                  specialtyLine: appointment.doctor.specialties.isNotEmpty
-                      ? appointment.doctor.specialties.first
-                      : '',
-                  statusLabel: appointmentStatusLabel(appointment.status),
-                  specialties: appointment.doctor.specialties,
-                  dateTimeText: formatAppointmentDateTime(appointment),
-                  feeText: appointment.currency.isEmpty
-                      ? '${appointment.bookingPrice}'
-                      : '${appointment.bookingPrice} ${appointment.currency}',
-                  isPaid: isAppointmentPaid(appointment.actions),
-                  cancelAppointment: appointment.actions.canCancel
-                      ? () => showCancelAppointmentDialog(
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      AppRoutes.appointmentDetailsView,
+                      arguments: appointment.id,
+                    );
+                  },
+                  child: DoctorProfileCard(
+                    avatarUrl: appointment.doctor.avatarUrl,
+                    doctorName: appointment.doctor.localizedName(languageCode),
+                    specialtyLine: appointment.doctor.specialties.isNotEmpty
+                        ? appointment.doctor.specialties.first
+                        : '',
+                    statusLabel: appointmentStatusLabel(appointment.status),
+                    specialties: appointment.doctor.specialties,
+                    dateTimeText: formatAppointmentDateTime(appointment),
+                    feeText: appointment.currency.isEmpty
+                        ? '${appointment.bookingPrice}'
+                        : '${appointment.bookingPrice} ${appointment.currency}',
+                    isPaid: isAppointmentPaid(appointment.actions),
+                    cancelAppointment: appointment.actions.canCancel
+                        ? () => showCancelAppointmentDialog(
                             context,
                             appointmentId: appointment.id,
                           )
-                      : null,
-                  onConfirmPayment: appointment.actions.canPay
-                      ? () async {
-                          final paid = await Navigator.of(context).pushNamed(
-                            AppRoutes.confirmPaymentView,
-                            arguments: ConfirmPaymentArgs(
-                              appointmentId: appointment.id,
-                              bookingPrice: appointment.bookingPrice,
-                              doctorName: appointment.doctor
-                                  .localizedName(languageCode),
-                              dateTimeText:
-                                  formatAppointmentDateTime(appointment),
-                              currency: appointment.currency,
-                            ),
-                          );
-                          if (paid == true && context.mounted) {
-                            await context
-                                .read<AppointmentsViewModel>()
-                                .refreshAppointments();
+                        : null,
+                    onConfirmPayment: appointment.actions.canPay
+                        ? () async {
+                            final paid = await Navigator.of(context).pushNamed(
+                              AppRoutes.confirmPaymentView,
+                              arguments: ConfirmPaymentArgs(
+                                appointmentId: appointment.id,
+                                bookingPrice: appointment.bookingPrice,
+                                doctorName: appointment.doctor.localizedName(
+                                  languageCode,
+                                ),
+                                dateTimeText: formatAppointmentDateTime(
+                                  appointment,
+                                ),
+                                currency: appointment.currency,
+                              ),
+                            );
+                            if (paid == true && context.mounted) {
+                              await context
+                                  .read<AppointmentsViewModel>()
+                                  .refreshAppointments();
+                            }
                           }
-                        }
-                      : null,
+                        : null,
+                  ),
                 );
               },
             ),

@@ -21,10 +21,12 @@ class PaymentAmountRow extends StatelessWidget {
         : theme.regular14.copyWith(color: theme.textColor300);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: style),
-        Text(value, style: style),
+        Expanded(child: Text(label, style: style)),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(value, textAlign: TextAlign.end, style: style),
+        ),
       ],
     );
   }

@@ -15,11 +15,13 @@ class EndPoint {
   static const String patientDoctorAvailability =
       "/patient/doctors/{id}/availability";
   static const String patientAppointments = "/patient/appointments";
+  static const String patientAppointmentDetails = "/patient/appointments/{id}";
   static const String patientCancelAppointment =
       "/patient/appointments/{id}/cancel";
   static const String patientValidateCoupon =
       "/patient/payments/validate-coupon";
   static const String patientPayments = "/patient/payments";
+  static const String patientInvoice = "/patient/invoices/{id}";
   static const String patientWallet = "/patient/wallet";
   static const String doctorWallet = "/doctor/wallet";
   static const String doctorWalletTransactions = "/doctor/wallet/transactions";
