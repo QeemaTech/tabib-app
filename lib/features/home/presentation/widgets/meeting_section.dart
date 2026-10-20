@@ -142,11 +142,13 @@ class MeetingSection extends StatelessWidget {
                 spacing: 2,
                 children: [
                   Icon(Icons.access_time, color: theme.primaryColor300),
-                  Text(
-                    "home.doctor.entryHint".tr(),
-                    textAlign: TextAlign.center,
-                    style: theme.medium13.copyWith(
-                      color: theme.primaryColor300,
+                  Flexible(
+                    child: Text(
+                      "home.doctor.entryHint".tr(),
+                      textAlign: TextAlign.center,
+                      style: theme.medium13.copyWith(
+                        color: theme.primaryColor300,
+                      ),
                     ),
                   ),
                 ],

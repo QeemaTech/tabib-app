@@ -11,6 +11,7 @@ import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/routes/initial_app_route.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/services/fcm_service.dart';
+import 'package:tabib_app/core/services/socket_io_service.dart';
 import 'package:tabib_app/core/services/local_notification_service.dart';
 import 'package:tabib_app/features/auth/domain/repo/auth_repo.dart';
 import 'package:tabib_app/tabib_app.dart';
@@ -63,6 +64,7 @@ void main() async {
 Future<InitialAppRoute> initRouteApp() async {
   final token = await AppLocalStorage.getSecuredString(key: LocalKeys.token);
   if (token.isNotEmpty) {
+    unawaited(getIt<SocketIoService>().connect(accessToken: token));
     final savedRole =
         await AppLocalStorage.getSecuredString(key: LocalKeys.role);
     final role = savedRole.isNotEmpty ? savedRole : 'user';

@@ -56,4 +56,7 @@ class EndPoint {
       "/doctor/onboarding/professional";
   static const String doctorOnboardingDocuments =
       "/doctor/onboarding/documents";
+
+
+  static const String socketUrl = "https://tabeeb.nodeteam.site";
 }
