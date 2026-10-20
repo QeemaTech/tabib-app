@@ -5,6 +5,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/widgets/reservation_card.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/appointment_card_facts.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/appointment_consultation_mode_button.dart';
 import 'package:tabib_app/features/home/presentation/widgets/request_review_doc.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
@@ -52,33 +54,85 @@ class _ReservationsLoadingWidget extends StatelessWidget {
         itemCount: 5,
         itemBuilder: (_, _) {
           if (filter == DoctorAppointmentsFilter.holding) {
-            return const RequestReviewDocCard(
+            return RequestReviewDocCard(
               patientName: 'Patient Name',
-              subtitle: 'Consultation',
-              timeLabel: '2026-08-10 - 09:30',
+              subtitle: 'Video call · 30 min',
+              timeLabel: '',
+              summary: const AppointmentCardFacts(
+                consultationType: '',
+                consultationTypeLabel: '',
+                dateText: '2026-08-10',
+                timeText: '09:00 - 09:30',
+                durationText: '',
+                feeText: '25 SAR',
+                complaint: 'Headache',
+              ),
             );
           }
+          final showSession = filter == DoctorAppointmentsFilter.confirm ||
+              filter == DoctorAppointmentsFilter.all;
           return ReservationCard(
-            showTime: filter != DoctorAppointmentsFilter.completed &&
-                filter != DoctorAppointmentsFilter.cancel,
-            statusBackgroundColor: filter == DoctorAppointmentsFilter.cancel
-                ? const Color(0xFFF7E4E3)
-                : null,
-            statusColor: filter == DoctorAppointmentsFilter.cancel
-                ? const Color(0xFFFF3B30)
-                : null,
+            showTime: false,
             status: filter == DoctorAppointmentsFilter.cancel
                 ? 'reservations.cancelBtn'.tr()
-                : 'reservations.confirmedNow'.tr(),
+                : 'appointments.statusConfirmed'.tr(),
             doctorName: 'appointments.drName'.tr(),
-            subTitle: 'reservations.cardiologyConsultation'.tr(),
-            time: '08:30',
+            subTitle: 'appointments.typeVideo'.tr(),
+            summary: const AppointmentCardFacts(
+              consultationType: '',
+              consultationTypeLabel: '',
+              dateText: '2026-08-10',
+              timeText: '09:00 - 09:30',
+              durationText: '',
+              feeText: '25 SAR',
+              complaint: 'Headache',
+              phone: '0500000000',
+            ),
+            sessionActions: showSession
+                ? const Row(
+                    children: [
+                      Expanded(
+                        child: AppointmentConsultationModeButton(
+                          mode: 'CHAT',
+                          enabled: true,
+                          loading: false,
+                          onPressed: _noop,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: AppointmentConsultationModeButton(
+                          mode: 'VOICE',
+                          enabled: true,
+                          loading: false,
+                          onPressed: _noop,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: AppointmentConsultationModeButton(
+                          mode: 'VIDEO',
+                          enabled: true,
+                          loading: false,
+                          onPressed: _noop,
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
             actions: filter == DoctorAppointmentsFilter.cancel
                 ? null
                 : [
                     ReservationActionButton(
-                      label: 'reservations.bookingDetails'.tr(),
+                      label: 'patients.viewProfile'.tr(),
                       iconPath: AssetsManager.records,
+                      onTap: () {},
+                    ),
+                    ReservationActionButton(
+                      label: filter == DoctorAppointmentsFilter.completed
+                          ? 'reservations.createReportBtn'.tr()
+                          : 'reservations.bookingDetails'.tr(),
+                      iconPath: AssetsManager.report,
                       onTap: () {},
                     ),
                   ],
@@ -160,3 +214,5 @@ class _ReservationsSuccessWidget extends StatelessWidget {
     );
   }
 }
+
+void _noop() {}

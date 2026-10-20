@@ -18,6 +18,8 @@ class ReservationCard extends StatelessWidget {
   final bool isCallEnabled;
   final VoidCallback? onCallTap;
   final String callIconPath;
+  final Widget? summary;
+  final Widget? sessionActions;
 
   const ReservationCard({
     super.key,
@@ -35,6 +37,8 @@ class ReservationCard extends StatelessWidget {
     this.isCallEnabled = false,
     this.onCallTap,
     this.callIconPath = AssetsManager.video,
+    this.summary,
+    this.sessionActions,
   });
 
   bool get _hasSessionIcons => isChatEnabled || isCallEnabled;
@@ -42,6 +46,7 @@ class ReservationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
+    final showTimeRow = showTime && time != null && time!.isNotEmpty;
     final sessionIcons = _ReservationSessionIcons(
       isChatEnabled: isChatEnabled,
       onChatTap: onChatTap,
@@ -94,9 +99,9 @@ class ReservationCard extends StatelessWidget {
                       ),
                       textAlign: TextAlign.end,
                     ),
-                    const SizedBox(height: 8),
-                    showTime || time != null
-                        ? Row(
+                    if (showTimeRow) ...[
+                      const SizedBox(height: 8),
+                      Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Icon(
@@ -116,13 +121,12 @@ class ReservationCard extends StatelessWidget {
                                 sessionIcons,
                               ],
                             ],
-                          )
-                        : _hasSessionIcons
-                            ? Align(
-                                alignment: AlignmentDirectional.centerEnd,
-                                child: sessionIcons,
-                              )
-                            : const SizedBox(),
+                          ),
+                    ] else if (_hasSessionIcons)
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: sessionIcons,
+                      ),
                   ],
                 ),
               ),
@@ -133,7 +137,15 @@ class ReservationCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          if (summary != null) ...[
+            summary!,
+            const SizedBox(height: 12),
+          ],
+          if (sessionActions != null) ...[
+            sessionActions!,
+            const SizedBox(height: 12),
+          ],
           if (actions != null)
             Row(
               children: actions!

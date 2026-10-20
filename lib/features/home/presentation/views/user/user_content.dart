@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/home/presentation/view_model/patient_home_state.dart';
@@ -10,6 +12,7 @@ import 'package:tabib_app/features/home/presentation/widgets/header_special.dart
 import 'package:tabib_app/features/home/presentation/widgets/list_of_special_doc.dart';
 import 'package:tabib_app/features/home/presentation/widgets/meeting_section.dart';
 import 'package:tabib_app/features/home/presentation/widgets/search_bar_widget.dart';
+import 'package:tabib_app/features/home/presentation/widgets/special_item.dart';
 
 class UserContent extends StatelessWidget {
   const UserContent({super.key});
@@ -25,9 +28,7 @@ class UserContent extends StatelessWidget {
         final homeState = state.homeState;
 
         if (homeState.isLoading || homeState.isInitial) {
-          return Center(
-            child: CircularProgressIndicator(color: theme.primaryColor),
-          );
+          return const UserHomeLoadingBody();
         }
 
         if (homeState.isError) {
@@ -87,6 +88,53 @@ class UserContent extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class UserHomeLoadingBody extends StatelessWidget {
+  const UserHomeLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 16,
+          children: [
+            const SearchBarWidget(readOnly: true),
+            const MeetingSection(),
+            const HeaderSpecial(title: 'home.user.fastSpecializations'),
+            const Row(
+              children: [
+                Expanded(
+                  child: SpecialItem(
+                    title: 'Cardiology',
+                    image: AssetsManager.skinDoc,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: SpecialItem(
+                    title: 'Dermatology',
+                    image: AssetsManager.skinDoc,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: SpecialItem(
+                    title: 'Pediatrics',
+                    image: AssetsManager.skinDoc,
+                  ),
+                ),
+              ],
+            ),
+            const HeaderSpecial(title: 'home.user.featuredDoctors'),
+            const MeetingSection(patientName: 'Doctor Name'),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ class ProfileMenuItem extends StatelessWidget {
   final String? subtitle;
   final IconData? icon;
   final VoidCallback onTap;
+  final bool showTrailing;
 
   const ProfileMenuItem({
     super.key,
@@ -13,6 +14,7 @@ class ProfileMenuItem extends StatelessWidget {
     this.subtitle,
     this.icon,
     required this.onTap,
+    this.showTrailing = true,
   });
 
   @override
@@ -66,11 +68,13 @@ class ProfileMenuItem extends StatelessWidget {
                   subtitle!,
                   style: theme.regular12.copyWith(color: theme.textColor200),
                 ),
-          trailing: Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: theme.primaryColor300,
-          ),
+          trailing: showTrailing
+              ? Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: theme.primaryColor300,
+                )
+              : null,
         ),
       ),
     );

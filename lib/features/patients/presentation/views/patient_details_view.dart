@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/appointment_card_facts.dart';
 import 'package:tabib_app/features/patients/presentation/view_model/patient_file_state.dart';
 import 'package:tabib_app/features/patients/presentation/view_model/patient_file_view_model.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/expandable_section.dart';
@@ -65,18 +66,26 @@ class _PatientDetailsLoadingWidget extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const PatientInfoCard(name: '----', id: '----'),
+            const PatientInfoCard(name: 'Patient Name', id: '232345'),
             const SizedBox(height: 24),
             ExpandableSection(
               title: 'patients.details.patientInfo'.tr(),
               backgroundColor: const Color(0xFFE9EBF1),
               iconPath: AssetsManager.patientsActive,
               child: const PatientInfoDetails(
-                gender: '----',
-                birthDate: '----',
-                height: '----',
-                weight: '----',
+                gender: 'Male',
+                phone: '0500000000',
               ),
+            ),
+            const SizedBox(height: 12),
+            const AppointmentCardFacts(
+              consultationType: 'VIDEO',
+              consultationTypeLabel: 'Video call',
+              dateText: '2026-08-10',
+              timeText: '09:00 - 09:30',
+              durationText: '',
+              feeText: '25 SAR',
+              notes: 'Follow up notes',
             ),
           ],
         ),

@@ -1,11 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/features/auth/presentation/widgets/drop_down_menu.dart';
+import 'package:tabib_app/features/home/domain/entities/doctor_details_entity.dart';
+import 'package:tabib_app/features/home/domain/entities/doctor_specialty_entity.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_state.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_details_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/available_appointment_list.dart';
@@ -89,9 +92,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
             final detailsState = state.doctorDetailsState;
 
             if (detailsState.isLoading || detailsState.isInitial) {
-              return Center(
-                child: CircularProgressIndicator(color: theme.primaryColor),
-              );
+              return const DoctorDetailsLoadingBody();
             }
 
             if (detailsState.isError) {
@@ -182,6 +183,67 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
               consultationFee: doctor.consultationFee,
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class DoctorDetailsLoadingBody extends StatelessWidget {
+  const DoctorDetailsLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DoctorHeaderCard(
+              doctor: const DoctorDetailsEntity(
+                id: '1',
+                fullNameAr: 'دكتور أحمد',
+                fullNameEn: 'Doctor Name',
+                avatarUrl: '',
+                bioAr: 'نبذة عن الطبيب',
+                bioEn: 'Doctor biography placeholder for the loading state.',
+                experienceYears: 10,
+                consultationFee: 25,
+                ratingAvg: 4.8,
+                ratingCount: 20,
+                isOnline: true,
+                specialties: [
+                  DoctorSpecialtyEntity(
+                    id: '1',
+                    nameAr: 'قلب',
+                    nameEn: 'Cardiology',
+                  ),
+                ],
+                certificates: [],
+                reviews: [],
+              ),
+            ),
+            DoctorSpecializationsSection(
+              specialties: const [
+                DoctorSpecialtyEntity(
+                  id: '1',
+                  nameAr: 'قلب',
+                  nameEn: 'Cardiology',
+                ),
+              ],
+            ),
+            const DoctorAboutSection(
+              bio: 'Doctor biography placeholder for the loading state.',
+            ),
+            Text(
+              'home.doctorDetails.selectConsultationType'.tr(),
+              style: context.appTheme.bold12,
+            ),
+            const CalendarSection(selectedDay: null),
+          ],
         ),
       ),
     );

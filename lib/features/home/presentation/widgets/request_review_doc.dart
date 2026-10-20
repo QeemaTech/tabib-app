@@ -12,6 +12,7 @@ class RequestReviewDocCard extends StatelessWidget {
   final VoidCallback? onAccept;
   final VoidCallback? onReject;
   final bool isActionLoading;
+  final Widget? summary;
 
   const RequestReviewDocCard({
     super.key,
@@ -22,6 +23,7 @@ class RequestReviewDocCard extends StatelessWidget {
     this.onAccept,
     this.onReject,
     this.isActionLoading = false,
+    this.summary,
   });
 
   @override
@@ -71,39 +73,47 @@ class RequestReviewDocCard extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: theme.bold12.copyWith(
-                        color: theme.textColor300,
-                        fontSize: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: theme.bold12.copyWith(
                           color: theme.textColor300,
-                          size: 18,
+                          fontSize: 10,
                         ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            timeLabel,
-                            style: theme.bold12.copyWith(
-                              color: theme.textColor300,
+                      ),
+                    ],
+                    if (timeLabel.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            color: theme.textColor300,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              timeLabel,
+                              style: theme.bold12.copyWith(
+                                color: theme.textColor300,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
+          if (summary != null) ...[
+            summary!,
+            const SizedBox(height: 16),
+          ],
           AcceptDoctorBtn(
             onAccept: onAccept,
             onReject: onReject,

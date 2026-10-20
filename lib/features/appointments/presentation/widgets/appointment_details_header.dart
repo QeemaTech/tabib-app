@@ -5,6 +5,7 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_details_entity.dart';
 import 'package:tabib_app/features/appointments/presentation/utils/appointment_ui_helpers.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/appointment_status_badge.dart';
 
 class AppointmentDetailsHeader extends StatelessWidget {
   final PatientAppointmentDetailsEntity details;
@@ -74,16 +75,9 @@ class AppointmentDetailsHeader extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              color: theme.primaryColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              appointmentStatusLabel(details.status),
-              style: theme.bold12.copyWith(color: theme.primaryColor),
-            ),
+          AppointmentStatusBadge(
+            status: details.status,
+            label: appointmentStatusLabel(details.status),
           ),
         ],
       ),

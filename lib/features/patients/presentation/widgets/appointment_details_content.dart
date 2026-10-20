@@ -1,12 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
+import 'package:tabib_app/features/appointments/presentation/utils/appointment_ui_helpers.dart'
+    show formatAppointmentTimeRange;
 import 'package:tabib_app/features/patients/presentation/widgets/appointment_info_details.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/expandable_section.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/medical_note_card.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/patient_info_card.dart';
 import 'package:tabib_app/features/patients/presentation/widgets/patient_info_details.dart';
 import 'package:tabib_app/features/reservations/domain/entities/doctor_appointment_entity.dart';
+import 'package:tabib_app/features/reservations/presentation/widgets/doctor_booking_visit_section.dart';
 
 class AppointmentDetailsContent extends StatelessWidget {
   final DoctorAppointmentEntity appointment;
@@ -30,15 +33,20 @@ class AppointmentDetailsContent extends StatelessWidget {
             imagePath: patient.hasAvatar ? patient.avatarUrl : null,
           ),
           const SizedBox(height: 16),
+          DoctorBookingVisitSection(appointment: appointment),
+          const SizedBox(height: 16),
           ExpandableSection(
             title: 'patients.appointmentDetails.patientInfo'.tr(),
             backgroundColor: const Color(0xFFE9EBF1),
             iconPath: AssetsManager.patientsActive,
             child: PatientInfoDetails(
               gender: _genderLabel(patient.gender),
-              birthDate: '—',
               height: _heightLabel(patient.heightCm),
               weight: _weightLabel(patient.weightKg),
+              phone: [
+                if (patient.countryCode.isNotEmpty) patient.countryCode,
+                if (patient.phone.isNotEmpty) patient.phone,
+              ].join(' '),
             ),
           ),
           ExpandableSection(
@@ -47,7 +55,10 @@ class AppointmentDetailsContent extends StatelessWidget {
             iconPath: AssetsManager.appointmentsActive,
             child: AppointmentInfoDetails(
               date: dateParts.dateLabel,
-              time: appointment.startTime,
+              time: formatAppointmentTimeRange(
+                startTime: appointment.startTime,
+                endTime: appointment.endTime,
+              ),
               day: dateParts.dayName,
               month: dateParts.monthName,
               dayNumber: dateParts.dayNumber,

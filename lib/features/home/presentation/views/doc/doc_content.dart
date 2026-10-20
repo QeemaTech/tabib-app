@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/home/domain/entities/doctor_dashboard_entity.dart';
+import 'package:tabib_app/features/home/domain/entities/doctor_dashboard_stats_entity.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_state.dart';
 import 'package:tabib_app/features/home/presentation/view_model/doctor_dashboard_view_model.dart';
 import 'package:tabib_app/features/home/presentation/widgets/dashboard_reject_dialog.dart';
@@ -47,7 +49,7 @@ class DocContent extends StatelessWidget {
           final dashboardState = state.dashboardState;
 
           if (dashboardState.isLoading || dashboardState.isInitial) {
-            return const _DocContentLoadingWidget();
+            return const DocHomeLoadingBody();
           }
 
           if (dashboardState.isError) {
@@ -72,15 +74,42 @@ class DocContent extends StatelessWidget {
   }
 }
 
-class _DocContentLoadingWidget extends StatelessWidget {
-  const _DocContentLoadingWidget();
+class DocHomeLoadingBody extends StatelessWidget {
+  const DocHomeLoadingBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-        color: context.appTheme.primaryColor,
-        strokeWidth: 2,
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: 16,
+          children: [
+            const SearchBarWidget(),
+            DocDashboard(
+              stats: const DoctorDashboardStatsEntity(
+                todayCount: 4,
+                weekCount: 12,
+                completedCount: 8,
+                totalCompletedCount: 20,
+                pendingCount: 2,
+                rating: 4.8,
+                ratingCount: 16,
+                earnings: 250,
+              ),
+            ),
+            const MeetingSection(patientName: 'Patient Name'),
+            HeaderSpecial(
+              title: 'home.doctor.reviewRequests',
+              titleArgs: const ['2'],
+            ),
+            const RequestReviewDocCard(
+              patientName: 'Patient Name',
+              subtitle: 'Video call',
+              timeLabel: '2026-08-10 | 09:30',
+            ),
+          ],
+        ),
       ),
     );
   }

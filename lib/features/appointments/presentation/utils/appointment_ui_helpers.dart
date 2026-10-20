@@ -19,19 +19,68 @@ String appointmentStatusLabel(String status) {
   }
 }
 
+String consultationTypeLabel(String type) {
+  switch (type.toUpperCase()) {
+    case 'CHAT':
+      return 'appointments.typeChat'.tr();
+    case 'VOICE':
+      return 'appointments.typeVoice'.tr();
+    case 'VIDEO':
+      return 'appointments.typeVideo'.tr();
+    default:
+      return type;
+  }
+}
+
+String formatAppointmentDate(String rawDate) {
+  if (rawDate.contains('T')) return rawDate.split('T').first;
+  return rawDate;
+}
+
+String formatAppointmentTimeRange({
+  required String startTime,
+  required String endTime,
+}) {
+  if (endTime.isEmpty || endTime == startTime) return startTime;
+  return '$startTime - $endTime';
+}
+
+String appointmentDurationLabel({
+  required String consultationType,
+  required int durationChatHours,
+  required int durationCallMinutes,
+}) {
+  final type = consultationType.toUpperCase();
+  if (type == 'CHAT' && durationChatHours > 0) {
+    return 'appointments.chatDuration'.tr(
+      namedArgs: {'hours': '$durationChatHours'},
+    );
+  }
+  if ((type == 'VOICE' || type == 'VIDEO') && durationCallMinutes > 0) {
+    return 'appointments.callDuration'.tr(
+      namedArgs: {'minutes': '$durationCallMinutes'},
+    );
+  }
+  return '';
+}
+
 String formatAppointmentDateTime(PatientAppointmentEntity appointment) {
-  final rawDate = appointment.date;
-  final datePart =
-      rawDate.contains('T') ? rawDate.split('T').first : rawDate;
-  return '$datePart | ${appointment.startTime}';
+  final datePart = formatAppointmentDate(appointment.date);
+  final time = formatAppointmentTimeRange(
+    startTime: appointment.startTime,
+    endTime: appointment.endTime,
+  );
+  if (datePart.isEmpty) return time;
+  if (time.isEmpty) return datePart;
+  return '$datePart | $time';
 }
 
 String formatAppointmentDetailsWhen(PatientAppointmentDetailsEntity details) {
-  final rawDate = details.date;
-  final datePart = rawDate.contains('T') ? rawDate.split('T').first : rawDate;
-  final start = details.startTime;
-  final end = details.endTime;
-  final time = end.isEmpty || end == start ? start : '$start - $end';
+  final datePart = formatAppointmentDate(details.date);
+  final time = formatAppointmentTimeRange(
+    startTime: details.startTime,
+    endTime: details.endTime,
+  );
   if (datePart.isEmpty) return time;
   if (time.isEmpty) return datePart;
   return '$datePart | $time';

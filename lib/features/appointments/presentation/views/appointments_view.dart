@@ -4,15 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
-import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/appointments/domain/entities/patient_appointment_entity.dart';
-import 'package:tabib_app/features/appointments/presentation/utils/appointment_ui_helpers.dart';
-import 'package:tabib_app/features/appointments/presentation/utils/confirm_payment_args.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointments_state.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointments_view_model.dart';
-import 'package:tabib_app/features/appointments/presentation/widgets/cancel_appointment_dialog.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/doctor_profile_card.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/patient_appointment_list_card.dart';
 
 class AppointmentsView extends StatelessWidget {
   const AppointmentsView({super.key});
@@ -81,10 +78,16 @@ class _AppointmentsLoadingWidget extends StatelessWidget {
               avatarUrl: '',
               doctorName: 'Doctor Name',
               specialtyLine: 'Specialty',
+              status: 'CONFIRMED',
               statusLabel: 'Confirmed',
               specialties: ['Specialty One', 'Specialty Two'],
-              dateTimeText: '2026-07-18 | 09:00',
+              consultationType: 'VIDEO',
+              consultationTypeLabel: 'Video call',
+              dateText: '2026-07-18',
+              timeText: '09:00 - 09:30',
+              durationText: '30 min',
               feeText: '25',
+              complaint: 'Complaint',
             ),
           ),
         ],
@@ -142,7 +145,6 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    final languageCode = context.locale.languageCode;
 
     return RefreshIndicator(
       color: theme.primaryColor,
@@ -166,57 +168,8 @@ class _AppointmentsSuccessWidget extends StatelessWidget {
               itemCount: appointments.length,
               separatorBuilder: (_, _) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
-                final appointment = appointments[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.appointmentDetailsView,
-                      arguments: appointment.id,
-                    );
-                  },
-                  child: DoctorProfileCard(
-                    avatarUrl: appointment.doctor.avatarUrl,
-                    doctorName: appointment.doctor.localizedName(languageCode),
-                    specialtyLine: appointment.doctor.specialties.isNotEmpty
-                        ? appointment.doctor.specialties.first
-                        : '',
-                    statusLabel: appointmentStatusLabel(appointment.status),
-                    specialties: appointment.doctor.specialties,
-                    dateTimeText: formatAppointmentDateTime(appointment),
-                    feeText: appointment.currency.isEmpty
-                        ? '${appointment.bookingPrice}'
-                        : '${appointment.bookingPrice} ${appointment.currency}',
-                    isPaid: isAppointmentPaid(appointment.actions),
-                    cancelAppointment: appointment.actions.canCancel
-                        ? () => showCancelAppointmentDialog(
-                            context,
-                            appointmentId: appointment.id,
-                          )
-                        : null,
-                    onConfirmPayment: appointment.actions.canPay
-                        ? () async {
-                            final paid = await Navigator.of(context).pushNamed(
-                              AppRoutes.confirmPaymentView,
-                              arguments: ConfirmPaymentArgs(
-                                appointmentId: appointment.id,
-                                bookingPrice: appointment.bookingPrice,
-                                doctorName: appointment.doctor.localizedName(
-                                  languageCode,
-                                ),
-                                dateTimeText: formatAppointmentDateTime(
-                                  appointment,
-                                ),
-                                currency: appointment.currency,
-                              ),
-                            );
-                            if (paid == true && context.mounted) {
-                              await context
-                                  .read<AppointmentsViewModel>()
-                                  .refreshAppointments();
-                            }
-                          }
-                        : null,
-                  ),
+                return PatientAppointmentListCard(
+                  appointment: appointments[index],
                 );
               },
             ),

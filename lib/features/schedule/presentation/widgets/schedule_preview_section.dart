@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/schedule/presentation/view_model/doctor_schedule_state.dart';
 import 'package:tabib_app/features/schedule/presentation/view_model/doctor_schedule_view_model.dart';
@@ -115,12 +116,7 @@ class _PreviewBody extends StatelessWidget {
       );
     }
     if (previewState.isLoading) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: CircularProgressIndicator(color: theme.primaryColor),
-        ),
-      );
+      return const SchedulePreviewLoadingBody();
     }
     if (previewState.isError) {
       return Text(
@@ -143,6 +139,27 @@ class _PreviewBody extends StatelessWidget {
       children: preview.slots
           .map((slot) => _PreviewChip(start: slot.startTime, end: slot.endTime))
           .toList(),
+    );
+  }
+}
+
+class SchedulePreviewLoadingBody extends StatelessWidget {
+  const SchedulePreviewLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: const Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          _PreviewChip(start: '09:00', end: '09:30'),
+          _PreviewChip(start: '10:00', end: '10:30'),
+          _PreviewChip(start: '11:00', end: '11:30'),
+          _PreviewChip(start: '12:00', end: '12:30'),
+        ],
+      ),
     );
   }
 }

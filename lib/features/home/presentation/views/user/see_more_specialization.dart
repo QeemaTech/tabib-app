@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
@@ -46,7 +47,7 @@ class SeeMoreSpecializationView extends StatelessWidget {
               builder: (context, state) {
                 final specialtiesState = state.specialtiesState;
                 if (specialtiesState.isLoading || specialtiesState.isInitial) {
-                  return const _SpecialtiesLoadingWidget();
+                  return const SpecialtiesLoadingBody();
                 }
                 if (specialtiesState.isError) {
                   return _SpecialtiesErrorWidget(
@@ -67,14 +68,27 @@ class SeeMoreSpecializationView extends StatelessWidget {
   }
 }
 
-class _SpecialtiesLoadingWidget extends StatelessWidget {
-  const _SpecialtiesLoadingWidget();
+class SpecialtiesLoadingBody extends StatelessWidget {
+  const SpecialtiesLoadingBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.appTheme;
-    return Center(
-      child: CircularProgressIndicator(color: theme.primaryColor),
+    return Skeletonizer(
+      enabled: true,
+      child: GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.9,
+        ),
+        itemCount: 9,
+        itemBuilder: (_, _) => const SpecialItem(
+          title: 'Specialty',
+          image: AssetsManager.skinDoc,
+        ),
+      ),
     );
   }
 }

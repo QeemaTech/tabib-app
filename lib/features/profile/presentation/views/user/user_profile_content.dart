@@ -7,6 +7,7 @@ import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_state.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_view_model.dart';
+import 'package:tabib_app/features/profile/presentation/widgets/patient_profile_summary_card.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/profile_menu_item.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/user_profile_header.dart';
 
@@ -17,15 +18,24 @@ class UserProfileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 60),
+        const SizedBox(height: 24),
         BlocBuilder<PatientProfileViewModel, PatientProfileState>(
           buildWhen: (previous, current) =>
               previous.profileState != current.profileState,
           builder: (context, state) {
             final profileState = state.profileState;
-            return UserProfileHeader(
-              profile: profileState.data,
-              isLoading: profileState.isLoading || profileState.isInitial,
+            final profile = profileState.data;
+            return Column(
+              children: [
+                UserProfileHeader(
+                  profile: profile,
+                  isLoading: profileState.isLoading || profileState.isInitial,
+                ),
+                if (profile != null) ...[
+                  const SizedBox(height: 24),
+                  PatientProfileSummaryCard(profile: profile),
+                ],
+              ],
             );
           },
         ),
@@ -55,22 +65,13 @@ class UserProfileContent extends StatelessWidget {
               },
             ),
             ProfileMenuItem(
-              title: 'profile.medicalProfile'.tr(),
-              subtitle: 'profile.medicalSubtitle'.tr(),
-              icon: Icons.favorite_border,
-              onTap: () {},
-            ),
-            ProfileMenuItem(
-              title: 'profile.settings'.tr(),
-              subtitle: 'profile.settingsSubtitle'.tr(),
-              icon: Icons.settings_outlined,
-              onTap: () {},
-            ),
-            ElevatedButton(
-              onPressed: () async {
+              title: 'profile.logout'.tr(),
+              icon: Icons.logout,
+              showTrailing: false,
+              onTap: () async {
                 await context.read<PatientProfileViewModel>().logout();
                 await AppLocalStorage.clearAllSecuredData();
-                 SocketIoService.instance.disconnect();
+                SocketIoService.instance.disconnect();
                 CachedUserRole.uiRole = 'user';
                 if (!context.mounted) {
                   return;
@@ -80,7 +81,6 @@ class UserProfileContent extends StatelessWidget {
                   (route) => false,
                 );
               },
-              child: Text('Logout'.tr()),
             ),
           ],
         ),

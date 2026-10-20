@@ -319,7 +319,17 @@
     "invoicesEmpty": "لا توجد فواتير",
     "downloadFailed": "تعذر تنزيل الفاتورة",
     "invoiceOpenFailed": "تم الدفع، لكن تعذر فتح رابط الفاتورة",
-    "paid": "مدفوع"
+    "paid": "مدفوع",
+    "typeChat": "محادثة",
+    "typeVoice": "مكالمة صوتية",
+    "typeVideo": "مكالمة فيديو",
+    "chatDuration": "{hours} س",
+    "callDuration": "{minutes} د",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "fee": "الرسوم",
+    "cancelReason": "سبب الإلغاء",
+    "phone": "الهاتف"
   },
   "records": {
     "title": "السجلات الطبية",
@@ -430,6 +440,7 @@
     "male": "ذكر",
     "female": "أنثى",
     "experiences": "الخبرات",
+    "logout": "تسجيل الخروج",
     "personal": {
       "phone": "الهاتف",
       "email": "البريد الإلكتروني",
@@ -444,6 +455,9 @@
       "fullNameSo": "الاسم الكامل (صومالي)",
       "allergies": "الحساسية",
       "chronicConditions": "الأمراض المزمنة",
+      "currentMedications": "الأدوية الحالية",
+      "medicationAllergy": "حساسية من دواء",
+      "yes": "نعم",
       "chooseBirthDate": "اختر تاريخ الميلاد",
       "editTitle": "تعديل المعلومات الشخصية",
       "save": "حفظ",
@@ -465,6 +479,10 @@
       "clinic": "العيادة",
       "clinicAddress": "عنوان العيادة",
       "bio": "نبذة",
+      "feeChat": "رسوم المحادثة",
+      "feeVoice": "رسوم المكالمة الصوتية",
+      "feeVideo": "رسوم مكالمة الفيديو",
+      "specialties": "التخصصات",
       "statusPending": "قيد المراجعة",
       "statusVerified": "موثق",
       "statusRejected": "مرفوض"

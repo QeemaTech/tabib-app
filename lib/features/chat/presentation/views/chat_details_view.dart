@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_details_state.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_details_view_model.dart';
+import 'package:tabib_app/features/chat/presentation/widgets/chat_bubble.dart';
 import 'package:tabib_app/features/chat/presentation/widgets/chat_message_input.dart';
 import 'package:tabib_app/features/chat/presentation/widgets/chat_messages_list.dart';
 
@@ -125,7 +127,7 @@ class _ChatMessagesBody extends StatelessWidget {
           p.isLoadingMore != c.isLoadingMore,
       builder: (context, state) {
         if (state.historyState.isLoading || state.historyState.isInitial) {
-          return const _ChatHistoryLoadingWidget();
+          return const ChatHistoryLoadingBody();
         }
         if (state.historyState.isError) {
           return _ChatHistoryErrorWidget(
@@ -149,13 +151,33 @@ class _ChatMessagesBody extends StatelessWidget {
   }
 }
 
-class _ChatHistoryLoadingWidget extends StatelessWidget {
-  const _ChatHistoryLoadingWidget();
+class ChatHistoryLoadingBody extends StatelessWidget {
+  const ChatHistoryLoadingBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(color: context.appTheme.primaryColor),
+    return Skeletonizer(
+      enabled: true,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: const [
+          ChatBubble(
+            message: 'Hello, how are you feeling today?',
+            time: '09:00',
+            isMe: false,
+          ),
+          ChatBubble(
+            message: 'I have a headache since yesterday.',
+            time: '09:02',
+            isMe: true,
+          ),
+          ChatBubble(
+            message: 'Please describe the symptoms in more detail.',
+            time: '09:03',
+            isMe: false,
+          ),
+        ],
+      ),
     );
   }
 }

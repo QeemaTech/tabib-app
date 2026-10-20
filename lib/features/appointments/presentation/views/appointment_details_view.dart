@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointment_details_state.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/appointment_details_view_model.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/appointment_consultation_mode_button.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/appointment_details_content.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/payment_success_error.dart';
 import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
@@ -50,11 +52,7 @@ class AppointmentDetailsView extends StatelessWidget {
                 builder: (context, state) {
                   final details = state.detailsState;
                   if (details.isLoading || details.isInitial) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: theme.primaryColor,
-                      ),
-                    );
+                    return const PatientAppointmentDetailsLoadingBody();
                   }
                   if (details.isError || details.data == null) {
                     return PaymentSuccessError(
@@ -109,3 +107,80 @@ class AppointmentDetailsView extends StatelessWidget {
     }
   }
 }
+
+class PatientAppointmentDetailsLoadingBody extends StatelessWidget {
+  const PatientAppointmentDetailsLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return Skeletonizer(
+      enabled: true,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'appointments.drName'.tr(),
+              style: theme.bold18.copyWith(color: theme.primaryColor),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'appointments.typeVideo'.tr(),
+              style: theme.regular14.copyWith(color: theme.textColor300),
+            ),
+            const SizedBox(height: 16),
+            const Row(
+              children: [
+                Expanded(
+                  child: AppointmentConsultationModeButton(
+                    mode: 'CHAT',
+                    enabled: true,
+                    loading: false,
+                    onPressed: _noop,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: AppointmentConsultationModeButton(
+                    mode: 'VOICE',
+                    enabled: true,
+                    loading: false,
+                    onPressed: _noop,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: AppointmentConsultationModeButton(
+                    mode: 'VIDEO',
+                    enabled: true,
+                    loading: false,
+                    onPressed: _noop,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '2026-08-10 | 09:00 - 09:30',
+              style: theme.regular14.copyWith(color: theme.textColor600),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '25 SAR',
+              style: theme.regular14.copyWith(color: theme.textColor600),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Headache and fever',
+              style: theme.regular14.copyWith(color: theme.textColor300),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void _noop() {}

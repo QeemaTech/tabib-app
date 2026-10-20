@@ -15,7 +15,7 @@ class AppointmentConsultationActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final modes = details.doctor.offeredChannels;
+    final modes = const ['CHAT', 'VOICE', 'VIDEO'];
 
     return BlocBuilder<StartConsultationViewModel, StartConsultationState>(
       builder: (context, startState) {

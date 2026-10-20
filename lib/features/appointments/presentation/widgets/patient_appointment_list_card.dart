@@ -29,59 +29,88 @@ class PatientAppointmentListCard extends StatelessWidget {
     final canStartCall = appointment.status.toUpperCase() == 'CONFIRMED' &&
         isCallType &&
         appointment.actions.canAccessCall;
+    final feeText = appointment.currency.isEmpty
+        ? '${appointment.bookingPrice}'
+        : '${appointment.bookingPrice} ${appointment.currency}';
 
-    return DoctorProfileCard(
-      avatarUrl: appointment.doctor.avatarUrl,
-      doctorName: doctorName,
-      specialtyLine: appointment.doctor.specialties.isNotEmpty
-          ? appointment.doctor.specialties.first
-          : '',
-      statusLabel: appointmentStatusLabel(appointment.status),
-      specialties: appointment.doctor.specialties,
-      dateTimeText: formatAppointmentDateTime(appointment),
-      feeText: appointment.currency.isEmpty
-          ? '${appointment.bookingPrice}'
-          : '${appointment.bookingPrice} ${appointment.currency}',
-      isPaid: isAppointmentPaid(appointment.actions),
-      callIconPath: AssetsManager.video,
-      callType: consultationType,
-      onCallTap: () {
-              Navigator.of(context).pushNamed(
-                AppRoutes.videoCallView,
-                arguments: VideoCallArgs(
-                  appointmentId: appointment.id,
-                  callType: consultationType,
-                  peerName: doctorName,
-                ),
-              );
-            },
-      //  canStartCall
-      //     ?
-      //     : null,
-      cancelAppointment: appointment.actions.canCancel
-          ? () => showCancelAppointmentDialog(
-                context,
-                appointmentId: appointment.id,
-              )
-          : null,
-      onConfirmPayment: appointment.actions.canPay
-          ? () async {
-              final paid = await Navigator.of(context).pushNamed(
-                AppRoutes.confirmPaymentView,
-                arguments: ConfirmPaymentArgs(
-                  appointmentId: appointment.id,
-                  bookingPrice: appointment.bookingPrice,
-                  doctorName: doctorName,
-                  dateTimeText: formatAppointmentDateTime(appointment), currency: appointment.currency,
-                ),
-              );
-              if (paid == true && context.mounted) {
-                await context
-                    .read<AppointmentsViewModel>()
-                    .refreshAppointments();
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          AppRoutes.appointmentDetailsView,
+          arguments: appointment.id,
+        );
+      },
+      child: DoctorProfileCard(
+        avatarUrl: appointment.doctor.avatarUrl,
+        doctorName: doctorName,
+        specialtyLine: appointment.doctor.specialties.isNotEmpty
+            ? appointment.doctor.specialties.first
+            : '',
+        status: appointment.status,
+        statusLabel: appointmentStatusLabel(appointment.status),
+        specialties: appointment.doctor.specialties,
+        consultationType: consultationType,
+        consultationTypeLabel: consultationTypeLabel(
+          appointment.consultationType,
+        ),
+        dateText: formatAppointmentDate(appointment.date),
+        timeText: formatAppointmentTimeRange(
+          startTime: appointment.startTime,
+          endTime: appointment.endTime,
+        ),
+        durationText: appointmentDurationLabel(
+          consultationType: appointment.consultationType,
+          durationChatHours: appointment.durationChatHours,
+          durationCallMinutes: appointment.durationCallMinutes,
+        ),
+        feeText: feeText,
+        complaint: appointment.complaint,
+        symptoms: appointment.symptoms,
+        notes: appointment.notes,
+        cancelReason: appointment.status.toUpperCase() == 'CANCELLED'
+            ? appointment.cancelReason
+            : '',
+        isPaid: isAppointmentPaid(appointment.actions),
+        callIconPath: AssetsManager.video,
+        callType: consultationType,
+        onCallTap: canStartCall
+            ? () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.videoCallView,
+                  arguments: VideoCallArgs(
+                    appointmentId: appointment.id,
+                    callType: consultationType,
+                    peerName: doctorName,
+                  ),
+                );
               }
-            }
-          : null,
+            : null,
+        cancelAppointment: appointment.actions.canCancel
+            ? () => showCancelAppointmentDialog(
+                  context,
+                  appointmentId: appointment.id,
+                )
+            : null,
+        onConfirmPayment: appointment.actions.canPay
+            ? () async {
+                final paid = await Navigator.of(context).pushNamed(
+                  AppRoutes.confirmPaymentView,
+                  arguments: ConfirmPaymentArgs(
+                    appointmentId: appointment.id,
+                    bookingPrice: appointment.bookingPrice,
+                    doctorName: doctorName,
+                    dateTimeText: formatAppointmentDateTime(appointment),
+                    currency: appointment.currency,
+                  ),
+                );
+                if (paid == true && context.mounted) {
+                  await context
+                      .read<AppointmentsViewModel>()
+                      .refreshAppointments();
+                }
+              }
+            : null,
+      ),
     );
   }
 }

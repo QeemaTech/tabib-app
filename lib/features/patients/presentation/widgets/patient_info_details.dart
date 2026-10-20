@@ -7,18 +7,48 @@ class PatientInfoDetails extends StatelessWidget {
   final String birthDate;
   final String height;
   final String weight;
+  final String phone;
 
   const PatientInfoDetails({
     super.key,
-    required this.gender,
-    required this.birthDate,
-    required this.height,
-    required this.weight,
+    this.gender = '',
+    this.birthDate = '',
+    this.height = '',
+    this.weight = '',
+    this.phone = '',
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
+    final rows = <Widget>[
+      if (_hasValue(birthDate))
+        _PatientInfoRow(
+          label: 'patients.details.birthDate'.tr(),
+          value: birthDate,
+        ),
+      if (_hasValue(gender))
+        _PatientInfoRow(
+          label: 'patients.details.gender'.tr(),
+          value: gender,
+        ),
+      if (_hasValue(phone))
+        _PatientInfoRow(
+          label: 'appointments.phone'.tr(),
+          value: phone,
+        ),
+      if (_hasValue(weight))
+        _PatientInfoRow(
+          label: 'patients.details.weight'.tr(),
+          value: weight,
+        ),
+      if (_hasValue(height))
+        _PatientInfoRow(
+          label: 'patients.details.height'.tr(),
+          value: height,
+        ),
+    ];
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -27,26 +57,14 @@ class PatientInfoDetails extends StatelessWidget {
       ),
       child: Column(
         spacing: 5,
-        children: [
-          _PatientInfoRow(
-            label: 'patients.details.birthDate'.tr(),
-            value: birthDate,
-          ),
-          _PatientInfoRow(
-            label: 'patients.details.gender'.tr(),
-            value: gender,
-          ),
-          _PatientInfoRow(
-            label: 'patients.details.weight'.tr(),
-            value: weight,
-          ),
-          _PatientInfoRow(
-            label: 'patients.details.height'.tr(),
-            value: height,
-          ),
-        ],
+        children: rows,
       ),
     );
+  }
+
+  bool _hasValue(String value) {
+    final trimmed = value.trim();
+    return trimmed.isNotEmpty && trimmed != '—' && trimmed != '----';
   }
 }
 

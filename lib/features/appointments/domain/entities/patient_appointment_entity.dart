@@ -42,6 +42,10 @@ class PatientAppointmentEntity extends Equatable {
   final String consultationType;
   final double bookingPrice;
   final String currency;
+  final int durationChatHours;
+  final int durationCallMinutes;
+  final String complaint;
+  final String symptoms;
   final String notes;
   final String cancelReason;
   final String createdAt;
@@ -57,6 +61,10 @@ class PatientAppointmentEntity extends Equatable {
     required this.consultationType,
     required this.bookingPrice,
     required this.currency,
+    required this.durationChatHours,
+    required this.durationCallMinutes,
+    required this.complaint,
+    required this.symptoms,
     required this.notes,
     required this.cancelReason,
     required this.createdAt,
@@ -73,6 +81,10 @@ class PatientAppointmentEntity extends Equatable {
     String? consultationType,
     double? bookingPrice,
     String? currency,
+    int? durationChatHours,
+    int? durationCallMinutes,
+    String? complaint,
+    String? symptoms,
     String? notes,
     String? cancelReason,
     String? createdAt,
@@ -88,6 +100,10 @@ class PatientAppointmentEntity extends Equatable {
       consultationType: consultationType ?? this.consultationType,
       bookingPrice: bookingPrice ?? this.bookingPrice,
       currency: currency ?? this.currency,
+      durationChatHours: durationChatHours ?? this.durationChatHours,
+      durationCallMinutes: durationCallMinutes ?? this.durationCallMinutes,
+      complaint: complaint ?? this.complaint,
+      symptoms: symptoms ?? this.symptoms,
       notes: notes ?? this.notes,
       cancelReason: cancelReason ?? this.cancelReason,
       createdAt: createdAt ?? this.createdAt,
@@ -106,6 +122,10 @@ class PatientAppointmentEntity extends Equatable {
         consultationType,
         bookingPrice,
         currency,
+        durationChatHours,
+        durationCallMinutes,
+        complaint,
+        symptoms,
         notes,
         cancelReason,
         createdAt,

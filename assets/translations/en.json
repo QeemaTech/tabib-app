@@ -319,7 +319,17 @@
     "invoicesEmpty": "No invoices yet",
     "downloadFailed": "Could not download the invoice",
     "invoiceOpenFailed": "Payment completed, but the invoice link could not be opened",
-    "paid": "Paid"
+    "paid": "Paid",
+    "typeChat": "Chat",
+    "typeVoice": "Voice call",
+    "typeVideo": "Video call",
+    "chatDuration": "{hours} h",
+    "callDuration": "{minutes} min",
+    "date": "Date",
+    "time": "Time",
+    "fee": "Fee",
+    "cancelReason": "Reason",
+    "phone": "Phone"
   },
   "records": {
     "title": "Medical Records",
@@ -430,6 +440,7 @@
     "male": "Male",
     "female": "Female",
     "experiences": "Experiences",
+    "logout": "Log out",
     "personal": {
       "phone": "Phone",
       "email": "Email",
@@ -444,6 +455,9 @@
       "fullNameSo": "Full name (Somali)",
       "allergies": "Allergies",
       "chronicConditions": "Chronic conditions",
+      "currentMedications": "Current medications",
+      "medicationAllergy": "Medication allergy",
+      "yes": "Yes",
       "chooseBirthDate": "Choose birth date",
       "editTitle": "Edit personal info",
       "save": "Save",
@@ -465,6 +479,10 @@
       "clinic": "Clinic",
       "clinicAddress": "Clinic address",
       "bio": "Bio",
+      "feeChat": "Chat fee",
+      "feeVoice": "Voice fee",
+      "feeVideo": "Video fee",
+      "specialties": "Specialties",
       "statusPending": "Pending",
       "statusVerified": "Verified",
       "statusRejected": "Rejected"

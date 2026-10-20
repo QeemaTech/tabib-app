@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tabib_app/core/di/di.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/features/appointments/domain/entities/patient_invoice_entity.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/payment_success_state.dart';
 import 'package:tabib_app/features/appointments/presentation/view_model/payment_success_view_model.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/payment_success_content.dart';
@@ -34,9 +36,7 @@ class PaymentSuccessView extends StatelessWidget {
           builder: (context, state) {
             final invoice = state.invoiceState;
             if (invoice.isLoading || invoice.isInitial) {
-              return Center(
-                child: CircularProgressIndicator(color: theme.primaryColor),
-              );
+              return const PaymentSuccessLoadingBody();
             }
             if (invoice.isError || invoice.data == null) {
               return PaymentSuccessError(
@@ -48,6 +48,34 @@ class PaymentSuccessView extends StatelessWidget {
             }
             return PaymentSuccessContent(invoice: invoice.data!);
           },
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentSuccessLoadingBody extends StatelessWidget {
+  const PaymentSuccessLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      enabled: true,
+      child: PaymentSuccessContent(
+        invoice: const PatientInvoiceEntity(
+          id: '1',
+          invoiceNumber: 'INV-1001',
+          pdfUrl: '',
+          htmlUrl: '',
+          downloadPath: '',
+          issuedAt: '2026-08-10',
+          amount: 25,
+          currency: 'SAR',
+          appointmentId: '1',
+          appointmentDate: '2026-08-10',
+          appointmentTime: '09:00',
+          appointmentStatus: 'CONFIRMED',
+          doctorName: 'Doctor Name',
         ),
       ),
     );

@@ -45,11 +45,27 @@ class UserProfileHeader extends StatelessWidget {
               name.isEmpty ? '-' : name,
               style: theme.bold18.copyWith(color: theme.textColor600),
             ),
-            const SizedBox(height: 4),
-            Text(
-              metaParts.isEmpty ? '-' : metaParts.join(' • '),
-              style: theme.regular14.copyWith(color: theme.textColor300),
-            ),
+            if (isLoading || metaParts.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                metaParts.isEmpty ? '-' : metaParts.join(' • '),
+                style: theme.regular14.copyWith(color: theme.textColor300),
+              ),
+            ],
+            if (profile != null && profile!.phone.trim().isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                profile!.phone,
+                style: theme.regular14.copyWith(color: theme.textColor300),
+              ),
+            ],
+            if (profile?.isVerified == true) ...[
+              const SizedBox(height: 8),
+              Text(
+                'profile.personal.verified'.tr(),
+                style: theme.bold12.copyWith(color: theme.primaryColor),
+              ),
+            ],
           ],
         ),
       ),
