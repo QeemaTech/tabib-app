@@ -80,12 +80,15 @@ class AppointmentChannelEntity extends Equatable {
 }
 
 class AppointmentDetailsDoctorEntity extends Equatable {
+  static const offeredModes = ['CHAT', 'VOICE', 'VIDEO'];
+
   final String id;
   final String fullNameAr;
   final String fullNameEn;
   final String avatarUrl;
   final double ratingAvg;
   final int ratingCount;
+  final List<String> channels;
   final List<AppointmentSpecialtyEntity> specialties;
   final AppointmentClinicEntity clinic;
 
@@ -96,6 +99,7 @@ class AppointmentDetailsDoctorEntity extends Equatable {
     required this.avatarUrl,
     required this.ratingAvg,
     required this.ratingCount,
+    required this.channels,
     required this.specialties,
     required this.clinic,
   });
@@ -107,9 +111,19 @@ class AppointmentDetailsDoctorEntity extends Equatable {
     avatarUrl: '',
     ratingAvg: 0,
     ratingCount: 0,
+    channels: [],
     specialties: [],
     clinic: AppointmentClinicEntity.empty,
   );
+
+  List<String> get offeredChannels {
+    final known = channels
+        .map((channel) => channel.toUpperCase())
+        .where(offeredModes.contains)
+        .toList();
+    if (known.isEmpty) return offeredModes;
+    return known;
+  }
 
   String localizedName(String languageCode) {
     if (languageCode == 'ar' && fullNameAr.isNotEmpty) return fullNameAr;
@@ -125,6 +139,7 @@ class AppointmentDetailsDoctorEntity extends Equatable {
     avatarUrl,
     ratingAvg,
     ratingCount,
+    channels,
     specialties,
     clinic,
   ];

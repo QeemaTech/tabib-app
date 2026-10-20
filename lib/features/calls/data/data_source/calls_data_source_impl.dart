@@ -7,7 +7,6 @@ import 'package:tabib_app/features/calls/data/models/request/agora_token_request
 import 'package:tabib_app/features/calls/data/models/response/agora_token_response.dart';
 import 'package:tabib_app/features/calls/data/models/response/end_call_response.dart';
 import 'package:tabib_app/features/chat/data/models/request/start_consultation_request.dart';
-import 'package:tabib_app/features/chat/data/models/response/start_consultation_response.dart';
 
 @LazySingleton(as: CallsDataSource)
 class CallsDataSourceImpl implements CallsDataSource {
@@ -16,13 +15,11 @@ class CallsDataSourceImpl implements CallsDataSource {
   CallsDataSourceImpl(this.apiClient);
 
   @override
-  Future<Result<StartConsultationResponse>> startConsultation({
+  Future<Result<EndCallResponse>> startCall({
     required String appointmentId,
     required StartConsultationRequest request,
   }) {
-    return executeApi(
-      () => apiClient.startConsultation(appointmentId, request),
-    );
+    return executeApi(() => apiClient.startCall(appointmentId, request));
   }
 
   @override

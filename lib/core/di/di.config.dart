@@ -59,6 +59,24 @@ import '../../features/auth/presentation/view_model/doc/complete_doc_profile_cub
     as _i380;
 import '../../features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart'
     as _i765;
+import '../../features/calls/data/data_source/calls_data_source.dart' as _i713;
+import '../../features/calls/data/data_source/calls_data_source_impl.dart'
+    as _i16;
+import '../../features/calls/data/repo/calls_repo_impl.dart' as _i1064;
+import '../../features/calls/domain/repo/calls_repo.dart' as _i935;
+import '../../features/calls/presentation/view_model/video_call_view_model.dart'
+    as _i38;
+import '../../features/chat/data/data_source/chat_data_source.dart' as _i542;
+import '../../features/chat/data/data_source/chat_data_source_impl.dart'
+    as _i304;
+import '../../features/chat/data/repo/chat_repo_impl.dart' as _i328;
+import '../../features/chat/domain/repo/chat_repo.dart' as _i804;
+import '../../features/chat/presentation/view_model/chat_details_view_model.dart'
+    as _i848;
+import '../../features/chat/presentation/view_model/chat_list_view_model.dart'
+    as _i1016;
+import '../../features/chat/presentation/view_model/start_consultation_view_model.dart'
+    as _i856;
 import '../../features/home/data/data_source/doctor_dashboard_data_source.dart'
     as _i25;
 import '../../features/home/data/data_source/doctor_dashboard_data_source_impl.dart'
@@ -168,8 +186,8 @@ import '../../features/wallet/presentation/view_model/wallet_view_model.dart'
     as _i226;
 import '../api/api_client.dart' as _i277;
 import '../api/api_module.dart' as _i0;
+import '../app_services/agora_rtc_service.dart' as _i639;
 import '../app_services/image_picker_services.dart' as _i772;
-
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
@@ -182,6 +200,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i566.LayoutViewModel>(() => _i566.LayoutViewModel());
     gh.lazySingleton<_i361.BaseOptions>(() => apiModule.providerOption());
     gh.lazySingleton<_i52.TalkerDioLogger>(() => apiModule.provideLogger());
+    gh.lazySingleton<_i639.AgoraRtcService>(() => _i639.AgoraRtcService());
     gh.lazySingleton<_i361.Dio>(
       () => apiModule.provideDio(
         gh<_i361.BaseOptions>(),
@@ -238,6 +257,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i961.SearchDoctorsDataSource>(
       () => _i556.SearchDoctorsDataSourceImpl(gh<_i277.ApiClient>()),
     );
+    gh.lazySingleton<_i542.ChatDataSource>(
+      () => _i304.ChatDataSourceImpl(gh<_i277.ApiClient>()),
+    );
     gh.lazySingleton<_i702.DoctorAppointmentsDataSource>(
       () => _i657.DoctorAppointmentsDataSourceImpl(gh<_i277.ApiClient>()),
     );
@@ -249,6 +271,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i914.WalletDataSource>(
       () => _i474.WalletDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.lazySingleton<_i713.CallsDataSource>(
+      () => _i16.CallsDataSourceImpl(gh<_i277.ApiClient>()),
     );
     gh.lazySingleton<_i541.PatientHealthProfileRepo>(
       () => _i49.PatientHealthProfileRepoImpl(
@@ -293,6 +318,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i170.AuthRepo>(
       () => _i984.AuthRepoImpl(gh<_i217.RemoteDataSource>()),
     );
+    gh.lazySingleton<_i804.ChatRepo>(
+      () => _i328.ChatRepoImpl(gh<_i542.ChatDataSource>()),
+    );
     gh.lazySingleton<_i313.DoctorOnboardingRepo>(
       () => _i291.DoctorOnboardingRepoImpl(
         gh<_i577.DoctorOnboardingDataSource>(),
@@ -317,8 +345,23 @@ extension GetItInjectableX on _i174.GetIt {
         doctorOnboardingRepo: gh<_i313.DoctorOnboardingRepo>(),
       ),
     );
+    gh.factory<_i162.DoctorProfileViewModel>(
+      () => _i162.DoctorProfileViewModel(
+        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
+    );
     gh.lazySingleton<_i471.DoctorPatientsRepo>(
       () => _i269.DoctorPatientsRepoImpl(gh<_i1062.DoctorPatientsDataSource>()),
+    );
+    gh.factory<_i369.PatientProfileViewModel>(
+      () => _i369.PatientProfileViewModel(
+        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
+    );
+    gh.lazySingleton<_i935.CallsRepo>(
+      () => _i1064.CallsRepoImpl(gh<_i713.CallsDataSource>()),
     );
     gh.lazySingleton<_i305.PatientFileRepo>(
       () => _i822.PatientFileRepoImpl(gh<_i846.PatientFileDataSource>()),
@@ -337,6 +380,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i763.DoctorAppointmentsRepo>(
       () => _i308.DoctorAppointmentsRepoImpl(
         gh<_i702.DoctorAppointmentsDataSource>(),
+      ),
+    );
+    gh.factory<_i38.VideoCallViewModel>(
+      () => _i38.VideoCallViewModel(
+        callsRepo: gh<_i935.CallsRepo>(),
+        agoraRtcService: gh<_i639.AgoraRtcService>(),
       ),
     );
     gh.factory<_i838.DoctorPatientsViewModel>(
@@ -379,20 +428,17 @@ extension GetItInjectableX on _i174.GetIt {
         appointmentsRepo: gh<_i201.AppointmentsRepo>(),
       ),
     );
-    gh.factory<_i162.DoctorProfileViewModel>(
-      () => _i162.DoctorProfileViewModel(
-        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
-        authRepo: gh<_i170.AuthRepo>(),
-      ),
+    gh.factory<_i848.ChatDetailsViewModel>(
+      () => _i848.ChatDetailsViewModel(chatRepo: gh<_i804.ChatRepo>()),
+    );
+    gh.factory<_i1016.ChatListViewModel>(
+      () => _i1016.ChatListViewModel(chatRepo: gh<_i804.ChatRepo>()),
+    );
+    gh.factory<_i856.StartConsultationViewModel>(
+      () => _i856.StartConsultationViewModel(chatRepo: gh<_i804.ChatRepo>()),
     );
     gh.factory<_i1025.AuthViewModel>(
-      () => _i1025.AuthViewModel(gh<_i170.AuthRepo>()),
-    );
-    gh.factory<_i369.PatientProfileViewModel>(
-      () => _i369.PatientProfileViewModel(
-        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
-        authRepo: gh<_i170.AuthRepo>(),
-      ),
+      () => _i1025.AuthViewModel(authRepo: gh<_i170.AuthRepo>()),
     );
     gh.factory<_i452.PatientFileViewModel>(
       () => _i452.PatientFileViewModel(

@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_details_state.dart';
 import 'package:tabib_app/features/chat/presentation/view_model/chat_details_view_model.dart';
@@ -28,22 +30,16 @@ class ChatDetailsView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: theme.backgroundColor,
           elevation: 0,
-          centerTitle: true,
-          title: BlocSelector<ChatDetailsViewModel, ChatDetailsState, String>(
-            selector: (state) => state.participantTitle,
-            builder: (context, title) => Text(
-              title.isNotEmpty ? title : 'layout.navBar.messages'.tr(),
-              style: theme.bold18.copyWith(color: theme.textColor600),
-            ),
-          ),
+          centerTitle: false,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: theme.textColor600, size: 20),
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: theme.textColor600,
+              size: 20,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(20),
-            child: _ChatTypingStatusBar(),
-          ),
+          title: const _ChatDetailsTitle(),
         ),
         body: const Column(
           children: [
@@ -56,30 +52,60 @@ class ChatDetailsView extends StatelessWidget {
   }
 }
 
-class _ChatTypingStatusBar extends StatelessWidget {
-  const _ChatTypingStatusBar();
+class _ChatDetailsTitle extends StatelessWidget {
+  const _ChatDetailsTitle();
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return BlocBuilder<ChatDetailsViewModel, ChatDetailsState>(
-      buildWhen: (p, c) =>
-          p.isPeerTyping != c.isPeerTyping ||
-          p.isJoined != c.isJoined ||
-          p.isConnected != c.isConnected,
+      buildWhen: (previous, current) =>
+          previous.participantTitle != current.participantTitle ||
+          previous.avatarUrl != current.avatarUrl ||
+          previous.isPeerTyping != current.isPeerTyping ||
+          previous.isJoined != current.isJoined ||
+          previous.isConnected != current.isConnected,
       builder: (context, state) {
-        final text = state.isPeerTyping
+        final status = state.isPeerTyping
             ? 'chat.typing'.tr()
             : (!state.isConnected
                 ? 'chat.reconnecting'.tr()
                 : (!state.isJoined ? 'chat.joining'.tr() : ''));
-        if (text.isEmpty) return const SizedBox(height: 20);
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Text(
-            text,
-            style: theme.regular12.copyWith(color: theme.textColor200),
-          ),
+        final title = state.participantTitle.isNotEmpty
+            ? state.participantTitle
+            : 'layout.navBar.messages'.tr();
+        return Row(
+          children: [
+            CustomImageView(
+              imagePath: state.avatarUrl.isNotEmpty
+                  ? state.avatarUrl
+                  : AssetsManager.doctor,
+              height: 40,
+              width: 40,
+              radius: BorderRadius.circular(20),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.medium16.copyWith(color: theme.textColor600),
+                  ),
+                  if (status.isNotEmpty)
+                    Text(
+                      status,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.regular12.copyWith(color: theme.primaryColor),
+                    ),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
@@ -172,9 +198,24 @@ class _ChatEmptyMessagesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return Center(
-      child: Text(
-        'chat.noMessages'.tr(),
-        style: theme.regular14.copyWith(color: theme.textColor300),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.forum_outlined,
+              size: 48,
+              color: theme.primaryColor.withValues(alpha: 0.7),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'chat.noMessages'.tr(),
+              textAlign: TextAlign.center,
+              style: theme.regular14.copyWith(color: theme.textColor300),
+            ),
+          ],
+        ),
       ),
     );
   }

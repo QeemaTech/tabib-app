@@ -120,6 +120,8 @@ class PatientAppointmentDetailsDoctorResponse {
   final num? ratingAvg;
   @JsonKey(name: 'ratingCount')
   final num? ratingCount;
+  @JsonKey(name: 'channels')
+  final List<String>? channels;
   @JsonKey(name: 'specialties')
   final List<PatientAppointmentSpecialtyResponse>? specialties;
   @JsonKey(name: 'clinic')
@@ -132,6 +134,7 @@ class PatientAppointmentDetailsDoctorResponse {
     this.avatarUrl,
     this.ratingAvg,
     this.ratingCount,
+    this.channels,
     this.specialties,
     this.clinic,
   });

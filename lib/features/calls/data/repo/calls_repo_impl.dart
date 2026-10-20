@@ -9,10 +9,7 @@ import 'package:tabib_app/features/calls/data/models/response/end_call_response.
 import 'package:tabib_app/features/calls/domain/entities/agora_token_entity.dart';
 import 'package:tabib_app/features/calls/domain/entities/call_session_entity.dart';
 import 'package:tabib_app/features/calls/domain/repo/calls_repo.dart';
-import 'package:tabib_app/features/chat/data/mapper/start_consultation_mapper.dart';
 import 'package:tabib_app/features/chat/data/models/request/start_consultation_request.dart';
-import 'package:tabib_app/features/chat/data/models/response/start_consultation_response.dart';
-import 'package:tabib_app/features/chat/domain/entities/started_consultation_entity.dart';
 
 @LazySingleton(as: CallsRepo)
 class CallsRepoImpl implements CallsRepo {
@@ -21,18 +18,18 @@ class CallsRepoImpl implements CallsRepo {
   CallsRepoImpl(this.dataSource);
 
   @override
-  Future<Result<StartedConsultationEntity>> startConsultation({
+  Future<Result<CallSessionEntity>> startCall({
     required String appointmentId,
     required String type,
   }) async {
-    final response = await dataSource.startConsultation(
+    final response = await dataSource.startCall(
       appointmentId: appointmentId,
       request: StartConsultationRequest(type: type),
     );
     switch (response) {
-      case Success<StartConsultationResponse>():
+      case Success<EndCallResponse>():
         return Success(response.data.toEntity());
-      case Failure<StartConsultationResponse>():
+      case Failure<EndCallResponse>():
         return Failure(response.errorMessage);
     }
   }

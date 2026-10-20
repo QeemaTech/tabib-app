@@ -3,6 +3,7 @@ import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/features/chat/domain/entities/message_entity.dart';
 import 'package:tabib_app/features/chat/presentation/utils/chat_list_ui_helpers.dart';
 import 'package:tabib_app/features/chat/presentation/widgets/chat_bubble.dart';
+import 'package:tabib_app/features/chat/presentation/widgets/chat_day_chip.dart';
 
 class ChatMessagesList extends StatefulWidget {
   final List<MessageEntity> messages;
@@ -61,7 +62,6 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
       return;
     }
     if (!_scrollController.hasClients) return;
-    // reverse:true → older messages are toward maxScrollExtent.
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 80) {
       widget.onLoadMore!();
@@ -77,12 +77,13 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     final messages = widget.messages;
+    final locale = Localizations.localeOf(context).toString();
     final itemCount = messages.length + (widget.isLoadingMore ? 1 : 0);
 
     return ListView.builder(
       controller: _scrollController,
       reverse: true,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         if (widget.isLoadingMore && index == messages.length) {
@@ -100,12 +101,29 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
             ),
           );
         }
-        final message = messages[messages.length - 1 - index];
-        return ChatBubble(
-          message: message.content,
-          time: formatChatListTime(message.createdAt),
-          isMe: message.isMine,
-          isPending: message.isPending,
+        final messageIndex = messages.length - 1 - index;
+        final message = messages[messageIndex];
+        final showDay = messageIndex == 0 ||
+            !isSameChatDay(
+              messages[messageIndex - 1].createdAt,
+              message.createdAt,
+            );
+        return Column(
+          children: [
+            if (showDay)
+              ChatDayChip(
+                label: formatChatDayLabel(message.createdAt, locale: locale),
+              ),
+            ChatBubble(
+              message: message.content,
+              time: formatChatMessageTime(message.createdAt, locale: locale),
+              isMe: message.isMine,
+              isPending: message.isPending,
+              status: message.status,
+              isRead: message.isRead,
+              fileName: message.fileName,
+            ),
+          ],
         );
       },
     );

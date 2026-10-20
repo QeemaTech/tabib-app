@@ -62,7 +62,10 @@ class EndPoint {
   static const String consultationMessages =
       "/consultations/{consultationId}/messages";
   static const String agoraToken = "/agora/token";
+  static const String startCall = "/calls/appointment/{appointmentId}/start";
   static const String endCall = "/calls/{callId}/end";
+  static const String registerDevice = "/device/register";
+  static const String unregisterDevice = "/device/unregister";
 
 
 }

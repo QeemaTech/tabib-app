@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:tabib_app/core/app_services/sokect_io_service.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 import 'package:tabib_app/core/services/fcm_service.dart';
-import 'package:tabib_app/core/services/socket_io_service.dart';
 import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
@@ -19,12 +19,8 @@ import 'package:tabib_app/features/auth/presentation/view_model/auth_state.dart'
 @injectable
 class AuthViewModel extends Cubit<AuthState> {
   final AuthRepo authRepo;
-  final SocketIoService socketIoService;
 
-  AuthViewModel({
-    required this.authRepo,
-    required this.socketIoService,
-  }) : super(const AuthState());
+  AuthViewModel({required this.authRepo}) : super(const AuthState());
 
   void setPreferredLanguage(String value) {
     emit(state.copyWith(preferredLanguage: value));
@@ -97,7 +93,7 @@ class AuthViewModel extends Cubit<AuthState> {
             key: LocalKeys.token,
             value: accessToken,
           );
-          await socketIoService.connect(accessToken: accessToken);
+          SocketIoService(token: accessToken).connect();
         }
         if (refreshToken != null && refreshToken.isNotEmpty) {
           await AppLocalStorage.setSecuredString(

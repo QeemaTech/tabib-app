@@ -28,6 +28,7 @@ class ChatDetailsViewModel extends Cubit<ChatDetailsState> {
   Future<void> init({
     required String consultationId,
     String participantTitle = '',
+    String avatarUrl = '',
   }) async {
     if (consultationId.isEmpty) {
       emit(
@@ -48,6 +49,7 @@ class ChatDetailsViewModel extends Cubit<ChatDetailsState> {
       state.copyWith(
         consultationId: consultationId,
         participantTitle: participantTitle,
+        avatarUrl: avatarUrl,
         historyState: BaseState.loading(),
         messages: const [],
         hasMore: false,

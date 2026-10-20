@@ -42,6 +42,7 @@ dependencies:
   permission_handler: ^13.0.2
   flutter_local_notifications: ^22.3.2
   socket_io_client: ^3.1.6
+  agora_rtc_engine: ^6.6.4
   
 
 

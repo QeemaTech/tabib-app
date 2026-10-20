@@ -51,6 +51,7 @@ extension PatientAppointmentDetailsDoctorResponseMapper
       avatarUrl: avatarUrl ?? '',
       ratingAvg: ratingAvg?.toDouble() ?? 0,
       ratingCount: ratingCount?.toInt() ?? 0,
+      channels: channels ?? const [],
       specialties:
           specialties?.map((specialty) => specialty.toEntity()).toList() ??
           const [],

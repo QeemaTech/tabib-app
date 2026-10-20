@@ -329,6 +329,12 @@ abstract class ApiClient {
   @POST(EndPoint.agoraToken)
   Future<AgoraTokenResponse> getAgoraToken(@Body() AgoraTokenRequest request);
 
+  @POST(EndPoint.startCall)
+  Future<EndCallResponse> startCall(
+    @Path('appointmentId') String appointmentId,
+    @Body() StartConsultationRequest request,
+  );
+
   @POST(EndPoint.endCall)
   Future<EndCallResponse> endCall(@Path('callId') String callId);
 }

@@ -72,7 +72,7 @@ class PatientAppointmentListCard extends StatelessWidget {
                   appointmentId: appointment.id,
                   bookingPrice: appointment.bookingPrice,
                   doctorName: doctorName,
-                  dateTimeText: formatAppointmentDateTime(appointment),
+                  dateTimeText: formatAppointmentDateTime(appointment), currency: appointment.currency,
                 ),
               );
               if (paid == true && context.mounted) {

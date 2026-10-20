@@ -148,6 +148,7 @@ class Routes {
               ..init(
                 consultationId: args.consultationId,
                 participantTitle: args.title,
+                avatarUrl: args.avatarUrl,
               ),
             child: const ChatDetailsView(),
           ),

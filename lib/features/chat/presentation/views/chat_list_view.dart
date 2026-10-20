@@ -55,17 +55,11 @@ class _ChatListLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.appTheme;
     return Skeletonizer(
       enabled: true,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        itemCount: 5,
-        separatorBuilder: (_, _) => Divider(
-          color: theme.textColor100.withValues(alpha: 0.3),
-          indent: 80,
-          endIndent: 20,
-        ),
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: 6,
         itemBuilder: (_, index) => ChatItem(
           name: 'Doctor Name',
           lastMessage: 'Last message placeholder text',
@@ -134,9 +128,30 @@ class _ChatListEmptyWidget extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.6,
             child: Center(
-              child: Text(
-                'chat.noMessages'.tr(),
-                style: theme.regular14.copyWith(color: theme.textColor300),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.chat_bubble_outline,
+                      size: 56,
+                      color: theme.primaryColor.withValues(alpha: 0.7),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'chat.emptyTitle'.tr(),
+                      textAlign: TextAlign.center,
+                      style: theme.medium16.copyWith(color: theme.textColor600),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'chat.emptySubtitle'.tr(),
+                      textAlign: TextAlign.center,
+                      style: theme.regular14.copyWith(color: theme.textColor300),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -155,51 +170,59 @@ class _ChatListSuccessWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     final languageCode = context.locale.languageCode;
+    final locale = context.locale.toString();
 
     return RefreshIndicator(
       color: theme.primaryColor,
       onRefresh: () =>
           context.read<ChatListViewModel>().refreshConsultations(),
-      child: ListView.separated(
+      child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: consultations.length,
-        separatorBuilder: (_, _) => Divider(
-          color: theme.textColor100.withValues(alpha: 0.3),
-          indent: 80,
-          endIndent: 20,
-        ),
         itemBuilder: (context, index) {
           final consultation = consultations[index];
           final lastMessage = consultation.lastMessage;
           final timeSource = lastMessage?.createdAt.isNotEmpty == true
               ? lastMessage!.createdAt
               : consultation.updatedAt;
+          final preview = _preview(lastMessage);
 
           return ChatItem(
             name: consultation.participant.localizedFullName(languageCode),
-            lastMessage: lastMessage?.content.isNotEmpty == true
-                ? lastMessage!.content
-                : 'chat.noMessages'.tr(),
-            time: formatChatListTime(timeSource),
+            lastMessage: preview,
+            time: formatChatListTime(timeSource, locale: locale),
             imageUrl: consultation.participant.avatarUrl.isNotEmpty
                 ? consultation.participant.avatarUrl
                 : null,
             unreadCount: consultation.unreadCount,
-            onTap: () {
-              Navigator.pushNamed(
+            onTap: () async {
+              await Navigator.pushNamed(
                 context,
                 AppRoutes.chatDetailsView,
                 arguments: ChatDetailsArgs(
                   consultationId: consultation.id,
                   title: consultation.participant
                       .localizedFullName(languageCode),
+                  avatarUrl: consultation.participant.avatarUrl,
                 ),
               );
+              if (!context.mounted) return;
+              await context.read<ChatListViewModel>().refreshConsultations();
             },
           );
         },
       ),
     );
+  }
+
+  String _preview(ConsultationLastMessageEntity? lastMessage) {
+    if (lastMessage == null || lastMessage.content.trim().isEmpty) {
+      return 'chat.noMessages'.tr();
+    }
+    if (lastMessage.isMine) {
+      return '${'chat.you'.tr()}: ${lastMessage.content}';
+    }
+    return lastMessage.content;
   }
 }

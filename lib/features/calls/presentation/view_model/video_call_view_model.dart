@@ -7,14 +7,11 @@ import 'package:tabib_app/features/calls/domain/entities/agora_token_entity.dart
 import 'package:tabib_app/features/calls/domain/entities/call_session_entity.dart';
 import 'package:tabib_app/features/calls/domain/repo/calls_repo.dart';
 import 'package:tabib_app/features/calls/presentation/view_model/video_call_state.dart';
-import 'package:tabib_app/features/chat/domain/entities/started_consultation_entity.dart';
 
 @injectable
 class VideoCallViewModel extends Cubit<VideoCallState> {
-  VideoCallViewModel({
-    required this.callsRepo,
-    required this.agoraRtcService,
-  }) : super(const VideoCallState());
+  VideoCallViewModel({required this.callsRepo, required this.agoraRtcService})
+    : super(const VideoCallState());
 
   final CallsRepo callsRepo;
   final AgoraRtcService agoraRtcService;
@@ -46,7 +43,7 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
   }) async {
     if (state.connectState.isLoading) return;
 
-    final type = 'CHAT';
+    final type = callType.toUpperCase() == 'VOICE' ? 'VOICE' : 'VIDEO';
     emit(
       state.copyWith(
         callType: type,
@@ -57,29 +54,33 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
       ),
     );
 
-    final startResult = await callsRepo.startConsultation(
+    final startResult = await callsRepo.startCall(
       appointmentId: appointmentId,
       type: type,
     );
-    if (startResult case Failure<StartedConsultationEntity>()) {
-      emit(state.copyWith(connectState: BaseState.error(startResult.errorMessage)));
+    if (startResult case Failure<CallSessionEntity>()) {
+      emit(
+        state.copyWith(connectState: BaseState.error(startResult.errorMessage)),
+      );
       return;
     }
 
-    final consultation = (startResult as Success<StartedConsultationEntity>).data;
-    final callId = consultation.videoCallId;
-    final roomId = consultation.videoRoomId;
-    if (callId == null || callId.isEmpty || roomId == null || roomId.isEmpty) {
+    final session = (startResult as Success<CallSessionEntity>).data;
+    if (session.id.isEmpty || session.channelName.isEmpty) {
       emit(state.copyWith(connectState: BaseState.error('calls.missingRoom')));
       return;
     }
 
-    _callId = callId;
-    _channelName = roomId;
+    _callId = session.id;
+    _channelName = session.channelName;
 
-    final tokenResult = await callsRepo.getAgoraToken(channelName: roomId);
+    final tokenResult = await callsRepo.getAgoraToken(
+      channelName: session.channelName,
+    );
     if (tokenResult case Failure<AgoraTokenEntity>()) {
-      emit(state.copyWith(connectState: BaseState.error(tokenResult.errorMessage)));
+      emit(
+        state.copyWith(connectState: BaseState.error(tokenResult.errorMessage)),
+      );
       return;
     }
 
@@ -169,7 +170,13 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
 
     _ended = true;
     if (!isClosed) {
-      emit(state.copyWith(isEnding: false, endedSession: session, errorMessage: error));
+      emit(
+        state.copyWith(
+          isEnding: false,
+          endedSession: session,
+          errorMessage: error,
+        ),
+      );
     }
   }
 

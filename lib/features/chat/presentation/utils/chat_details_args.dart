@@ -1,10 +1,12 @@
 class ChatDetailsArgs {
   final String consultationId;
   final String title;
+  final String avatarUrl;
 
   const ChatDetailsArgs({
     required this.consultationId,
     this.title = '',
+    this.avatarUrl = '',
   });
 
   static ChatDetailsArgs fromRouteArguments(Object? arguments) {
@@ -18,6 +20,7 @@ class ChatDetailsArgs {
             (arguments['consultationId'] as String?) ??
             '',
         title: (arguments['title'] as String?) ?? '',
+        avatarUrl: (arguments['avatarUrl'] as String?) ?? '',
       );
     }
     return const ChatDetailsArgs(consultationId: '');

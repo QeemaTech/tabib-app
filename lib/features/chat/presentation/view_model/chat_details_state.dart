@@ -5,6 +5,7 @@ import 'package:tabib_app/features/chat/domain/entities/message_entity.dart';
 class ChatDetailsState extends Equatable {
   final String consultationId;
   final String participantTitle;
+  final String avatarUrl;
   final List<MessageEntity> messages;
   final BaseState<bool> historyState;
   final bool isJoined;
@@ -19,6 +20,7 @@ class ChatDetailsState extends Equatable {
   const ChatDetailsState({
     this.consultationId = '',
     this.participantTitle = '',
+    this.avatarUrl = '',
     this.messages = const [],
     this.historyState = const BaseState(requestState: RequestState.init),
     this.isJoined = false,
@@ -34,6 +36,7 @@ class ChatDetailsState extends Equatable {
   ChatDetailsState copyWith({
     String? consultationId,
     String? participantTitle,
+    String? avatarUrl,
     List<MessageEntity>? messages,
     BaseState<bool>? historyState,
     bool? isJoined,
@@ -50,6 +53,7 @@ class ChatDetailsState extends Equatable {
     return ChatDetailsState(
       consultationId: consultationId ?? this.consultationId,
       participantTitle: participantTitle ?? this.participantTitle,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       messages: messages ?? this.messages,
       historyState: historyState ?? this.historyState,
       isJoined: isJoined ?? this.isJoined,
@@ -67,6 +71,7 @@ class ChatDetailsState extends Equatable {
   List<Object?> get props => [
         consultationId,
         participantTitle,
+        avatarUrl,
         messages,
         historyState,
         isJoined,

@@ -46,53 +46,73 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: BoxDecoration(
         color: theme.backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: theme.textColor600.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        border: Border(
+          top: BorderSide(color: theme.textColor100.withValues(alpha: 0.4)),
+        ),
       ),
       child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: theme.textColor100.withValues(alpha: 0.25),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  enabled: widget.enabled,
-                  onChanged: widget.onChanged,
-                  onSubmitted: (_) => _handleSend(),
-                  decoration: InputDecoration(
-                    hintText: 'chat.hint'.tr(),
-                    hintStyle: theme.regular14.copyWith(
-                      color: theme.textColor200,
+        top: false,
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                enabled: widget.enabled,
+                minLines: 1,
+                maxLines: 4,
+                textInputAction: TextInputAction.send,
+                onChanged: widget.onChanged,
+                onSubmitted: (_) => _handleSend(),
+                style: theme.regular14.copyWith(color: theme.textColor600),
+                decoration: InputDecoration(
+                  hintText: 'chat.hint'.tr(),
+                  hintStyle: theme.regular14.copyWith(
+                    color: theme.textColor200,
+                  ),
+                  filled: true,
+                  fillColor: theme.whiteColor,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(
+                      color: theme.textColor100.withValues(alpha: 0.7),
                     ),
-                    border: InputBorder.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(
+                      color: theme.textColor100.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: theme.primaryColor),
                   ),
                 ),
               ),
-              IconButton(
+            ),
+            const SizedBox(width: 8),
+            Material(
+              color: widget.enabled
+                  ? theme.primaryColor
+                  : theme.textColor100,
+              shape: const CircleBorder(),
+              child: IconButton(
                 onPressed: widget.enabled ? _handleSend : null,
                 icon: Icon(
                   Icons.send,
-                  color: widget.enabled
-                      ? theme.primaryColor
-                      : theme.textColor200,
+                  color: theme.whiteColor,
                   size: 20,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
