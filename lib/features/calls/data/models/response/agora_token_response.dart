@@ -30,12 +30,15 @@ class AgoraTokenDataResponse {
   final String? appId;
   @JsonKey(name: 'expiresAt')
   final String? expiresAt;
+  @JsonKey(name: 'uid')
+  final int? uid;
 
   AgoraTokenDataResponse({
     this.token,
     this.channelName,
     this.appId,
     this.expiresAt,
+    this.uid,
   });
 
   factory AgoraTokenDataResponse.fromJson(Map<String, dynamic> json) =>

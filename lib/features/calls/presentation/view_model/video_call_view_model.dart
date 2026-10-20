@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tabib_app/core/app_services/agora_rtc_service.dart';
@@ -54,6 +55,17 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
       ),
     );
 
+    await WidgetsBinding.instance.endOfFrame;
+    final mediaMode = type == 'VOICE' ? CallMediaMode.voice : CallMediaMode.video;
+    try {
+      await agoraRtcService.ensurePermissions(mediaMode: mediaMode);
+    } catch (e) {
+      if (!isClosed) {
+        emit(state.copyWith(connectState: BaseState.error(e.toString())));
+      }
+      return;
+    }
+
     final startResult = await callsRepo.startCall(
       appointmentId: appointmentId,
       type: type,
@@ -103,6 +115,7 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
       await agoraRtcService.join(
         token: tokenData.token,
         channelId: tokenData.channelName,
+        uid: tokenData.uid ?? 0,
       );
       if (!isClosed) {
         emit(
@@ -113,6 +126,7 @@ class VideoCallViewModel extends Cubit<VideoCallState> {
         );
       }
     } catch (e) {
+      await agoraRtcService.dispose();
       if (!isClosed) {
         emit(state.copyWith(connectState: BaseState.error(e.toString())));
       }

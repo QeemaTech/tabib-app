@@ -20,6 +20,7 @@ extension AgoraTokenDataResponseMapper on AgoraTokenDataResponse {
       channelName: channelName ?? '',
       appId: appId ?? '',
       expiresAt: expiresAt ?? '',
+      uid: uid,
     );
   }
 }

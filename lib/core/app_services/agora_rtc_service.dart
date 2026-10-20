@@ -21,76 +21,101 @@ class AgoraRtcService {
 
   CallMediaMode get mediaMode => _mediaMode;
 
+  Future<void> ensurePermissions({
+    required CallMediaMode mediaMode,
+  }) async {
+    await _require(Permission.microphone);
+    if (mediaMode == CallMediaMode.video) {
+      await _require(Permission.camera);
+    }
+  }
+
+  Future<void> _require(Permission permission) async {
+    var status = await permission.status;
+    if (_isAllowed(status)) return;
+    if (!status.isPermanentlyDenied) {
+      status = await permission.request();
+    }
+    if (_isAllowed(status)) return;
+    if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    }
+    throw StateError(
+      permission == Permission.camera
+          ? 'Camera permission is required'
+          : 'Microphone permission is required',
+    );
+  }
+
+  bool _isAllowed(PermissionStatus status) =>
+      status.isGranted || status.isLimited;
+
   Future<void> initialize({
     required String appId,
     CallMediaMode mediaMode = CallMediaMode.video,
   }) async {
-    if (_engine != null) return;
-
     _mediaMode = mediaMode;
     final isVideo = mediaMode == CallMediaMode.video;
+    await ensurePermissions(mediaMode: mediaMode);
 
-    final permissions = <Permission>[Permission.microphone];
-    if (isVideo) {
-      permissions.add(Permission.camera);
-    }
-
-    final statuses = await permissions.request();
-    final micGranted = statuses[Permission.microphone]?.isGranted ?? false;
-    if (!micGranted) {
-      throw StateError('Microphone permission is required');
-    }
-    if (isVideo) {
-      final cameraGranted = statuses[Permission.camera]?.isGranted ?? false;
-      if (!cameraGranted) {
-        throw StateError('Camera permission is required');
+    var engine = _engine;
+    if (engine == null) {
+      engine = createAgoraRtcEngine();
+      try {
+        await engine.initialize(
+          RtcEngineContext(
+            appId: appId,
+            channelProfile: ChannelProfileType.channelProfileCommunication,
+          ),
+        );
+        engine.registerEventHandler(
+          RtcEngineEventHandler(
+            onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+              final uid = connection.localUid;
+              if (uid != null) {
+                onLocalUserJoined?.call(uid);
+              }
+            },
+            onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+              onRemoteUserJoined?.call(remoteUid);
+            },
+            onUserOffline: (
+              RtcConnection connection,
+              int remoteUid,
+              UserOfflineReasonType reason,
+            ) {
+              onRemoteUserLeft?.call(remoteUid);
+            },
+            onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
+              onTokenPrivilegeWillExpire?.call(token);
+            },
+            onError: (ErrorCodeType err, String msg) {
+              onError?.call('$err: $msg');
+            },
+          ),
+        );
+        _engine = engine;
+      } catch (_) {
+        await engine.release();
+        rethrow;
       }
+    } else {
+      try {
+        await engine.leaveChannel();
+      } catch (_) {}
     }
 
-    final engine = createAgoraRtcEngine();
-    await engine.initialize(
-      RtcEngineContext(
-        appId: appId,
-        channelProfile: ChannelProfileType.channelProfileCommunication,
-      ),
-    );
+    await _applyMediaMode(engine, isVideo);
+  }
 
-    engine.registerEventHandler(
-      RtcEngineEventHandler(
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          final uid = connection.localUid;
-          if (uid != null) {
-            onLocalUserJoined?.call(uid);
-          }
-        },
-        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          onRemoteUserJoined?.call(remoteUid);
-        },
-        onUserOffline: (
-          RtcConnection connection,
-          int remoteUid,
-          UserOfflineReasonType reason,
-        ) {
-          onRemoteUserLeft?.call(remoteUid);
-        },
-        onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          onTokenPrivilegeWillExpire?.call(token);
-        },
-        onError: (ErrorCodeType err, String msg) {
-          onError?.call('$err: $msg');
-        },
-      ),
-    );
-
+  Future<void> _applyMediaMode(RtcEngine engine, bool isVideo) async {
+    await engine.enableAudio();
     if (isVideo) {
       await engine.enableVideo();
       await engine.startPreview();
-    } else {
-      await engine.disableVideo();
-      await engine.enableAudio();
+      return;
     }
-
-    _engine = engine;
+    await engine.disableVideo();
   }
 
   Future<void> join({

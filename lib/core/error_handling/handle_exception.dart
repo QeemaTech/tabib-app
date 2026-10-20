@@ -22,8 +22,10 @@ class NetworkException {
         case DioExceptionType.connectionError:
           return 'errors.connectionError'.tr();
         case DioExceptionType.unknown:
+          print(exception.message);
           return 'errors.unknown'.tr();
         case DioExceptionType.transformTimeout:
+          print(exception.message);
           return 'errors.unknown'.tr();
       }
     }
