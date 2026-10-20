@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/app_services/sokect_io_service.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/routes/routes.dart';
@@ -85,7 +86,7 @@ class DocProfileContent extends StatelessWidget {
                 onPressed: () async {
                   await context.read<DoctorProfileViewModel>().logout();
                   await AppLocalStorage.clearAllSecuredData();
-                  if (context.mounted) {
+                  SocketIoService.instance.disconnect();if (context.mounted) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRoutes.loginView,
                       (route) => false,

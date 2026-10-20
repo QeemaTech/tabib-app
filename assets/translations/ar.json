@@ -479,7 +479,22 @@
   "chat": {
     "title": "الرسائل",
     "hint": "اكتب رسالتك هنا...",
-    "noMessages": "لا توجد رسائل بعد"
+    "noMessages": "لا توجد رسائل بعد",
+    "typing": "يكتب الآن...",
+    "reconnecting": "جارٍ إعادة الاتصال...",
+    "joining": "جارٍ الانضمام للمحادثة..."
+  },
+  "calls": {
+    "connecting": "جاري الاتصال...",
+    "connected": "متصل",
+    "waitingPeer": "في انتظار الطرف الآخر...",
+    "callEnded": "انتهت المكالمة",
+    "duration": "المدة: {}",
+    "done": "تم",
+    "missingRoom": "غرفة المكالمة غير متاحة",
+    "invalidToken": "بيانات الاتصال غير صالحة",
+    "startVideo": "بدء مكالمة فيديو",
+    "startVoice": "بدء مكالمة صوتية"
   },
   "reservations": {
     "title": "الحجوزات",

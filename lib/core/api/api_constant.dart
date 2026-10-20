@@ -1,5 +1,6 @@
 class EndPoint {
   static const String baseUrl = "https://tabeeb.nodeteam.site/api/v1/";
+  static const String socketUrl = "https://tabeeb.nodeteam.site";
 
   EndPoint._();
 
@@ -7,7 +8,6 @@ class EndPoint {
   static const String registerDoctor = "/auth/doctor/register";
   static const String sendOtp = "/auth/send-otp";
   static const String verifyOtp = "/auth/verify-otp";
-  static const String registerDevice = "/auth/register-device";
   static const String patientHealthProfile = "/patient/health-profile";
   static const String patientMedicalInfo = "/patient/health-profile/medical-info";
   static const String patientHome = "/patient/home";
@@ -56,7 +56,13 @@ class EndPoint {
       "/doctor/onboarding/professional";
   static const String doctorOnboardingDocuments =
       "/doctor/onboarding/documents";
+  static const String consultations = "/consultations";
+  static const String consultationsStart =
+      "/consultations/{appointmentId}/start";
+  static const String consultationMessages =
+      "/consultations/{consultationId}/messages";
+  static const String agoraToken = "/agora/token";
+  static const String endCall = "/calls/{callId}/end";
 
 
-  static const String socketUrl = "https://tabeeb.nodeteam.site";
 }

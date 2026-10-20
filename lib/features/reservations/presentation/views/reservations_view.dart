@@ -7,6 +7,9 @@ import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
 import 'package:tabib_app/core/widgets/calendar_section.dart';
 import 'package:tabib_app/core/widgets/filter_chips.dart';
+import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_state.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/start_consultation_view_model.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_state.dart';
 import 'package:tabib_app/features/reservations/presentation/view_model/doctor_appointments_view_model.dart';
 import 'package:tabib_app/features/reservations/presentation/widgets/reservations_list_area.dart';
@@ -16,8 +19,14 @@ class ReservationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<DoctorAppointmentsViewModel>()..loadAppointments(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              getIt<DoctorAppointmentsViewModel>()..loadAppointments(),
+        ),
+        BlocProvider(create: (_) => getIt<StartConsultationViewModel>()),
+      ],
       child: const _ReservationsViewBody(),
     );
   }
@@ -31,30 +40,66 @@ class _ReservationsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return BlocListener<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
-      listenWhen: (previous, current) =>
-          previous.actionState != current.actionState,
-      listener: (context, state) {
-        final action = state.actionState;
-        if (action.isLoaded) {
-          final message = action.data == DoctorAppointmentActionType.reject
-              ? 'reservations.rejectSuccess'.tr()
-              : 'reservations.acceptSuccess'.tr();
-          CustomToast.show(
-            context,
-            message: message,
-            status: ToastStatus.success,
-          );
-          context.read<DoctorAppointmentsViewModel>().resetActionState();
-        } else if (action.isError) {
-          CustomToast.show(
-            context,
-            message: action.errorMessage ?? 'errors.unknown'.tr(),
-            status: ToastStatus.error,
-          );
-          context.read<DoctorAppointmentsViewModel>().resetActionState();
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
+          listenWhen: (previous, current) =>
+              previous.actionState != current.actionState,
+          listener: (context, state) {
+            final action = state.actionState;
+            if (action.isLoaded) {
+              final message = action.data == DoctorAppointmentActionType.reject
+                  ? 'reservations.rejectSuccess'.tr()
+                  : 'reservations.acceptSuccess'.tr();
+              CustomToast.show(
+                context,
+                message: message,
+                status: ToastStatus.success,
+              );
+              context.read<DoctorAppointmentsViewModel>().resetActionState();
+            } else if (action.isError) {
+              CustomToast.show(
+                context,
+                message: action.errorMessage ?? 'errors.unknown'.tr(),
+                status: ToastStatus.error,
+              );
+              context.read<DoctorAppointmentsViewModel>().resetActionState();
+            }
+          },
+        ),
+        BlocListener<StartConsultationViewModel, StartConsultationState>(
+          listenWhen: (previous, current) =>
+              previous.startState != current.startState,
+          listener: (context, state) {
+            final startState = state.startState;
+            if (startState.isLoaded) {
+              final consultation = startState.data;
+              context.read<StartConsultationViewModel>().reset();
+              if (consultation != null && consultation.id.isNotEmpty) {
+                final languageCode = context.locale.languageCode;
+                final title = languageCode.startsWith('ar')
+                    ? consultation.patient.fullNameAr
+                    : (consultation.patient.fullNameAr.isNotEmpty
+                        ? consultation.patient.fullNameAr
+                        : consultation.patient.id);
+                Navigator.of(context).pushNamed(
+                  AppRoutes.chatDetailsView,
+                  arguments: ChatDetailsArgs(
+                    consultationId: consultation.id,
+                    title: title,
+                  ),
+                );
+              }
+            } else if (startState.isError) {
+              CustomToast.error(
+                context,
+                startState.errorMessage ?? 'errors.unknown'.tr(),
+              );
+              context.read<StartConsultationViewModel>().reset();
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<DoctorAppointmentsViewModel, DoctorAppointmentsState>(
         builder: (context, state) {
           return Column(

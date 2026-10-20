@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabib_app/core/app_services/sokect_io_service.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
 import 'package:tabib_app/core/routes/routes.dart';
@@ -69,6 +70,7 @@ class UserProfileContent extends StatelessWidget {
               onPressed: () async {
                 await context.read<PatientProfileViewModel>().logout();
                 await AppLocalStorage.clearAllSecuredData();
+                 SocketIoService.instance.disconnect();
                 CachedUserRole.uiRole = 'user';
                 if (!context.mounted) {
                   return;

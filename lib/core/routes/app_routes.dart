@@ -12,6 +12,9 @@ import 'package:tabib_app/features/auth/presentation/view_model/auth_constants.d
 import 'package:tabib_app/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/doc/complete_doc_profile_cubit.dart';
 import 'package:tabib_app/features/auth/presentation/view_model/patient/complete_patient_profile_view_model.dart';
+import 'package:tabib_app/features/chat/presentation/utils/chat_details_args.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/chat_details_view_model.dart';
+import 'package:tabib_app/features/chat/presentation/view_model/chat_list_view_model.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_details_view.dart';
 import 'package:tabib_app/features/chat/presentation/views/chat_list_view.dart';
 import 'package:tabib_app/features/home/presentation/views/user/search_view.dart';
@@ -43,6 +46,9 @@ import 'package:tabib_app/features/appointments/presentation/views/appointment_d
 import 'package:tabib_app/features/appointments/presentation/views/patient_invoices_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/confirm_payment_view.dart';
 import 'package:tabib_app/features/appointments/presentation/views/payment_success_view.dart';
+import 'package:tabib_app/features/calls/presentation/utils/video_call_args.dart';
+import 'package:tabib_app/features/calls/presentation/view_model/video_call_view_model.dart';
+import 'package:tabib_app/features/calls/presentation/views/video_call_view.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -127,9 +133,25 @@ class Routes {
           ),
         );
       case AppRoutes.chatListView:
-        return MaterialPageRoute(builder: (context) => const ChatListView());
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<ChatListViewModel>()..loadConsultations(),
+            child: const ChatListView(),
+          ),
+        );
       case AppRoutes.chatDetailsView:
-        return MaterialPageRoute(builder: (context) => const ChatDetailsView());
+        final args = ChatDetailsArgs.fromRouteArguments(settings.arguments);
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<ChatDetailsViewModel>()
+              ..init(
+                consultationId: args.consultationId,
+                participantTitle: args.title,
+              ),
+            child: const ChatDetailsView(),
+          ),
+        );
       case AppRoutes.patientDetailsView:
         final appointmentId = settings.arguments as String? ?? '';
         return MaterialPageRoute(
@@ -226,6 +248,20 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) =>
               AppointmentDetailsView(appointmentId: appointmentId),
+        );
+      case AppRoutes.videoCallView:
+        final args = VideoCallArgs.fromRouteArguments(settings.arguments);
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<VideoCallViewModel>()
+              ..startCall(
+                appointmentId: args.appointmentId,
+                callType: args.callType,
+                peerName: args.peerName,
+              ),
+            child: const VideoCallView(),
+          ),
         );
       case AppRoutes.completeProfileView:
         final role = settings.arguments as String? ?? 'user';

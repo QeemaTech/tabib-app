@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
+import 'package:tabib_app/features/appointments/presentation/widgets/doctor_profile_card_footer.dart';
 import 'package:tabib_app/features/appointments/presentation/widgets/specialty_tag.dart';
 
 class DoctorProfileCard extends StatelessWidget {
@@ -15,6 +16,9 @@ class DoctorProfileCard extends StatelessWidget {
   final String feeText;
   final VoidCallback? cancelAppointment;
   final VoidCallback? onConfirmPayment;
+  final VoidCallback? onCallTap;
+  final String callIconPath;
+  final String? callType;
   final bool isPaid;
 
   const DoctorProfileCard({
@@ -28,6 +32,9 @@ class DoctorProfileCard extends StatelessWidget {
     required this.feeText,
     this.cancelAppointment,
     this.onConfirmPayment,
+    this.onCallTap,
+    this.callIconPath = AssetsManager.video,
+    this.callType,
     this.isPaid = false,
   });
 
@@ -36,10 +43,6 @@ class DoctorProfileCard extends StatelessWidget {
     final theme = context.appTheme;
     final confirmedBg = theme.primaryColor.withValues(alpha: 0.1);
     final tagBgColor = theme.textColor100.withValues(alpha: 0.1);
-    final metaStyle = theme.regular12.copyWith(
-      color: theme.primaryColor,
-      fontWeight: FontWeight.w500,
-    );
 
     return Container(
       decoration: BoxDecoration(
@@ -107,20 +110,47 @@ class DoctorProfileCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: confirmedBg,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    statusLabel,
-                    style: theme.bold12.copyWith(
-                      color: theme.primaryColor,
-                      fontSize: 13,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: confirmedBg,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        statusLabel,
+                        style: theme.bold12.copyWith(
+                          color: theme.primaryColor,
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (onCallTap != null) ...[
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: onCallTap,
+                        behavior: HitTestBehavior.opaque,
+                        child: Semantics(
+                          label: (callType?.toUpperCase() == 'VOICE'
+                                  ? 'calls.startVoice'
+                                  : 'calls.startVideo')
+                              .tr(),
+                          button: true,
+                          child: CustomImageView(
+                            imagePath: callIconPath,
+                            height: 22,
+                            width: 22,
+                            color: theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
@@ -147,99 +177,12 @@ class DoctorProfileCard extends StatelessWidget {
               color: theme.textColor100.withValues(alpha: 0.2),
               thickness: 1,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CustomImageView(
-                            height: 12,
-                            imagePath: AssetsManager.appointments,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(dateTimeText, style: metaStyle),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomImageView(imagePath: AssetsManager.moneys),
-                          Text(feeText, style: metaStyle),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (cancelAppointment != null)
-                            GestureDetector(
-                              onTap: cancelAppointment,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withValues(alpha: 0.4),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  'appointments.cancelAppointment'.tr(),
-                                  style: theme.regular12.copyWith(
-                                    color: theme.primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (isPaid)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: theme.primaryColor.withValues(
-                                  alpha: 0.12,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                'appointments.paid'.tr(),
-                                style: theme.regular12.copyWith(
-                                  color: theme.primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )
-                          else if (onConfirmPayment != null)
-                            GestureDetector(
-                              onTap: onConfirmPayment,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.green.withValues(alpha: 0.4),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  'appointments.confirmPayment'.tr(),
-                                  style: theme.regular12.copyWith(
-                                    color: theme.primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            DoctorProfileCardFooter(
+              dateTimeText: dateTimeText,
+              feeText: feeText,
+              cancelAppointment: cancelAppointment,
+              onConfirmPayment: onConfirmPayment,
+              isPaid: isPaid,
             ),
           ],
         ),

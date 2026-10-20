@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:tabib_app/core/app_services/sokect_io_service.dart';
 import 'package:tabib_app/core/cache_helper/app_local_storage.dart';
 import 'package:tabib_app/core/cache_helper/local_keys.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
@@ -67,6 +68,7 @@ class AuthRepoImpl implements AuthRepo {
           response.data.data?.accessToken ?? '',
           response.data.data?.refreshToken ?? '',
         );
+        SocketIoService(token: response.data.data?.accessToken ?? ''  ).connect();
         return Success(response.data);
       case Failure<VerifyOtpResponse>():
         return Failure(response.errorMessage);
