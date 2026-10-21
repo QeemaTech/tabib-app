@@ -28,27 +28,30 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        Expanded(
-          child: _buildLanguageButton(
-            context: context,
-            label: 'English',
-            value: 'en',
-            isSelected: selectedLanguage == 'en',
-            onTap: () => _selectLanguage('en'),
-          ),
+        _buildLanguageButton(
+          context: context,
+          label: 'English',
+          value: 'en',
+          isSelected: selectedLanguage == 'en',
+          onTap: () => _selectLanguage('en'),
         ),
-        const SizedBox(width: 16.0),
-        Expanded(
-          child: _buildLanguageButton(
-            context: context,
-            label: 'العربية',
-            value: 'ar',
-            isSelected: selectedLanguage == 'ar',
-            onTap: () => _selectLanguage('ar'),
-          ),
+        const SizedBox(height: 12),
+        _buildLanguageButton(
+          context: context,
+          label: 'العربية',
+          value: 'ar',
+          isSelected: selectedLanguage == 'ar',
+          onTap: () => _selectLanguage('ar'),
+        ),
+        const SizedBox(height: 12),
+        _buildLanguageButton(
+          context: context,
+          label: 'Af-Soomaali',
+          value: 'so',
+          isSelected: selectedLanguage == 'so',
+          onTap: () => _selectLanguage('so'),
         ),
       ],
     );

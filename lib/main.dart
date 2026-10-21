@@ -50,7 +50,7 @@ void main() async {
   final initialAppRoute = await initRouteApp();
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('ar'), Locale('en')],
+      supportedLocales: const [Locale('ar'), Locale('en'), Locale('so')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       startLocale: const Locale('en'),

@@ -64,6 +64,10 @@ class UserProfileContent extends StatelessWidget {
                 Navigator.of(context).pushNamed(AppRoutes.patientInvoicesView);
               },
             ),
+            Text(
+              'profile.language'.tr(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             ProfileMenuItem(
               title: 'profile.logout'.tr(),
               icon: Icons.logout,

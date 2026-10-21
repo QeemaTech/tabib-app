@@ -123,22 +123,40 @@ class _DocContentErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: theme.regular14.copyWith(color: theme.textColor300),
-          ),
-          const SizedBox(height: 12),
-          IconButton(
-            onPressed: () =>
-                context.read<DoctorDashboardViewModel>().loadDashboard(),
-            icon: Icon(Icons.refresh, color: theme.primaryColor),
-          ),
-        ],
+    return RefreshIndicator(
+      color: theme.primaryColor,
+      onRefresh: () =>
+          context.read<DoctorDashboardViewModel>().refreshDashboard(),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: theme.regular14.copyWith(
+                        color: theme.textColor300,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    IconButton(
+                      onPressed: () => context
+                          .read<DoctorDashboardViewModel>()
+                          .loadDashboard(),
+                      icon: Icon(Icons.refresh, color: theme.primaryColor),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -161,36 +179,43 @@ class _DocContentSuccessWidget extends StatelessWidget {
         ? dashboard.todayAppointments.first
         : null;
     final patientName = firstAppointment?.patient.fullNameAr;
+    final theme = context.appTheme;
 
-    return SingleChildScrollView(
-      child: Column(
-        spacing: 16,
-        children: [
-          const SearchBarWidget(),
-          DocDashboard(stats: dashboard.stats),
-          MeetingSection(patientName: patientName),
-          HeaderSpecial(
-            title: 'home.doctor.reviewRequests',
-            titleArgs: ['${dashboard.stats.pendingCount}'],
-          ),
-          ...dashboard.pendingRequests.map(
-            (request) => RequestReviewDocCard(
-              patientName: request.patient.fullNameAr,
-              subtitle: request.consultationType,
-              timeLabel: '${request.date} - ${request.startTime}',
-              imageUrl: request.patient.avatarUrl,
-              isActionLoading:
-                  isActionLoading && actionAppointmentId == request.id,
-              onAccept: () => context
-                  .read<DoctorDashboardViewModel>()
-                  .acceptAppointment(request.id),
-              onReject: () => showDashboardRejectDialog(
-                context,
-                appointmentId: request.id,
+    return RefreshIndicator(
+      color: theme.primaryColor,
+      onRefresh: () =>
+          context.read<DoctorDashboardViewModel>().refreshDashboard(),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          spacing: 16,
+          children: [
+            const SearchBarWidget(),
+            DocDashboard(stats: dashboard.stats),
+            MeetingSection(patientName: patientName),
+            HeaderSpecial(
+              title: 'home.doctor.reviewRequests',
+              titleArgs: ['${dashboard.stats.pendingCount}'],
+            ),
+            ...dashboard.pendingRequests.map(
+              (request) => RequestReviewDocCard(
+                patientName: request.patient.fullNameAr,
+                subtitle: request.consultationType,
+                timeLabel: '${request.date} - ${request.startTime}',
+                imageUrl: request.patient.avatarUrl,
+                isActionLoading:
+                    isActionLoading && actionAppointmentId == request.id,
+                onAccept: () => context
+                    .read<DoctorDashboardViewModel>()
+                    .acceptAppointment(request.id),
+                onReject: () => showDashboardRejectDialog(
+                  context,
+                  appointmentId: request.id,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

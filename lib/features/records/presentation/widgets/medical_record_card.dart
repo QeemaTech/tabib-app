@@ -35,7 +35,7 @@ class MedicalRecordCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: theme.blackColor.withOpacity(0.05),
+            color: theme.blackColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -86,13 +86,15 @@ class MedicalRecordCard extends StatelessWidget {
                   style: theme.regular12.copyWith(color: theme.textColor200),
                 ),
               ),
-              _buildActionButton(
-                onTap: onDownloadTap,
-                icon: Icons.file_download_outlined,
-                label: 'records.download'.tr(),
-                theme: theme,
-              ),
-              const SizedBox(width: 16),
+              if (onDownloadTap != null) ...[
+                _buildActionButton(
+                  onTap: onDownloadTap,
+                  icon: Icons.file_download_outlined,
+                  label: 'records.download'.tr(),
+                  theme: theme,
+                ),
+                const SizedBox(width: 16),
+              ],
               _buildActionButton(
                 onTap: onViewTap,
                 icon: Icons.visibility_outlined,
@@ -135,11 +137,7 @@ class MedicalRecordCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 18,
-            color: theme.primaryColor,
-          ),
+          Icon(icon, size: 18, color: theme.primaryColor),
           const SizedBox(width: 4),
           Text(
             label,

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
@@ -10,6 +9,7 @@ class PrescriptionDoctorInfo extends StatelessWidget {
   final String specialty;
   final String date;
   final String time;
+  final String referenceLabel;
   final String rxNumber;
   final String? imageUrl;
 
@@ -19,6 +19,7 @@ class PrescriptionDoctorInfo extends StatelessWidget {
     required this.specialty,
     required this.date,
     required this.time,
+    required this.referenceLabel,
     required this.rxNumber,
     this.imageUrl,
   });
@@ -32,7 +33,7 @@ class PrescriptionDoctorInfo extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.whiteColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.textColor100.withOpacity(0.2)),
+        border: Border.all(color: theme.textColor100.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -56,17 +57,31 @@ class PrescriptionDoctorInfo extends StatelessWidget {
                     ),
                     Text(
                       specialty,
-                      style: theme.regular14.copyWith(color: theme.textColor300),
+                      style: theme.regular14.copyWith(
+                        color: theme.textColor300,
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          _buildInfoRow(Icons.calendar_today_outlined, '$date | $time', theme),
-          const SizedBox(height: 8),
-          _buildInfoRow(Icons.receipt_long_outlined, '${'records.details.rxNo'.tr()} $rxNumber', theme),
+          if (date.isNotEmpty || time.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            _buildInfoRow(
+              Icons.calendar_today_outlined,
+              time.isEmpty ? date : (date.isEmpty ? time : '$date | $time'),
+              theme,
+            ),
+          ],
+          if (rxNumber.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              Icons.receipt_long_outlined,
+              referenceLabel.isEmpty ? rxNumber : '$referenceLabel $rxNumber',
+              theme,
+            ),
+          ],
         ],
       ),
     );
@@ -77,10 +92,7 @@ class PrescriptionDoctorInfo extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: theme.textColor300),
         const SizedBox(width: 8),
-        Text(
-          text,
-          style: theme.regular12.copyWith(color: theme.textColor300),
-        ),
+        Text(text, style: theme.regular12.copyWith(color: theme.textColor300)),
       ],
     );
   }

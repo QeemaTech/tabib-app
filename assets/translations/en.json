@@ -336,6 +336,9 @@
     "summary": "Summary:",
     "download": "Download",
     "view": "View",
+    "empty": "No records yet",
+    "retry": "Retry",
+    "missingId": "Missing record id",
     "filters": {
       "all": "All",
       "reports": "Reports",
@@ -344,15 +347,26 @@
     },
     "details": {
       "title": "Prescription Details",
+      "reportTitle": "Report Details",
       "diagnosis": "Diagnosis",
       "medications": "Medications",
+      "prescriptions": "Prescriptions",
+      "prescriptionsCount": "{count} prescriptions",
       "rxNo": "Prescription No:",
       "dose": "Dose",
       "frequency": "Frequency",
       "duration": "Duration",
       "timing": "Timing",
       "bookFollowUp": "Book Follow-up",
-      "downloadPDF": "Download PDF"
+      "downloadPDF": "Download PDF",
+      "downloadFailed": "Could not open the file",
+      "vitals": "Vitals",
+      "bloodPressure": "Blood pressure",
+      "temperature": "Temperature",
+      "notes": "Medical notes",
+      "followUp": "Follow-up",
+      "tests": "Requested tests",
+      "visitType": "Visit type"
     }
   },
   "home": {
@@ -441,6 +455,8 @@
     "female": "Female",
     "experiences": "Experiences",
     "logout": "Log out",
+    "language": "Language",
+    "languageSubtitle": "Choose the app language",
     "personal": {
       "phone": "Phone",
       "email": "Email",

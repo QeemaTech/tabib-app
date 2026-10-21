@@ -69,6 +69,7 @@ flutter:
     - assets/svgs/
     - assets/translations/en.json
     - assets/translations/ar.json
+    - assets/translations/so.json
 
   fonts:
     - family: Cairo

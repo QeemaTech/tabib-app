@@ -9,7 +9,8 @@ class EndPoint {
   static const String sendOtp = "/auth/send-otp";
   static const String verifyOtp = "/auth/verify-otp";
   static const String patientHealthProfile = "/patient/health-profile";
-  static const String patientMedicalInfo = "/patient/health-profile/medical-info";
+  static const String patientMedicalInfo =
+      "/patient/health-profile/medical-info";
   static const String patientHome = "/patient/home";
   static const String patientDoctorDetails = "/patient/doctors/{id}";
   static const String patientDoctors = "/patient/doctors";
@@ -17,6 +18,15 @@ class EndPoint {
       "/patient/doctors/{id}/availability";
   static const String patientAppointments = "/patient/appointments";
   static const String patientAppointmentDetails = "/patient/appointments/{id}";
+  static const String patientAppointmentReport =
+      "/patient/appointments/{id}/report";
+  static const String patientAppointmentPrescription =
+      "/patient/appointments/{id}/prescription";
+  static const String patientPrescriptions = "/patient/prescriptions";
+  static const String patientPrescriptionDetails =
+      "/patient/prescriptions/{id}";
+  static const String patientReports = "/patient/reports";
+  static const String patientReportDetails = "/patient/reports/{id}";
   static const String patientCancelAppointment =
       "/patient/appointments/{id}/cancel";
   static const String patientValidateCoupon =
@@ -74,5 +84,6 @@ class EndPoint {
   static const String doctorNotifications = "/doctor/notifications";
   static const String doctorNotificationsReadAll =
       "/doctor/notifications/read-all";
-  static const String doctorNotificationRead = "/doctor/notifications/{id}/read";
+  static const String doctorNotificationRead =
+      "/doctor/notifications/{id}/read";
 }

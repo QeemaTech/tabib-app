@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/cache_helper/cached_user_role.dart';
@@ -37,6 +38,7 @@ import '../../features/patients/presentation/views/patient_appointment_details_v
 import '../../features/profile/presentation/views/doc/doctor_personal_info_view.dart';
 import '../../features/profile/presentation/views/user/patient_personal_info_view.dart';
 import '../../features/records/presentation/views/prescription_details_view.dart';
+import '../../features/records/presentation/views/report_details_view.dart';
 import 'package:tabib_app/features/wallet/presentation/utils/doctor_withdraw_args.dart';
 import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdraw_view.dart';
 import 'package:tabib_app/features/wallet/presentation/views/doc/doctor_withdrawal_details_view.dart';
@@ -64,24 +66,19 @@ class Routes {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => BlocProvider(
-            create: (context) =>
-                getIt<AuthViewModel>()..setAuthMode(mode),
+            create: (context) => getIt<AuthViewModel>()..setAuthMode(mode),
             child: const RoleView(),
           ),
         );
       case AppRoutes.loginView:
         return MaterialPageRoute(
-          builder: (context) => _authScoped(
-            settings.arguments,
-            const LoginView(),
-          ),
+          builder: (context) =>
+              _authScoped(settings.arguments, const LoginView()),
         );
       case AppRoutes.signUpView:
         return MaterialPageRoute(
-          builder: (context) => _authScoped(
-            settings.arguments,
-            const SignUpView(),
-          ),
+          builder: (context) =>
+              _authScoped(settings.arguments, const SignUpView()),
         );
       case AppRoutes.mainLayoutView:
         final argsRole = settings.arguments is String
@@ -97,8 +94,27 @@ class Routes {
           ),
         );
       case AppRoutes.prescriptionDetailsView:
+        final prescriptionId = settings.arguments as String? ?? '';
+        if (prescriptionId.isEmpty) {
+          return MaterialPageRoute(
+            builder: (context) =>
+                Scaffold(body: Center(child: Text('records.missingId'.tr()))),
+          );
+        }
         return MaterialPageRoute(
-          builder: (context) => const PrescriptionDetailsView(),
+          builder: (context) =>
+              PrescriptionDetailsView(prescriptionId: prescriptionId),
+        );
+      case AppRoutes.reportDetailsView:
+        final reportId = settings.arguments as String? ?? '';
+        if (reportId.isEmpty) {
+          return MaterialPageRoute(
+            builder: (context) =>
+                Scaffold(body: Center(child: Text('records.missingId'.tr()))),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (context) => ReportDetailsView(reportId: reportId),
         );
       case AppRoutes.seeMoreSpecializationView:
         return MaterialPageRoute(
@@ -162,8 +178,7 @@ class Routes {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => BlocProvider(
-            create: (_) =>
-                getIt<PatientFileViewModel>()..load(appointmentId),
+            create: (_) => getIt<PatientFileViewModel>()..load(appointmentId),
             child: const PatientDetailsView(),
           ),
         );
@@ -172,8 +187,9 @@ class Routes {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => BlocProvider(
-            create: (_) => getIt<DoctorAppointmentDetailsViewModel>()
-              ..loadDetails(appointmentId),
+            create: (_) =>
+                getIt<DoctorAppointmentDetailsViewModel>()
+                  ..loadDetails(appointmentId),
             child: const PatientsAppointmentDetailsView(),
           ),
         );
@@ -215,8 +231,7 @@ class Routes {
       case AppRoutes.doctorScheduleView:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (_) =>
-                getIt<DoctorScheduleViewModel>()..loadSchedule(),
+            create: (_) => getIt<DoctorScheduleViewModel>()..loadSchedule(),
             child: const DoctorScheduleView(),
           ),
         );

@@ -45,6 +45,9 @@ class PatientProfileEntity extends Equatable {
     if (languageCode.startsWith('ar') && fullNameAr.isNotEmpty) {
       return fullNameAr;
     }
+    if (languageCode.startsWith('so') && fullNameSo.isNotEmpty) {
+      return fullNameSo;
+    }
     if (fullNameEn.isNotEmpty) return fullNameEn;
     if (fullNameAr.isNotEmpty) return fullNameAr;
     if (fullNameSo.isNotEmpty) return fullNameSo;

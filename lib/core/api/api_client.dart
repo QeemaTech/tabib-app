@@ -36,6 +36,9 @@ import 'package:tabib_app/features/home/data/models/response/doctor_dashboard_re
 import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
 import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
 import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
+import 'package:tabib_app/features/records/data/models/response/patient_prescriptions_response.dart';
+import 'package:tabib_app/features/records/data/models/response/patient_record_detail_response.dart';
+import 'package:tabib_app/features/records/data/models/response/patient_reports_response.dart';
 import 'package:tabib_app/features/patients/data/models/response/doctor_patients_response.dart';
 import 'package:tabib_app/features/patients/data/models/response/patient_file_response.dart';
 import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
@@ -148,6 +151,38 @@ abstract class ApiClient {
     @Path('id') String id,
   );
 
+  @GET(EndPoint.patientAppointmentReport)
+  Future<PatientRecordDetailResponse> getPatientAppointmentReport(
+    @Path('id') String id,
+  );
+
+  @GET(EndPoint.patientAppointmentPrescription)
+  Future<PatientRecordDetailResponse> getPatientAppointmentPrescription(
+    @Path('id') String id,
+  );
+
+  @GET(EndPoint.patientReports)
+  Future<PatientReportsResponse> getPatientReports({
+    @Query('page') required int page,
+    @Query('limit') required int limit,
+  });
+
+  @GET(EndPoint.patientReportDetails)
+  Future<PatientRecordDetailResponse> getPatientReportDetails(
+    @Path('id') String id,
+  );
+
+  @GET(EndPoint.patientPrescriptions)
+  Future<PatientPrescriptionsResponse> getPatientPrescriptions({
+    @Query('page') required int page,
+    @Query('limit') required int limit,
+  });
+
+  @GET(EndPoint.patientPrescriptionDetails)
+  Future<PatientRecordDetailResponse> getPatientPrescriptionDetails(
+    @Path('id') String id,
+  );
+
   @PATCH(EndPoint.patientCancelAppointment)
   Future<CancelAppointmentResponse> cancelAppointment(
     @Path('id') String id,
@@ -175,9 +210,7 @@ abstract class ApiClient {
 
   @GET(EndPoint.patientInvoiceDownload)
   @DioResponseType(ResponseType.bytes)
-  Future<HttpResponse<Uint8List>> downloadPatientInvoice(
-    @Path('id') String id,
-  );
+  Future<HttpResponse<Uint8List>> downloadPatientInvoice(@Path('id') String id);
 
   @GET(EndPoint.patientWallet)
   Future<WalletResponse> getPatientWallet();

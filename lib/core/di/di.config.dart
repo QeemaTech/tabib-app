@@ -63,7 +63,7 @@ import '../../features/calls/data/data_source/calls_data_source.dart' as _i713;
 import '../../features/calls/data/data_source/calls_data_source_impl.dart'
     as _i16;
 import '../../features/calls/data/repo/calls_repo_impl.dart' as _i1064;
-import '../../features/calls/domain/repo/calls_repo.dart' as _i935;
+import '../../features/calls/domain/repo/calls_repo.dart' as _i936;
 import '../../features/calls/presentation/view_model/video_call_view_model.dart'
     as _i38;
 import '../../features/chat/data/data_source/chat_data_source.dart' as _i542;
@@ -157,6 +157,18 @@ import '../../features/profile/presentation/view_model/doctor_profile_view_model
     as _i162;
 import '../../features/profile/presentation/view_model/patient_profile_view_model.dart'
     as _i369;
+import '../../features/records/data/data_source/records_data_source.dart'
+    as _i761;
+import '../../features/records/data/data_source/records_data_source_impl.dart'
+    as _i935;
+import '../../features/records/data/repo/records_repo_impl.dart' as _i477;
+import '../../features/records/domain/repo/records_repo.dart' as _i795;
+import '../../features/records/presentation/view_model/prescription_details_view_model.dart'
+    as _i484;
+import '../../features/records/presentation/view_model/records_view_model.dart'
+    as _i1006;
+import '../../features/records/presentation/view_model/report_details_view_model.dart'
+    as _i744;
 import '../../features/reservations/data/data_source/doctor_appointments_data_source.dart'
     as _i702;
 import '../../features/reservations/data/data_source/doctor_appointments_data_source_impl.dart'
@@ -229,6 +241,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i10.DoctorDetailsDataSource>(
       () => _i276.DoctorDetailsDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.lazySingleton<_i761.RecordsDataSource>(
+      () => _i935.RecordsDataSourceImpl(gh<_i277.ApiClient>()),
     );
     gh.lazySingleton<_i275.AppointmentsDataSource>(
       () => _i47.AppointmentsDataSourceImpl(gh<_i277.ApiClient>()),
@@ -337,6 +352,9 @@ extension GetItInjectableX on _i174.GetIt {
         notificationsRepo: gh<_i846.NotificationsRepo>(),
       ),
     );
+    gh.lazySingleton<_i795.RecordsRepo>(
+      () => _i477.RecordsRepoImpl(gh<_i761.RecordsDataSource>()),
+    );
     gh.lazySingleton<_i170.AuthRepo>(
       () => _i984.AuthRepoImpl(gh<_i217.RemoteDataSource>()),
     );
@@ -370,7 +388,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i471.DoctorPatientsRepo>(
       () => _i269.DoctorPatientsRepoImpl(gh<_i1062.DoctorPatientsDataSource>()),
     );
-    gh.lazySingleton<_i935.CallsRepo>(
+    gh.lazySingleton<_i936.CallsRepo>(
       () => _i1064.CallsRepoImpl(gh<_i713.CallsDataSource>()),
     );
     gh.lazySingleton<_i305.PatientFileRepo>(
@@ -394,7 +412,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i38.VideoCallViewModel>(
       () => _i38.VideoCallViewModel(
-        callsRepo: gh<_i935.CallsRepo>(),
+        callsRepo: gh<_i936.CallsRepo>(),
         agoraRtcService: gh<_i639.AgoraRtcService>(),
       ),
     );
@@ -417,6 +435,17 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i773.DoctorAppointmentsViewModel(
         doctorAppointmentsRepo: gh<_i763.DoctorAppointmentsRepo>(),
       ),
+    );
+    gh.factory<_i484.PrescriptionDetailsViewModel>(
+      () => _i484.PrescriptionDetailsViewModel(
+        recordsRepo: gh<_i795.RecordsRepo>(),
+      ),
+    );
+    gh.factory<_i1006.RecordsViewModel>(
+      () => _i1006.RecordsViewModel(recordsRepo: gh<_i795.RecordsRepo>()),
+    );
+    gh.factory<_i744.ReportDetailsViewModel>(
+      () => _i744.ReportDetailsViewModel(recordsRepo: gh<_i795.RecordsRepo>()),
     );
     gh.factory<_i364.AppointmentDetailsViewModel>(
       () => _i364.AppointmentDetailsViewModel(

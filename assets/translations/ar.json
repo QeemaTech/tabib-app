@@ -336,6 +336,9 @@
     "summary": "الملخص:",
     "download": "تحميل",
     "view": "مشاهدة",
+    "empty": "لا توجد سجلات بعد",
+    "retry": "إعادة المحاولة",
+    "missingId": "معرّف السجل غير موجود",
     "filters": {
       "all": "الكل",
       "reports": "تقاريري",
@@ -344,15 +347,26 @@
     },
     "details": {
       "title": "تفاصيل الوصفة",
+      "reportTitle": "تفاصيل التقرير",
       "diagnosis": "التشخيص",
       "medications": "الأدوية",
+      "prescriptions": "الوصفات",
+      "prescriptionsCount": "{count} وصفات",
       "rxNo": "رقم الروشتة:",
       "dose": "الجرعة",
       "frequency": "التكرار",
       "duration": "المدة",
       "timing": "التوقيت",
       "bookFollowUp": "حجز موعد متابعة",
-      "downloadPDF": "تحميل PDF"
+      "downloadPDF": "تحميل PDF",
+      "downloadFailed": "تعذر فتح الملف",
+      "vitals": "العلامات الحيوية",
+      "bloodPressure": "ضغط الدم",
+      "temperature": "درجة الحرارة",
+      "notes": "الملاحظات الطبية",
+      "followUp": "المتابعة",
+      "tests": "الفحوصات المطلوبة",
+      "visitType": "نوع الزيارة"
     }
   },
   "home": {
@@ -441,6 +455,8 @@
     "female": "أنثى",
     "experiences": "الخبرات",
     "logout": "تسجيل الخروج",
+    "language": "اللغة",
+    "languageSubtitle": "اختر لغة التطبيق",
     "personal": {
       "phone": "الهاتف",
       "email": "البريد الإلكتروني",

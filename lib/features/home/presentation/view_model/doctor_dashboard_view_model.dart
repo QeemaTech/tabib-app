@@ -19,31 +19,26 @@ class DoctorDashboardViewModel extends Cubit<DoctorDashboardState> {
     required this.doctorAppointmentsRepo,
   }) : super(const DoctorDashboardState());
 
-  Future<void> loadDashboard() async {
-    emit(state.copyWith(dashboardState: BaseState.loading()));
+  Future<void> loadDashboard({bool showLoading = true}) async {
+    if (showLoading) {
+      emit(state.copyWith(dashboardState: BaseState.loading()));
+    }
     final result = await doctorDashboardRepo.getDoctorDashboard();
     switch (result) {
       case Success<DoctorDashboardEntity>():
-        emit(
-          state.copyWith(
-            dashboardState: BaseState.loaded(result.data),
-          ),
-        );
+        emit(state.copyWith(dashboardState: BaseState.loaded(result.data)));
       case Failure<DoctorDashboardEntity>():
         emit(
-          state.copyWith(
-            dashboardState: BaseState.error(result.errorMessage),
-          ),
+          state.copyWith(dashboardState: BaseState.error(result.errorMessage)),
         );
     }
   }
 
+  Future<void> refreshDashboard() => loadDashboard(showLoading: false);
+
   Future<void> acceptAppointment(String id) async {
     emit(
-      state.copyWith(
-        actionState: BaseState.loading(),
-        actionAppointmentId: id,
-      ),
+      state.copyWith(actionState: BaseState.loading(), actionAppointmentId: id),
     );
 
     final result = await doctorAppointmentsRepo.acceptAppointment(id);
@@ -71,10 +66,7 @@ class DoctorDashboardViewModel extends Cubit<DoctorDashboardState> {
     required String reason,
   }) async {
     emit(
-      state.copyWith(
-        actionState: BaseState.loading(),
-        actionAppointmentId: id,
-      ),
+      state.copyWith(actionState: BaseState.loading(), actionAppointmentId: id),
     );
 
     final result = await doctorAppointmentsRepo.rejectAppointment(
