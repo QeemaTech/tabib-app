@@ -8,6 +8,7 @@ class NotificationCard extends StatelessWidget {
   final String title;
   final String description;
   final String time;
+  final bool isRead;
   final VoidCallback? onTap;
 
   const NotificationCard({
@@ -15,6 +16,7 @@ class NotificationCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.time,
+    this.isRead = false,
     this.onTap,
   });
 
@@ -28,11 +30,11 @@ class NotificationCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFEAF8F6),
+          color: isRead ? theme.whiteColor : const Color(0xFFEAF8F6),
           borderRadius: BorderRadius.circular(16),
+          border: isRead ? Border.all(color: theme.textColor100) : null,
         ),
         child: Row(
-
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
@@ -49,9 +51,7 @@ class NotificationCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: theme.regular14.copyWith(
-                      color: theme.textColor300,
-                    ),
+                    style: theme.regular14.copyWith(color: theme.textColor300),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -74,9 +74,7 @@ class NotificationCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-           CustomImageView(
-             imagePath: AssetsManager.activeNotification,
-           )
+            CustomImageView(imagePath: AssetsManager.activeNotification),
           ],
         ),
       ),

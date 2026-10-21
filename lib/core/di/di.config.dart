@@ -72,7 +72,7 @@ import '../../features/chat/data/data_source/chat_data_source_impl.dart'
 import '../../features/chat/data/repo/chat_repo_impl.dart' as _i328;
 import '../../features/chat/domain/repo/chat_repo.dart' as _i804;
 import '../../features/chat/presentation/view_model/chat_details_view_model.dart'
-    as _i848;
+    as _i849;
 import '../../features/chat/presentation/view_model/chat_list_view_model.dart'
     as _i1016;
 import '../../features/chat/presentation/view_model/start_consultation_view_model.dart'
@@ -99,7 +99,7 @@ import '../../features/home/data/repo/patient_home_repo_impl.dart' as _i455;
 import '../../features/home/data/repo/search_doctors_repo_impl.dart' as _i232;
 import '../../features/home/domain/repo/doctor_dashboard_repo.dart' as _i845;
 import '../../features/home/domain/repo/doctor_details_repo.dart' as _i806;
-import '../../features/home/domain/repo/patient_home_repo.dart' as _i847;
+import '../../features/home/domain/repo/patient_home_repo.dart' as _i848;
 import '../../features/home/domain/repo/search_doctors_repo.dart' as _i824;
 import '../../features/home/presentation/view_model/doctor_dashboard_view_model.dart'
     as _i720;
@@ -112,12 +112,22 @@ import '../../features/home/presentation/view_model/search_doctors_view_model.da
 import '../../features/home/presentation/view_model/specialties_view_model.dart'
     as _i32;
 import '../../features/layout/view_model/layout_view_model.dart' as _i566;
+import '../../features/notification/data/data_source/notifications_data_source.dart'
+    as _i921;
+import '../../features/notification/data/data_source/notifications_data_source_impl.dart'
+    as _i808;
+import '../../features/notification/data/repo/notifications_repo_impl.dart'
+    as _i620;
+import '../../features/notification/domain/repo/notifications_repo.dart'
+    as _i846;
+import '../../features/notification/presentation/view_model/notifications_view_model.dart'
+    as _i1026;
 import '../../features/patients/data/data_source/doctor_patients_data_source.dart'
     as _i1062;
 import '../../features/patients/data/data_source/doctor_patients_data_source_impl.dart'
     as _i960;
 import '../../features/patients/data/data_source/patient_file_data_source.dart'
-    as _i846;
+    as _i847;
 import '../../features/patients/data/data_source/patient_file_data_source_impl.dart'
     as _i729;
 import '../../features/patients/data/repo/doctor_patients_repo_impl.dart'
@@ -188,6 +198,7 @@ import '../api/api_client.dart' as _i277;
 import '../api/api_module.dart' as _i0;
 import '../app_services/agora_rtc_service.dart' as _i639;
 import '../app_services/image_picker_services.dart' as _i772;
+
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
@@ -212,6 +223,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i25.DoctorDashboardDataSource>(
       () => _i204.DoctorDashboardDataSourceImpl(gh<_i277.ApiClient>()),
+    );
+    gh.lazySingleton<_i921.NotificationsDataSource>(
+      () => _i808.NotificationsDataSourceImpl(gh<_i277.ApiClient>()),
     );
     gh.lazySingleton<_i10.DoctorDetailsDataSource>(
       () => _i276.DoctorDetailsDataSourceImpl(gh<_i277.ApiClient>()),
@@ -242,6 +256,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i311.PatientProfileDataSource>(
       () => _i762.PatientProfileDataSourceImpl(gh<_i277.ApiClient>()),
     );
+    gh.lazySingleton<_i846.NotificationsRepo>(
+      () => _i620.NotificationsRepoImpl(gh<_i921.NotificationsDataSource>()),
+    );
     gh.lazySingleton<_i407.PatientProfileRepo>(
       () => _i544.PatientProfileRepoImpl(gh<_i311.PatientProfileDataSource>()),
     );
@@ -263,7 +280,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i702.DoctorAppointmentsDataSource>(
       () => _i657.DoctorAppointmentsDataSourceImpl(gh<_i277.ApiClient>()),
     );
-    gh.lazySingleton<_i846.PatientFileDataSource>(
+    gh.lazySingleton<_i847.PatientFileDataSource>(
       () => _i729.PatientFileDataSourceImpl(gh<_i277.ApiClient>()),
     );
     gh.lazySingleton<_i659.PatientHealthProfileDataSource>(
@@ -315,6 +332,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i64.DoctorProfileRepo>(
       () => _i1050.DoctorProfileRepoImpl(gh<_i567.DoctorProfileDataSource>()),
     );
+    gh.factory<_i1026.NotificationsViewModel>(
+      () => _i1026.NotificationsViewModel(
+        notificationsRepo: gh<_i846.NotificationsRepo>(),
+      ),
+    );
     gh.lazySingleton<_i170.AuthRepo>(
       () => _i984.AuthRepoImpl(gh<_i217.RemoteDataSource>()),
     );
@@ -337,7 +359,7 @@ extension GetItInjectableX on _i174.GetIt {
         searchDoctorsRepo: gh<_i824.SearchDoctorsRepo>(),
       ),
     );
-    gh.lazySingleton<_i847.PatientHomeRepo>(
+    gh.lazySingleton<_i848.PatientHomeRepo>(
       () => _i455.PatientHomeRepoImpl(gh<_i862.PatientHomeDataSource>()),
     );
     gh.factory<_i32.SpecialtiesViewModel>(
@@ -345,26 +367,14 @@ extension GetItInjectableX on _i174.GetIt {
         doctorOnboardingRepo: gh<_i313.DoctorOnboardingRepo>(),
       ),
     );
-    gh.factory<_i162.DoctorProfileViewModel>(
-      () => _i162.DoctorProfileViewModel(
-        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
-        authRepo: gh<_i170.AuthRepo>(),
-      ),
-    );
     gh.lazySingleton<_i471.DoctorPatientsRepo>(
       () => _i269.DoctorPatientsRepoImpl(gh<_i1062.DoctorPatientsDataSource>()),
-    );
-    gh.factory<_i369.PatientProfileViewModel>(
-      () => _i369.PatientProfileViewModel(
-        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
-        authRepo: gh<_i170.AuthRepo>(),
-      ),
     );
     gh.lazySingleton<_i935.CallsRepo>(
       () => _i1064.CallsRepoImpl(gh<_i713.CallsDataSource>()),
     );
     gh.lazySingleton<_i305.PatientFileRepo>(
-      () => _i822.PatientFileRepoImpl(gh<_i846.PatientFileDataSource>()),
+      () => _i822.PatientFileRepoImpl(gh<_i847.PatientFileDataSource>()),
     );
     gh.factory<_i986.DoctorScheduleViewModel>(
       () => _i986.DoctorScheduleViewModel(
@@ -428,8 +438,20 @@ extension GetItInjectableX on _i174.GetIt {
         appointmentsRepo: gh<_i201.AppointmentsRepo>(),
       ),
     );
-    gh.factory<_i848.ChatDetailsViewModel>(
-      () => _i848.ChatDetailsViewModel(chatRepo: gh<_i804.ChatRepo>()),
+    gh.factory<_i162.DoctorProfileViewModel>(
+      () => _i162.DoctorProfileViewModel(
+        doctorProfileRepo: gh<_i64.DoctorProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
+    );
+    gh.factory<_i369.PatientProfileViewModel>(
+      () => _i369.PatientProfileViewModel(
+        patientProfileRepo: gh<_i407.PatientProfileRepo>(),
+        authRepo: gh<_i170.AuthRepo>(),
+      ),
+    );
+    gh.factory<_i849.ChatDetailsViewModel>(
+      () => _i849.ChatDetailsViewModel(chatRepo: gh<_i804.ChatRepo>()),
     );
     gh.factory<_i1016.ChatListViewModel>(
       () => _i1016.ChatListViewModel(chatRepo: gh<_i804.ChatRepo>()),
@@ -447,7 +469,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i241.PatientHomeViewModel>(
       () => _i241.PatientHomeViewModel(
-        patientHomeRepo: gh<_i847.PatientHomeRepo>(),
+        patientHomeRepo: gh<_i848.PatientHomeRepo>(),
       ),
     );
     gh.factory<_i720.DoctorDashboardViewModel>(

@@ -69,10 +69,13 @@ class ProfileMenuItem extends StatelessWidget {
                   style: theme.regular12.copyWith(color: theme.textColor200),
                 ),
           trailing: showTrailing
-              ? Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: theme.primaryColor300,
+              ? Transform.flip(
+                  flipX: Directionality.of(context) == TextDirection.rtl,
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: theme.primaryColor300,
+                  ),
                 )
               : null,
         ),

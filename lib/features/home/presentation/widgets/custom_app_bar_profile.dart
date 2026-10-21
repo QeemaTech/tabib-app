@@ -29,13 +29,13 @@ class CustomAppBarProfile extends StatelessWidget {
       type: MaterialType.transparency,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: CustomImageView(
-          imagePath: AssetsManager.user,
-          height: 56,
-          width: 56,
-          radius: BorderRadius.circular(50),
-          onTap: onProfileImageClicked,
-        ),
+        // leading: CustomImageView(
+        //   imagePath: AssetsManager.user,
+        //   height: 56,
+        //   width: 56,
+        //   radius: BorderRadius.circular(50),
+        //   onTap: onProfileImageClicked,
+        // ),
 
         title: Text(
           title.tr(),

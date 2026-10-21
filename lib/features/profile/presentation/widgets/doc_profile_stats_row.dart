@@ -22,38 +22,37 @@ class DocProfileStatsRow extends StatelessWidget {
         final rating = stats?.rating;
         final hasRating = rating != null && rating > 0;
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: DocStatCard(
-                  title: 'profile.doctor.earnings'.tr(),
-                  value: earnings != null ? _formatNumber(earnings) : '0',
-                  icon: AssetsManager.moneys,
-                  valueColor: context.appTheme.primaryColor,
-                  prefixValue: '${'common.currency'.tr()} ',
-                ),
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: DocStatCard(
+                title: 'profile.doctor.earnings'.tr(),
+                value: earnings != null ? _formatNumber(earnings) : '0',
+                icon: AssetsManager.moneys,
+                valueColor: context.appTheme.primaryColor,
+                prefixValue: '${'common.currency'.tr()} ',
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: DocStatCard(
-                  title: 'profile.doctor.patients'.tr(),
-                  value: patients != null ? '$patients' : '0',
-                  icon: AssetsManager.profile,
-                ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: DocStatCard(
+                title: 'profile.doctor.patients'.tr(),
+                value: patients != null ? '$patients' : '0',
+                icon: AssetsManager.profile,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: DocStatCard(
-                  title: 'profile.doctor.ratings'.tr(),
-                  value: hasRating ? rating.toStringAsFixed(1) : '0',
-                  icon: AssetsManager.edit,
-                  showStars: hasRating,
-                ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: DocStatCard(
+                title: 'profile.doctor.ratings'.tr(),
+                value: hasRating ? rating.toStringAsFixed(1) : '0',
+                icon: AssetsManager.edit,
+                showStars: hasRating,
+                rating: rating ?? 0,
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

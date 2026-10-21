@@ -485,14 +485,20 @@
       "specialties": "Specialties",
       "statusPending": "Pending",
       "statusVerified": "Verified",
-      "statusRejected": "Rejected"
+      "statusRejected": "Rejected",
+      "account": "Account",
+      "fees": "Fees",
+      "personalInfoSubtitle": "Name, contact, and credentials",
+      "completeProfileSubtitle": "Specialty, clinic, and documents"
     }
   },
   "notifications": {
     "title": "Notifications",
     "reminderTitle": "Appointment Reminder",
     "reminderDescription": "Your appointment with {} tomorrow at {}",
-    "timeAgo": "{} minutes ago"
+    "timeAgo": "{} minutes ago",
+    "empty": "No notifications yet",
+    "markAllRead": "Mark all as read"
   },
   "chat": {
     "title": "Messages",

@@ -485,14 +485,20 @@
       "specialties": "التخصصات",
       "statusPending": "قيد المراجعة",
       "statusVerified": "موثق",
-      "statusRejected": "مرفوض"
+      "statusRejected": "مرفوض",
+      "account": "الحساب",
+      "fees": "الرسوم",
+      "personalInfoSubtitle": "الاسم وبيانات التواصل",
+      "completeProfileSubtitle": "التخصص والعيادة والمستندات"
     }
   },
   "notifications": {
     "title": "الإشعارات",
     "reminderTitle": "تذكير بالموعد",
     "reminderDescription": "موعدك مع {} غدًا في {}",
-    "timeAgo": "منذ {} دقائق"
+    "timeAgo": "منذ {} دقائق",
+    "empty": "لا توجد إشعارات",
+    "markAllRead": "تعليم الكل كمقروء"
   },
   "chat": {
     "title": "الرسائل",

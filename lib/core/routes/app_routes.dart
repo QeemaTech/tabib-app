@@ -31,6 +31,7 @@ import '../../features/home/presentation/views/user/doctor_details_view.dart';
 import '../../features/home/presentation/views/user/see_more_specialization.dart';
 import '../../features/layout/bottom_nav_bar.dart';
 import '../../features/layout/view_model/layout_view_model.dart';
+import '../../features/notification/presentation/view_model/notifications_view_model.dart';
 import '../../features/notification/presentation/views/notification_view.dart';
 import '../../features/patients/presentation/views/patient_appointment_details_view.dart';
 import '../../features/profile/presentation/views/doc/doctor_personal_info_view.dart';
@@ -120,7 +121,10 @@ class Routes {
         );
       case AppRoutes.notificationView:
         return MaterialPageRoute(
-          builder: (context) => const NotificationView(),
+          builder: (context) => BlocProvider(
+            create: (_) => getIt<NotificationsViewModel>()..loadNotifications(),
+            child: const NotificationView(),
+          ),
         );
       case AppRoutes.doctorDetailsView:
         final doctorId = settings.arguments as String? ?? '';

@@ -55,6 +55,9 @@ import 'package:tabib_app/features/wallet/data/models/response/wallet_response.d
 import 'package:tabib_app/features/wallet/data/models/response/wallet_transactions_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawal_details_response.dart';
 import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawals_response.dart';
+import 'package:tabib_app/features/notification/data/models/response/mark_all_read_response.dart';
+import 'package:tabib_app/features/notification/data/models/response/notification_read_response.dart';
+import 'package:tabib_app/features/notification/data/models/response/notifications_response.dart';
 import 'package:tabib_app/features/calls/data/models/request/agora_token_request.dart';
 import 'package:tabib_app/features/calls/data/models/response/agora_token_response.dart';
 import 'package:tabib_app/features/calls/data/models/response/end_call_response.dart';
@@ -337,4 +340,34 @@ abstract class ApiClient {
 
   @POST(EndPoint.endCall)
   Future<EndCallResponse> endCall(@Path('callId') String callId);
+
+  @GET(EndPoint.patientNotifications)
+  Future<NotificationsResponse> getPatientNotifications({
+    @Query('page') required int page,
+    @Query('limit') required int limit,
+    @Query('isRead') bool? isRead,
+  });
+
+  @PATCH(EndPoint.patientNotificationsReadAll)
+  Future<MarkAllReadResponse> markAllPatientNotificationsRead();
+
+  @PATCH(EndPoint.patientNotificationRead)
+  Future<NotificationReadResponse> markPatientNotificationRead(
+    @Path('id') String id,
+  );
+
+  @GET(EndPoint.doctorNotifications)
+  Future<NotificationsResponse> getDoctorNotifications({
+    @Query('page') required int page,
+    @Query('limit') required int limit,
+    @Query('isRead') bool? isRead,
+  });
+
+  @PATCH(EndPoint.doctorNotificationsReadAll)
+  Future<MarkAllReadResponse> markAllDoctorNotificationsRead();
+
+  @PATCH(EndPoint.doctorNotificationRead)
+  Future<NotificationReadResponse> markDoctorNotificationRead(
+    @Path('id') String id,
+  );
 }

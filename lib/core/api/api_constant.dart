@@ -66,6 +66,13 @@ class EndPoint {
   static const String endCall = "/calls/{callId}/end";
   static const String registerDevice = "/device/register";
   static const String unregisterDevice = "/device/unregister";
-
-
+  static const String patientNotifications = "/patient/notifications";
+  static const String patientNotificationsReadAll =
+      "/patient/notifications/read-all";
+  static const String patientNotificationRead =
+      "/patient/notifications/{id}/read";
+  static const String doctorNotifications = "/doctor/notifications";
+  static const String doctorNotificationsReadAll =
+      "/doctor/notifications/read-all";
+  static const String doctorNotificationRead = "/doctor/notifications/{id}/read";
 }
