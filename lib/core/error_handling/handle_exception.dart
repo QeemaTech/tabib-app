@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -30,6 +32,7 @@ class NetworkException {
       }
     }
     else {
+      log(exception.toString(), name: 'NetworkException');
       return 'errors.unknown'.tr();
     }
   }

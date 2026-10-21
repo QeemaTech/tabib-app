@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:tabib_app/core/error_handling/result.dart';
 
@@ -11,6 +13,7 @@ Future<Result<T>> executeApi<T>(Future<T> Function() callApi) async {
     if (e is Exception) {
       return Failure(NetworkException.getMessageError(e));
     }
+    log(e.toString(), name: 'executeApi');
     return Failure('errors.unknown'.tr());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tabib_app/features/calls/data/models/json_scalars.dart';
 
 part 'end_call_response.g.dart';
 
@@ -22,19 +23,19 @@ class EndCallResponse {
 
 @JsonSerializable(explicitToJson: true)
 class EndCallDataResponse {
-  @JsonKey(name: 'id')
+  @JsonKey(name: 'id', fromJson: readJsonString)
   final String? id;
-  @JsonKey(name: 'appointmentId')
+  @JsonKey(name: 'appointmentId', fromJson: readJsonString)
   final String? appointmentId;
-  @JsonKey(name: 'channelName')
+  @JsonKey(name: 'channelName', fromJson: readJsonString)
   final String? channelName;
-  @JsonKey(name: 'callType')
+  @JsonKey(name: 'callType', fromJson: readJsonString)
   final String? callType;
-  @JsonKey(name: 'status')
+  @JsonKey(name: 'status', fromJson: readJsonString)
   final String? status;
-  @JsonKey(name: 'startedAt')
+  @JsonKey(name: 'startedAt', fromJson: readJsonString)
   final String? startedAt;
-  @JsonKey(name: 'token')
+  @JsonKey(name: 'token', fromJson: readJsonString)
   final String? token;
   @JsonKey(name: 'durationSeconds')
   final int? durationSeconds;

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tabib_app/features/calls/data/models/json_scalars.dart';
 
 part 'agora_token_response.g.dart';
 
@@ -22,13 +23,13 @@ class AgoraTokenResponse {
 
 @JsonSerializable(explicitToJson: true)
 class AgoraTokenDataResponse {
-  @JsonKey(name: 'token')
+  @JsonKey(name: 'token', fromJson: readJsonString)
   final String? token;
-  @JsonKey(name: 'channelName')
+  @JsonKey(name: 'channelName', fromJson: readJsonString)
   final String? channelName;
-  @JsonKey(name: 'appId')
+  @JsonKey(name: 'appId', fromJson: readJsonString)
   final String? appId;
-  @JsonKey(name: 'expiresAt')
+  @JsonKey(name: 'expiresAt', fromJson: readJsonString)
   final String? expiresAt;
   @JsonKey(name: 'uid')
   final int? uid;

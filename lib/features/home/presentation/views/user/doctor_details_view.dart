@@ -133,22 +133,22 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                   DoctorSpecializationsSection(specialties: doctor.specialties),
                   DoctorAboutSection(bio: doctor.localizedBio(languageCode)),
                   DoctorCertificatesSection(certificates: doctor.certificates),
-                  Text(
-                    'home.doctorDetails.selectConsultationType'.tr(),
-                    style: theme.bold12,
-                  ),
-                  CustomDropdownField(
-                    hintText: 'home.doctorDetails.selectConsultationType'.tr(),
-                    items: _consultationItems,
-                    onChanged: (value) {
-                      if (value == null) return;
-                      final apiValue =
-                          _consultationApiValues[value] ?? value;
-                      context
-                          .read<DoctorDetailsViewModel>()
-                          .selectConsultationType(apiValue);
-                    },
-                  ),
+                  // Text(
+                  //   'home.doctorDetails.selectConsultationType'.tr(),
+                  //   style: theme.bold12,
+                  // ),
+                  // CustomDropdownField(
+                  //   hintText: 'home.doctorDetails.selectConsultationType'.tr(),
+                  //   items: _consultationItems,
+                  //   onChanged: (value) {
+                  //     if (value == null) return;
+                  //     final apiValue =
+                  //         _consultationApiValues[value] ?? value;
+                  //     context
+                  //         .read<DoctorDetailsViewModel>()
+                  //         .selectConsultationType(apiValue);
+                  //   },
+                  // ),
                   Text(
                     'home.doctorDetails.notes'.tr(),
                     style: theme.bold12,
