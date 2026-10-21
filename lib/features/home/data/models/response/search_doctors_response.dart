@@ -46,6 +46,7 @@ class SearchDoctorItemResponse {
   @JsonKey(name: 'durationCallMinutes')
   final int? durationCallMinutes;
   @JsonKey(name: 'channels')
+  @SearchDoctorChannelListConverter()
   final List<String>? channels;
   @JsonKey(name: 'ratingAvg')
   final num? ratingAvg;
@@ -108,4 +109,29 @@ class SearchDoctorsMetaResponse {
       _$SearchDoctorsMetaResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$SearchDoctorsMetaResponseToJson(this);
+}
+
+class SearchDoctorChannelListConverter
+    implements JsonConverter<List<String>?, Object?> {
+  const SearchDoctorChannelListConverter();
+
+  @override
+  List<String>? fromJson(Object? json) {
+    if (json is! List) return null;
+    final channels = <String>[];
+    for (final item in json) {
+      if (item is String && item.isNotEmpty) {
+        channels.add(item);
+      } else if (item is Map) {
+        final type = item['type'];
+        if (type is String && type.isNotEmpty) {
+          channels.add(type);
+        }
+      }
+    }
+    return channels;
+  }
+
+  @override
+  Object? toJson(List<String>? object) => object;
 }
