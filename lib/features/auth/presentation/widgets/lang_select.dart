@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 
 class LanguageSelector extends StatefulWidget {
-  const LanguageSelector({super.key, required this.onLanguageSelected});
-  final ValueChanged<String> onLanguageSelected;
+  const LanguageSelector({super.key, this.onLanguageSelected});
+  final ValueChanged<String>? onLanguageSelected;
   @override
   State<LanguageSelector> createState() => _LanguageSelectorState();
 }
@@ -19,7 +19,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   }
 
   Future<void> _selectLanguage(String value) async {
-    widget.onLanguageSelected(value);
+    widget.onLanguageSelected?.call(value);
     await context.setLocale(Locale(value));
     setState(() {
       selectedLanguage = value;

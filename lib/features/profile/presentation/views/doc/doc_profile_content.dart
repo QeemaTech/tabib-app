@@ -10,6 +10,7 @@ import 'package:tabib_app/features/profile/presentation/view_model/doctor_profil
 import 'package:tabib_app/features/profile/presentation/widgets/doc_profile_header.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/doc_profile_stats_row.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/doctor_profile_summary_card.dart';
+import 'package:tabib_app/features/profile/presentation/widgets/profile_language_section.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/profile_menu_item.dart';
 
 class DocProfileContent extends StatelessWidget {
@@ -78,6 +79,8 @@ class DocProfileContent extends StatelessWidget {
             }
           },
         ),
+        const SizedBox(height: 12),
+        const ProfileLanguageSection(),
         const SizedBox(height: 12),
         ProfileMenuItem(
           title: 'profile.logout'.tr(),

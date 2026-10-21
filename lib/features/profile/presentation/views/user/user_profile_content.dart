@@ -8,6 +8,7 @@ import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_state.dart';
 import 'package:tabib_app/features/profile/presentation/view_model/patient_profile_view_model.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/patient_profile_summary_card.dart';
+import 'package:tabib_app/features/profile/presentation/widgets/profile_language_section.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/profile_menu_item.dart';
 import 'package:tabib_app/features/profile/presentation/widgets/user_profile_header.dart';
 
@@ -64,10 +65,7 @@ class UserProfileContent extends StatelessWidget {
                 Navigator.of(context).pushNamed(AppRoutes.patientInvoicesView);
               },
             ),
-            Text(
-              'profile.language'.tr(),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            const ProfileLanguageSection(),
             ProfileMenuItem(
               title: 'profile.logout'.tr(),
               icon: Icons.logout,

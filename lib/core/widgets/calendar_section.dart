@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:tabib_app/core/localization/intl_locale.dart';
 import 'package:tabib_app/features/home/presentation/widgets/details_section.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -44,7 +45,7 @@ class _CalendarSectionState extends State<CalendarSection> {
     return DetailsSection(
       title: 'home.doctorDetails.selectDay'.tr(),
       child: TableCalendar(
-        locale: context.locale.languageCode,
+        locale: intlLocale(context.locale.languageCode),
         firstDay: DateTime.now(),
         calendarFormat: widget.calendarFormat ?? CalendarFormat.week,
         lastDay: DateTime.utc(2030, 3, 14),
