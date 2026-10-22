@@ -4,72 +4,92 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tabib_app/core/api/api_constant.dart';
-import 'package:tabib_app/features/auth/data/models/request/login_request.dart';
-import 'package:tabib_app/features/auth/data/models/request/register_device_request.dart';
-import 'package:tabib_app/features/auth/data/models/request/register_request.dart';
-import 'package:tabib_app/features/auth/data/models/request/submit_doctor_professional_request.dart';
-import 'package:tabib_app/features/auth/data/models/request/verify_otp_request.dart';
-import 'package:tabib_app/features/auth/data/models/response/doctor_documents_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/doctor_professional_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/patient_health_profile_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/patient_medical_info_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/professional_titles_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/register_device_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/register_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/unregister_device_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/specialties_response.dart';
-import 'package:tabib_app/features/auth/data/models/response/verify_otp_response.dart';
-import 'package:tabib_app/features/appointments/data/models/request/cancel_appointment_request.dart';
-import 'package:tabib_app/features/appointments/data/models/request/create_payment_request.dart';
-import 'package:tabib_app/features/appointments/data/models/request/validate_coupon_request.dart';
-import 'package:tabib_app/features/appointments/data/models/response/cancel_appointment_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/create_payment_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/patient_appointment_details_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/patient_invoice_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/patient_invoices_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/patient_appointments_response.dart';
-import 'package:tabib_app/features/appointments/data/models/response/validate_coupon_response.dart';
-import 'package:tabib_app/features/home/data/models/request/book_appointment_request.dart';
-import 'package:tabib_app/features/home/data/models/response/book_appointment_response.dart';
-import 'package:tabib_app/features/home/data/models/response/doctor_availability_response.dart';
-import 'package:tabib_app/features/home/data/models/response/doctor_dashboard_response.dart';
-import 'package:tabib_app/features/home/data/models/response/doctor_details_response.dart';
-import 'package:tabib_app/features/home/data/models/response/patient_home_response.dart';
-import 'package:tabib_app/features/home/data/models/response/search_doctors_response.dart';
-import 'package:tabib_app/features/records/data/models/response/patient_prescriptions_response.dart';
-import 'package:tabib_app/features/records/data/models/response/patient_record_detail_response.dart';
-import 'package:tabib_app/features/records/data/models/response/patient_reports_response.dart';
-import 'package:tabib_app/features/patients/data/models/response/doctor_patients_response.dart';
-import 'package:tabib_app/features/patients/data/models/response/patient_file_response.dart';
-import 'package:tabib_app/features/profile/data/models/request/update_patient_profile_request.dart';
-import 'package:tabib_app/features/profile/data/models/response/doctor_profile_response.dart';
-import 'package:tabib_app/features/profile/data/models/response/patient_profile_response.dart';
-import 'package:tabib_app/features/reservations/data/models/request/create_doctor_report_request.dart';
-import 'package:tabib_app/features/reservations/data/models/request/reject_appointment_request.dart';
-import 'package:tabib_app/features/reservations/data/models/response/create_doctor_report_response.dart';
-import 'package:tabib_app/features/reservations/data/models/response/doctor_appointments_response.dart';
-import 'package:tabib_app/features/schedule/data/models/request/replace_week_schedule_request.dart';
-import 'package:tabib_app/features/schedule/data/models/request/update_day_schedule_request.dart';
-import 'package:tabib_app/features/schedule/data/models/response/doctor_schedule_response.dart';
-import 'package:tabib_app/features/schedule/data/models/response/schedule_preview_response.dart';
-import 'package:tabib_app/features/wallet/data/models/request/create_withdrawal_request.dart';
-import 'package:tabib_app/features/wallet/data/models/response/doctor_wallet_response.dart';
-import 'package:tabib_app/features/wallet/data/models/response/wallet_response.dart';
-import 'package:tabib_app/features/wallet/data/models/response/wallet_transactions_response.dart';
-import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawal_details_response.dart';
-import 'package:tabib_app/features/wallet/data/models/response/wallet_withdrawals_response.dart';
-import 'package:tabib_app/features/notification/data/models/response/mark_all_read_response.dart';
-import 'package:tabib_app/features/notification/data/models/response/notification_read_response.dart';
-import 'package:tabib_app/features/notification/data/models/response/notifications_response.dart';
-import 'package:tabib_app/features/calls/data/models/request/agora_token_request.dart';
-import 'package:tabib_app/features/calls/data/models/response/agora_token_response.dart';
-import 'package:tabib_app/features/calls/data/models/response/end_call_response.dart';
-import 'package:tabib_app/features/chat/data/models/request/start_consultation_request.dart';
-import 'package:tabib_app/features/chat/data/models/response/consultations_response.dart';
-import 'package:tabib_app/features/chat/data/models/response/messages_response.dart';
-import 'package:tabib_app/features/chat/data/models/response/start_consultation_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/register_device_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/register_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/submit_doctor_professional_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/doctor_documents_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/doctor_professional_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/patient_health_profile_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/patient_medical_info_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/professional_titles_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/register_device_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/unregister_device_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/specialties_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/register_device_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/register_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/register_device_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/unregister_device_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/specialties_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/request/cancel_appointment_request.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/request/create_payment_request.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/request/validate_coupon_request.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/cancel_appointment_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/create_payment_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/patient_appointment_details_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/patient_invoice_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/patient_invoices_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/patient_appointments_response.dart';
+import 'package:tabib_app/features/patient_flow/appointments/data/models/response/validate_coupon_response.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/request/book_appointment_request.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/response/book_appointment_response.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/response/doctor_availability_response.dart';
+import 'package:tabib_app/features/doctor_flow/home/data/models/response/doctor_dashboard_response.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/response/doctor_details_response.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/response/patient_home_response.dart';
+import 'package:tabib_app/features/patient_flow/home/data/models/response/search_doctors_response.dart';
+import 'package:tabib_app/features/patient_flow/records/data/models/response/patient_prescriptions_response.dart';
+import 'package:tabib_app/features/patient_flow/records/data/models/response/patient_record_detail_response.dart';
+import 'package:tabib_app/features/patient_flow/records/data/models/response/patient_reports_response.dart';
+import 'package:tabib_app/features/doctor_flow/patients/data/models/response/doctor_patients_response.dart';
+import 'package:tabib_app/features/doctor_flow/patients/data/models/response/patient_file_response.dart';
+import 'package:tabib_app/features/patient_flow/profile/data/models/request/update_patient_profile_request.dart';
+import 'package:tabib_app/features/doctor_flow/profile/data/models/response/doctor_profile_response.dart';
+import 'package:tabib_app/features/patient_flow/profile/data/models/response/patient_profile_response.dart';
+import 'package:tabib_app/features/doctor_flow/reservations/data/models/request/create_doctor_report_request.dart';
+import 'package:tabib_app/features/doctor_flow/reservations/data/models/request/reject_appointment_request.dart';
+import 'package:tabib_app/features/doctor_flow/reservations/data/models/response/create_doctor_report_response.dart';
+import 'package:tabib_app/features/doctor_flow/reservations/data/models/response/doctor_appointments_response.dart';
+import 'package:tabib_app/features/doctor_flow/schedule/data/models/request/replace_week_schedule_request.dart';
+import 'package:tabib_app/features/doctor_flow/schedule/data/models/request/update_day_schedule_request.dart';
+import 'package:tabib_app/features/doctor_flow/schedule/data/models/response/doctor_schedule_response.dart';
+import 'package:tabib_app/features/doctor_flow/schedule/data/models/response/schedule_preview_response.dart';
+import 'package:tabib_app/features/doctor_flow/wallet/data/models/request/create_withdrawal_request.dart';
+import 'package:tabib_app/features/doctor_flow/wallet/data/models/response/doctor_wallet_response.dart';
+import 'package:tabib_app/features/patient_flow/wallet/data/models/response/wallet_response.dart';
+import 'package:tabib_app/features/doctor_flow/wallet/data/models/response/wallet_transactions_response.dart';
+import 'package:tabib_app/features/doctor_flow/wallet/data/models/response/wallet_withdrawal_details_response.dart';
+import 'package:tabib_app/features/doctor_flow/wallet/data/models/response/wallet_withdrawals_response.dart';
+import 'package:tabib_app/features/doctor_flow/notification/data/models/response/mark_all_read_response.dart';
+import 'package:tabib_app/features/doctor_flow/notification/data/models/response/notification_read_response.dart';
+import 'package:tabib_app/features/doctor_flow/notification/data/models/response/notifications_response.dart';
+import 'package:tabib_app/features/patient_flow/notification/data/models/response/mark_all_read_response.dart';
+import 'package:tabib_app/features/patient_flow/notification/data/models/response/notification_read_response.dart';
+import 'package:tabib_app/features/patient_flow/notification/data/models/response/notifications_response.dart';
+import 'package:tabib_app/features/doctor_flow/calls/data/models/request/agora_token_request.dart';
+import 'package:tabib_app/features/doctor_flow/calls/data/models/response/agora_token_response.dart';
+import 'package:tabib_app/features/doctor_flow/calls/data/models/response/end_call_response.dart';
+import 'package:tabib_app/features/patient_flow/calls/data/models/request/agora_token_request.dart';
+import 'package:tabib_app/features/patient_flow/calls/data/models/response/agora_token_response.dart';
+import 'package:tabib_app/features/patient_flow/calls/data/models/response/end_call_response.dart';
+import 'package:tabib_app/features/doctor_flow/chat/data/models/request/start_consultation_request.dart';
+import 'package:tabib_app/features/doctor_flow/chat/data/models/response/consultations_response.dart';
+import 'package:tabib_app/features/doctor_flow/chat/data/models/response/messages_response.dart';
+import 'package:tabib_app/features/doctor_flow/chat/data/models/response/start_consultation_response.dart';
+import 'package:tabib_app/features/patient_flow/chat/data/models/request/start_consultation_request.dart';
+import 'package:tabib_app/features/patient_flow/chat/data/models/response/consultations_response.dart';
+import 'package:tabib_app/features/patient_flow/chat/data/models/response/messages_response.dart';
+import 'package:tabib_app/features/patient_flow/chat/data/models/response/start_consultation_response.dart';
 
 part 'api_client.g.dart';
+
 
 @RestApi()
 abstract class ApiClient {
@@ -77,25 +97,53 @@ abstract class ApiClient {
   factory ApiClient(Dio dio, {String? baseUrl}) = _ApiClient;
 
   @POST(EndPoint.registerPatient)
-  Future<RegisterResponse> registerPatient(@Body() RegisterRequest request);
+  Future<PatientRegisterResponse> registerPatient(
+    @Body() PatientRegisterRequest request,
+  );
 
   @POST(EndPoint.registerDoctor)
-  Future<RegisterResponse> registerDoctor(@Body() RegisterRequest request);
+  Future<DoctorRegisterResponse> registerDoctor(
+    @Body() DoctorRegisterRequest request,
+  );
 
   @POST(EndPoint.sendOtp)
-  Future<RegisterResponse> sendOtp(@Body() LoginRequest request);
+  Future<DoctorRegisterResponse> sendDoctorOtp(
+    @Body() DoctorLoginRequest request,
+  );
+
+  @POST(EndPoint.sendOtp)
+  Future<PatientRegisterResponse> sendPatientOtp(
+    @Body() PatientLoginRequest request,
+  );
 
   @POST(EndPoint.verifyOtp)
-  Future<VerifyOtpResponse> verifyOtp(@Body() VerifyOtpRequest request);
+  Future<DoctorVerifyOtpResponse> verifyDoctorOtp(
+    @Body() DoctorVerifyOtpRequest request,
+  );
+
+  @POST(EndPoint.verifyOtp)
+  Future<PatientVerifyOtpResponse> verifyPatientOtp(
+    @Body() PatientVerifyOtpRequest request,
+  );
 
   @POST(EndPoint.registerDevice)
-  Future<RegisterDeviceResponse> registerDevice(
-    @Body() RegisterDeviceRequest request,
+  Future<DoctorRegisterDeviceResponse> registerDoctorDevice(
+    @Body() DoctorRegisterDeviceRequest request,
+  );
+
+  @POST(EndPoint.registerDevice)
+  Future<PatientRegisterDeviceResponse> registerPatientDevice(
+    @Body() PatientRegisterDeviceRequest request,
   );
 
   @DELETE(EndPoint.registerDevice)
-  Future<UnregisterDeviceResponse> unregisterDevice(
-    @Body() RegisterDeviceRequest request,
+  Future<DoctorUnregisterDeviceResponse> unregisterDoctorDevice(
+    @Body() DoctorRegisterDeviceRequest request,
+  );
+
+  @DELETE(EndPoint.registerDevice)
+  Future<PatientUnregisterDeviceResponse> unregisterPatientDevice(
+    @Body() PatientRegisterDeviceRequest request,
   );
 
   @MultiPart()
@@ -324,7 +372,12 @@ abstract class ApiClient {
   Future<DoctorProfileResponse> getDoctorProfile();
 
   @GET(EndPoint.specialties)
-  Future<SpecialtiesResponse> getSpecialties({
+  Future<DoctorSpecialtiesResponse> getDoctorSpecialties({
+    @Query('parentId') String? parentId,
+  });
+
+  @GET(EndPoint.specialties)
+  Future<PatientSpecialtiesResponse> getPatientSpecialties({
     @Query('parentId') String? parentId,
   });
 
@@ -347,60 +400,96 @@ abstract class ApiClient {
   });
 
   @GET(EndPoint.consultations)
-  Future<ConsultationsResponse> getConsultations();
+  Future<DoctorConsultationsResponse> getDoctorConsultations();
+
+  @GET(EndPoint.consultations)
+  Future<PatientConsultationsResponse> getPatientConsultations();
 
   @POST(EndPoint.consultationsStart)
-  Future<StartConsultationResponse> startConsultation(
+  Future<DoctorStartConsultationResponse> startDoctorConsultation(
     @Path('appointmentId') String appointmentId,
-    @Body() StartConsultationRequest request,
+    @Body() DoctorStartConsultationRequest request,
+  );
+
+  @POST(EndPoint.consultationsStart)
+  Future<PatientStartConsultationResponse> startPatientConsultation(
+    @Path('appointmentId') String appointmentId,
+    @Body() PatientStartConsultationRequest request,
   );
 
   @GET(EndPoint.consultationMessages)
-  Future<MessagesResponse> getConsultationMessages(
+  Future<DoctorMessagesResponse> getDoctorConsultationMessages(
+    @Path('consultationId') String consultationId, {
+    @Query('limit') int? limit,
+    @Query('before') String? before,
+  });
+
+  @GET(EndPoint.consultationMessages)
+  Future<PatientMessagesResponse> getPatientConsultationMessages(
     @Path('consultationId') String consultationId, {
     @Query('limit') int? limit,
     @Query('before') String? before,
   });
 
   @POST(EndPoint.agoraToken)
-  Future<AgoraTokenResponse> getAgoraToken(@Body() AgoraTokenRequest request);
+  Future<DoctorAgoraTokenResponse> getDoctorAgoraToken(
+    @Body() DoctorAgoraTokenRequest request,
+  );
+
+  @POST(EndPoint.agoraToken)
+  Future<PatientAgoraTokenResponse> getPatientAgoraToken(
+    @Body() PatientAgoraTokenRequest request,
+  );
 
   @POST(EndPoint.startCall)
-  Future<EndCallResponse> startCall(
+  Future<DoctorEndCallResponse> startDoctorCall(
     @Path('appointmentId') String appointmentId,
-    @Body() StartConsultationRequest request,
+    @Body() DoctorStartConsultationRequest request,
+  );
+
+  @POST(EndPoint.startCall)
+  Future<PatientEndCallResponse> startPatientCall(
+    @Path('appointmentId') String appointmentId,
+    @Body() PatientStartConsultationRequest request,
   );
 
   @POST(EndPoint.endCall)
-  Future<EndCallResponse> endCall(@Path('callId') String callId);
+  Future<DoctorEndCallResponse> endDoctorCall(
+    @Path('callId') String callId,
+  );
+
+  @POST(EndPoint.endCall)
+  Future<PatientEndCallResponse> endPatientCall(
+    @Path('callId') String callId,
+  );
 
   @GET(EndPoint.patientNotifications)
-  Future<NotificationsResponse> getPatientNotifications({
+  Future<PatientNotificationsResponse> getPatientNotifications({
     @Query('page') required int page,
     @Query('limit') required int limit,
     @Query('isRead') bool? isRead,
   });
 
   @PATCH(EndPoint.patientNotificationsReadAll)
-  Future<MarkAllReadResponse> markAllPatientNotificationsRead();
+  Future<PatientMarkAllReadResponse>
+  markAllPatientNotificationsRead();
 
   @PATCH(EndPoint.patientNotificationRead)
-  Future<NotificationReadResponse> markPatientNotificationRead(
-    @Path('id') String id,
-  );
+  Future<PatientNotificationReadResponse>
+  markPatientNotificationRead(@Path('id') String id);
 
   @GET(EndPoint.doctorNotifications)
-  Future<NotificationsResponse> getDoctorNotifications({
+  Future<DoctorNotificationsResponse> getDoctorNotifications({
     @Query('page') required int page,
     @Query('limit') required int limit,
     @Query('isRead') bool? isRead,
   });
 
   @PATCH(EndPoint.doctorNotificationsReadAll)
-  Future<MarkAllReadResponse> markAllDoctorNotificationsRead();
+  Future<DoctorMarkAllReadResponse>
+  markAllDoctorNotificationsRead();
 
   @PATCH(EndPoint.doctorNotificationRead)
-  Future<NotificationReadResponse> markDoctorNotificationRead(
-    @Path('id') String id,
-  );
+  Future<DoctorNotificationReadResponse>
+  markDoctorNotificationRead(@Path('id') String id);
 }

@@ -12,7 +12,8 @@ import 'package:tabib_app/core/routes/initial_app_route.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/services/fcm_service.dart';
 import 'package:tabib_app/core/services/local_notification_service.dart';
-import 'package:tabib_app/features/auth/domain/repo/auth_repo.dart';
+import 'package:tabib_app/features/doctor_flow/auth/domain/repo/auth_repo.dart';
+import 'package:tabib_app/features/patient_flow/auth/domain/repo/auth_repo.dart';
 import 'package:tabib_app/tabib_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -44,7 +45,12 @@ void main() async {
     if (accessToken.isEmpty) {
       return;
     }
-    await getIt<AuthRepo>().registerDevice();
+    final role = CachedUserRole.uiRole;
+    if (role == 'doctor' || role == 'doc') {
+      await getIt<DoctorAuthRepo>().registerDevice();
+      return;
+    }
+    await getIt<PatientAuthRepo>().registerDevice();
   });
 
   final initialAppRoute = await initRouteApp();

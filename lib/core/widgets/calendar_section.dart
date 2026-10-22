@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tabib_app/core/localization/intl_locale.dart';
-import 'package:tabib_app/features/home/presentation/widgets/details_section.dart';
+import 'package:tabib_app/core/widgets/details_section.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarSection extends StatefulWidget {
