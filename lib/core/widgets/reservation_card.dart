@@ -299,20 +299,26 @@ class ReservationActionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              label,
-              style: theme.bold12.copyWith(color: color, fontSize: 14),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.bold12.copyWith(color: color, fontSize: 14),
+              ),
             ),
-            const SizedBox(width: 8),
-            if (iconPath != null)
-              CustomImageView(
-                imagePath: iconPath!,
-                height: 20,
-                width: 20,
-                color: color,
-              )
-            else if (iconData != null)
-              Icon(iconData, size: 20, color: color),
+            if (iconPath != null || iconData != null) ...[
+              const SizedBox(width: 8),
+              if (iconPath != null)
+                CustomImageView(
+                  imagePath: iconPath!,
+                  height: 20,
+                  width: 20,
+                  color: color,
+                )
+              else
+                Icon(iconData, size: 20, color: color),
+            ],
           ],
         ),
       ),
