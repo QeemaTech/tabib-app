@@ -6,7 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
 import 'package:tabib_app/core/routes/routes.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/send_otp_request.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/request/verify_otp_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/verify_reset_code_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/presentation/view/reset_password_view.dart';
 import 'package:tabib_app/features/patient_flow/auth/presentation/view_model/auth_constants.dart';
 import 'package:tabib_app/features/patient_flow/auth/presentation/view_model/auth_state.dart';
 import 'package:tabib_app/features/patient_flow/auth/presentation/view_model/auth_view_model.dart';
@@ -14,7 +17,12 @@ import 'package:tabib_app/features/patient_flow/auth/presentation/view_model/aut
 import 'otp_widget.dart';
 
 class OtpBottomSheet extends StatefulWidget {
-  const OtpBottomSheet({super.key});
+  const OtpBottomSheet({
+    super.key,
+    this.purpose = OtpPurpose.accountVerification,
+  });
+
+  final OtpPurpose purpose;
 
   @override
   State<OtpBottomSheet> createState() => _OtpBottomSheetState();
@@ -28,6 +36,8 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
   late int _remainingTime;
   String _otpCode = '';
 
+  bool get _isReset => widget.purpose == OtpPurpose.passwordReset;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +45,9 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
     _remainingTime = _resendAfter;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final seconds = _resendSecondsFromState(context.read<PatientAuthViewModel>().state);
+      final seconds = _resendSecondsFromState(
+        context.read<PatientAuthViewModel>().state,
+      );
       setState(() {
         _resendAfter = seconds;
         _remainingTime = seconds;
@@ -45,10 +57,12 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
   }
 
   int _resendSecondsFromState(AuthState state) {
-    final fromRegister = state.registerModel.data?.data?.resendAfter;
-    final fromLogin = state.loginModel.data?.data?.resendAfter;
-    final seconds = fromRegister ?? fromLogin ?? _defaultResendAfter;
-    return seconds > 0 ? seconds : _defaultResendAfter;
+    final seconds = _isReset
+        ? state.forgotPasswordModel.data?.data?.resendAfter
+        : state.sendOtpModel.data?.data?.resendAfter ??
+              state.registerModel.data?.data?.resendAfter;
+    final value = seconds ?? _defaultResendAfter;
+    return value > 0 ? value : _defaultResendAfter;
   }
 
   void _startTimer() {
@@ -63,10 +77,17 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
           _remainingTime--;
         } else {
           timer.cancel();
-          _remainingTime = _resendAfter;
         }
       });
     });
+  }
+
+  void _restartTimer(int seconds) {
+    setState(() {
+      _resendAfter = seconds > 0 ? seconds : _defaultResendAfter;
+      _remainingTime = _resendAfter;
+    });
+    _startTimer();
   }
 
   @override
@@ -75,45 +96,131 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
     super.dispose();
   }
 
-  void _verifyOtp(BuildContext context) {
+  void _verify(BuildContext context) {
     if (_otpCode.length != 6) return;
     final authViewModel = context.read<PatientAuthViewModel>();
-    final state = authViewModel.state;
+    final authState = authViewModel.state;
+    if (_isReset) {
+      authViewModel.verifyResetCode(
+        PatientVerifyResetCodeRequest(
+          phone: authState.phone,
+          countryCode: authState.countryCode,
+          code: _otpCode,
+        ),
+      );
+      return;
+    }
     authViewModel.verifyOtp(
       PatientVerifyOtpRequest(
-        phone: state.phone,
-        countryCode: state.countryCode,
+        phone: authState.phone,
+        countryCode: authState.countryCode,
         code: _otpCode,
-        role: state.role,
+        role: authState.role,
       ),
     );
   }
 
-  void _onVerified(BuildContext context, AuthState state) {
+  void _resend(BuildContext context) {
+    if (_remainingTime > 0) return;
+    final authViewModel = context.read<PatientAuthViewModel>();
+    final authState = authViewModel.state;
+    final request = PatientSendOtpRequest(
+      phone: authState.phone,
+      countryCode: authState.countryCode,
+      role: authState.role,
+    );
+    if (_isReset) {
+      authViewModel.forgotPassword(request);
+    } else {
+      authViewModel.sendOtp(request);
+    }
+  }
+
+  void _onAccountVerified(BuildContext context, AuthState state) {
+    CustomToast.success(context, 'auth.otp.verifiedGoLogin'.tr());
+    final navigator = Navigator.of(context);
     final uiRole = AuthRole.toUi(state.role);
-    final targetRoute = state.authMode == AuthMode.signup
-        ? AppRoutes.completeProfileView
-        : AppRoutes.mainLayoutView;
-    Navigator.of(context).pop();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      targetRoute,
-      (route) => false,
-      arguments: uiRole,
+    navigator.pop();
+    if (state.authMode == AuthMode.signup) {
+      navigator.pushNamedAndRemoveUntil(
+        AppRoutes.loginView,
+        (route) => false,
+        arguments: {'mode': AuthMode.login, 'role': uiRole},
+      );
+    }
+  }
+
+  void _onResetVerified(BuildContext context) {
+    final navigator = Navigator.of(context);
+    final authViewModel = context.read<PatientAuthViewModel>();
+    navigator.pop();
+    navigator.push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: authViewModel,
+          child: const ResetPasswordView(),
+        ),
+      ),
     );
   }
+
+  AuthState? _listenedFrom;
 
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return BlocListener<PatientAuthViewModel, AuthState>(
-      listenWhen: (previous, current) =>
-          previous.verifyOtpModel != current.verifyOtpModel,
+      listenWhen: (previous, current) {
+        _listenedFrom = previous;
+        return _isReset
+            ? previous.verifyResetCodeModel != current.verifyResetCodeModel ||
+                  previous.forgotPasswordModel != current.forgotPasswordModel
+            : previous.verifyOtpModel != current.verifyOtpModel ||
+                  previous.sendOtpModel != current.sendOtpModel;
+      },
       listener: (context, state) {
-        if (state.verifyOtpModel.isError) {
+        final previous = _listenedFrom;
+        if (previous == null) return;
+        if (_isReset) {
+          if (previous.forgotPasswordModel != state.forgotPasswordModel) {
+            if (state.forgotPasswordModel.isError) {
+              CustomToast.error(
+                context,
+                state.forgotPasswordModel.errorMessage ?? '',
+              );
+            }
+            if (state.forgotPasswordModel.isLoaded) {
+              _restartTimer(_resendSecondsFromState(state));
+            }
+          }
+          if (previous.verifyResetCodeModel != state.verifyResetCodeModel) {
+            if (state.verifyResetCodeModel.isError) {
+              CustomToast.error(
+                context,
+                state.verifyResetCodeModel.errorMessage ?? '',
+              );
+            }
+            if (state.verifyResetCodeModel.isLoaded) {
+              _onResetVerified(context);
+            }
+          }
+          return;
+        }
+        if (previous.sendOtpModel != state.sendOtpModel) {
+          if (state.sendOtpModel.isError) {
+            CustomToast.error(context, state.sendOtpModel.errorMessage ?? '');
+          }
+          if (state.sendOtpModel.isLoaded) {
+            _restartTimer(_resendSecondsFromState(state));
+          }
+        }
+        if (previous.verifyOtpModel != state.verifyOtpModel &&
+            state.verifyOtpModel.isError) {
           CustomToast.error(context, state.verifyOtpModel.errorMessage ?? '');
         }
-        if (state.verifyOtpModel.isLoaded) {
-          _onVerified(context, state);
+        if (previous.verifyOtpModel != state.verifyOtpModel &&
+            state.verifyOtpModel.isLoaded) {
+          _onAccountVerified(context, state);
         }
       },
       child: Container(
@@ -175,31 +282,29 @@ class _OtpBottomSheetState extends State<OtpBottomSheet> {
                 isLoading: false,
               ),
               const SizedBox(height: 24),
-              Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'auth.otp.resendIn'.tr(
-                        args: ['$_remainingTime'],
-                      ),
-                      style: theme.regular14.copyWith(
-                        color: theme.primaryColor300,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'auth.otp.resend'.tr(),
-                      style: theme.medium16.copyWith(color: theme.blackColor),
-                    ),
-                  ],
+              if (_remainingTime > 0)
+                Text(
+                  'auth.otp.resendIn'.tr(args: ['$_remainingTime']),
+                  textAlign: TextAlign.center,
+                  style: theme.regular14.copyWith(color: theme.primaryColor300),
+                )
+              else
+                TextButton(
+                  onPressed: () => _resend(context),
+                  child: Text(
+                    'auth.otp.resend'.tr(),
+                    style: theme.medium16.copyWith(color: theme.blackColor),
+                  ),
                 ),
-              ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => _verifyOtp(context),
+                onPressed: () => _verify(context),
                 child: BlocBuilder<PatientAuthViewModel, AuthState>(
                   builder: (context, state) {
-                    return state.verifyOtpModel.isLoading
+                    final isLoading = _isReset
+                        ? state.verifyResetCodeModel.isLoading
+                        : state.verifyOtpModel.isLoading;
+                    return isLoading
                         ? SizedBox(
                             height: 24,
                             width: 24,

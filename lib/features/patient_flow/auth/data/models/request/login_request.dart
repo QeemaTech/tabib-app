@@ -8,14 +8,12 @@ class PatientLoginRequest {
   final String? phone;
   @JsonKey(name: 'countryCode')
   final String? countryCode;
+  @JsonKey(name: 'password')
+  final String? password;
   @JsonKey(name: 'role')
   final String? role;
 
-  PatientLoginRequest({
-    this.phone,
-    this.countryCode,
-    this.role,
-  });
+  PatientLoginRequest({this.phone, this.countryCode, this.password, this.role});
 
   factory PatientLoginRequest.fromJson(Map<String, dynamic> json) =>
       _$PatientLoginRequestFromJson(json);

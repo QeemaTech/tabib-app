@@ -5,6 +5,9 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:tabib_app/core/api/api_constant.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/reset_password_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/send_otp_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/request/verify_reset_code_request.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/register_device_request.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/submit_doctor_professional_request.dart';
@@ -18,8 +21,13 @@ import 'package:tabib_app/features/doctor_flow/auth/data/models/response/registe
 import 'package:tabib_app/features/doctor_flow/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/response/unregister_device_response.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/response/specialties_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/reset_password_response.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/doctor_flow/auth/data/models/response/verify_reset_code_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/reset_password_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/send_otp_request.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/request/verify_reset_code_request.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/request/register_device_request.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/request/verify_otp_request.dart';
@@ -27,7 +35,9 @@ import 'package:tabib_app/features/patient_flow/auth/data/models/response/regist
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/register_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/unregister_device_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/specialties_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/reset_password_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/verify_reset_code_response.dart';
 import 'package:tabib_app/features/patient_flow/appointments/data/models/request/cancel_appointment_request.dart';
 import 'package:tabib_app/features/patient_flow/appointments/data/models/request/create_payment_request.dart';
 import 'package:tabib_app/features/patient_flow/appointments/data/models/request/validate_coupon_request.dart';
@@ -90,7 +100,6 @@ import 'package:tabib_app/features/patient_flow/chat/data/models/response/start_
 
 part 'api_client.g.dart';
 
-
 @RestApi()
 abstract class ApiClient {
   @factoryMethod
@@ -106,14 +115,54 @@ abstract class ApiClient {
     @Body() DoctorRegisterRequest request,
   );
 
-  @POST(EndPoint.sendOtp)
-  Future<DoctorRegisterResponse> sendDoctorOtp(
+  @POST(EndPoint.login)
+  Future<PatientVerifyOtpResponse> loginPatient(
+    @Body() PatientLoginRequest request,
+  );
+
+  @POST(EndPoint.login)
+  Future<DoctorVerifyOtpResponse> loginDoctor(
     @Body() DoctorLoginRequest request,
   );
 
   @POST(EndPoint.sendOtp)
+  Future<DoctorRegisterResponse> sendDoctorOtp(
+    @Body() DoctorSendOtpRequest request,
+  );
+
+  @POST(EndPoint.sendOtp)
   Future<PatientRegisterResponse> sendPatientOtp(
-    @Body() PatientLoginRequest request,
+    @Body() PatientSendOtpRequest request,
+  );
+
+  @POST(EndPoint.forgotPassword)
+  Future<PatientRegisterResponse> forgotPatientPassword(
+    @Body() PatientSendOtpRequest request,
+  );
+
+  @POST(EndPoint.forgotPassword)
+  Future<DoctorRegisterResponse> forgotDoctorPassword(
+    @Body() DoctorSendOtpRequest request,
+  );
+
+  @POST(EndPoint.verifyResetCode)
+  Future<PatientVerifyResetCodeResponse> verifyPatientResetCode(
+    @Body() PatientVerifyResetCodeRequest request,
+  );
+
+  @POST(EndPoint.verifyResetCode)
+  Future<DoctorVerifyResetCodeResponse> verifyDoctorResetCode(
+    @Body() DoctorVerifyResetCodeRequest request,
+  );
+
+  @POST(EndPoint.resetPassword)
+  Future<PatientResetPasswordResponse> resetPatientPassword(
+    @Body() PatientResetPasswordRequest request,
+  );
+
+  @POST(EndPoint.resetPassword)
+  Future<DoctorResetPasswordResponse> resetDoctorPassword(
+    @Body() DoctorResetPasswordRequest request,
   );
 
   @POST(EndPoint.verifyOtp)
@@ -454,14 +503,10 @@ abstract class ApiClient {
   );
 
   @POST(EndPoint.endCall)
-  Future<DoctorEndCallResponse> endDoctorCall(
-    @Path('callId') String callId,
-  );
+  Future<DoctorEndCallResponse> endDoctorCall(@Path('callId') String callId);
 
   @POST(EndPoint.endCall)
-  Future<PatientEndCallResponse> endPatientCall(
-    @Path('callId') String callId,
-  );
+  Future<PatientEndCallResponse> endPatientCall(@Path('callId') String callId);
 
   @GET(EndPoint.patientNotifications)
   Future<PatientNotificationsResponse> getPatientNotifications({
@@ -471,12 +516,12 @@ abstract class ApiClient {
   });
 
   @PATCH(EndPoint.patientNotificationsReadAll)
-  Future<PatientMarkAllReadResponse>
-  markAllPatientNotificationsRead();
+  Future<PatientMarkAllReadResponse> markAllPatientNotificationsRead();
 
   @PATCH(EndPoint.patientNotificationRead)
-  Future<PatientNotificationReadResponse>
-  markPatientNotificationRead(@Path('id') String id);
+  Future<PatientNotificationReadResponse> markPatientNotificationRead(
+    @Path('id') String id,
+  );
 
   @GET(EndPoint.doctorNotifications)
   Future<DoctorNotificationsResponse> getDoctorNotifications({
@@ -486,10 +531,10 @@ abstract class ApiClient {
   });
 
   @PATCH(EndPoint.doctorNotificationsReadAll)
-  Future<DoctorMarkAllReadResponse>
-  markAllDoctorNotificationsRead();
+  Future<DoctorMarkAllReadResponse> markAllDoctorNotificationsRead();
 
   @PATCH(EndPoint.doctorNotificationRead)
-  Future<DoctorNotificationReadResponse>
-  markDoctorNotificationRead(@Path('id') String id);
+  Future<DoctorNotificationReadResponse> markDoctorNotificationRead(
+    @Path('id') String id,
+  );
 }

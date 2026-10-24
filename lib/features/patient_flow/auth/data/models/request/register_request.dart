@@ -12,14 +12,17 @@ class PatientRegisterRequest {
   final String? countryCode;
   @JsonKey(name: "email")
   final String? email;
+  @JsonKey(name: "password")
+  final String? password;
   @JsonKey(name: "preferredLanguage")
   final String? preferredLanguage;
 
-  PatientRegisterRequest ({
+  PatientRegisterRequest({
     this.fullName,
     this.phone,
     this.countryCode,
     this.email,
+    this.password,
     this.preferredLanguage,
   });
 
@@ -31,5 +34,3 @@ class PatientRegisterRequest {
     return _$PatientRegisterRequestToJson(this);
   }
 }
-
-

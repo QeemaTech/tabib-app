@@ -22,3 +22,11 @@ class AuthMode {
   static const String login = 'login';
   static const String signup = 'signup';
 }
+
+enum OtpPurpose { accountVerification, passwordReset }
+
+class AuthErrorCode {
+  AuthErrorCode._();
+
+  static const String unverified = 'AUTH_014';
+}

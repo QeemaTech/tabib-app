@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 sealed class Result<T> extends Equatable {
- const Result();
+  const Result();
 
   const factory Result.success(T data) = Success<T>;
-  const factory Result.failure(String errorMessage) = Failure<T>;
+  const factory Result.failure(String errorMessage, {String? errorCode}) =
+      Failure<T>;
 
   R when<R>({
     required R Function(T data) success,
@@ -21,21 +22,15 @@ class Success<T> extends Result<T> {
   final T data;
   const Success(this.data);
   @override
- 
   @override
   List<Object?> get props => [data];
-  
-
 }
 
 class Failure<T> extends Result<T> {
   final String errorMessage;
-  const Failure(this.errorMessage);
+  final String? errorCode;
+  const Failure(this.errorMessage, {this.errorCode});
 
   @override
-  List<Object?> get props => [errorMessage];
-  
-
+  List<Object?> get props => [errorMessage, errorCode];
 }
-
-

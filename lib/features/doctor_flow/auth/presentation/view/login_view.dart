@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tabib_app/core/constant/assets_manager.dart';
 import 'package:tabib_app/core/extension/app_extension.dart';
+import 'package:tabib_app/core/routes/routes.dart';
+import 'package:tabib_app/core/utilities/app_validator.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
+import 'package:tabib_app/core/utilities/password_text_field.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/login_request.dart';
+import 'package:tabib_app/features/doctor_flow/auth/presentation/view/forgot_password_view.dart';
 import 'package:tabib_app/features/doctor_flow/auth/presentation/view/otp_bottom_sheet.dart';
+import 'package:tabib_app/features/doctor_flow/auth/presentation/view_model/auth_constants.dart';
 import 'package:tabib_app/features/doctor_flow/auth/presentation/view_model/auth_state.dart';
 import 'package:tabib_app/features/doctor_flow/auth/presentation/view_model/auth_view_model.dart';
 
@@ -22,16 +27,26 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController phoneController;
+  late TextEditingController passwordController;
 
   @override
   void initState() {
     super.initState();
     phoneController = TextEditingController();
+    passwordController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final authViewModel = context.read<DoctorAuthViewModel>();
+      if (authViewModel.state.countryCode == null) {
+        authViewModel.setCountryCode('+39');
+      }
+    });
   }
 
   @override
   void dispose() {
     phoneController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -47,20 +62,50 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  void _enterApp(BuildContext context, AuthState state) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.mainLayoutView,
+      (route) => false,
+      arguments: AuthRole.toUi(state.role),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
-    return BlocListener<DoctorAuthViewModel, AuthState>(
-      listenWhen: (previous, current) =>
-          previous.loginModel != current.loginModel,
-      listener: (context, state) {
-        if (state.loginModel.isError) {
-          CustomToast.error(context, state.loginModel.errorMessage ?? '');
-        }
-        if (state.loginModel.isLoaded) {
-          _showOtpSheet(context);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DoctorAuthViewModel, AuthState>(
+          listenWhen: (previous, current) =>
+              previous.loginModel != current.loginModel,
+          listener: (context, state) {
+            if (state.loginModel.isError) {
+              CustomToast.error(context, state.loginModel.errorMessage ?? '');
+            }
+            if (state.loginModel.isLoaded) {
+              _enterApp(context, state);
+            }
+          },
+        ),
+        BlocListener<DoctorAuthViewModel, AuthState>(
+          listenWhen: (previous, current) =>
+              previous.sendOtpModel != current.sendOtpModel,
+          listener: (context, state) {
+            if (state.sendOtpModel.isError && state.openVerificationSheet) {
+              context.read<DoctorAuthViewModel>().setOpenVerificationSheet(
+                false,
+              );
+              CustomToast.error(context, state.sendOtpModel.errorMessage ?? '');
+            }
+            if (state.sendOtpModel.isLoaded && state.openVerificationSheet) {
+              context.read<DoctorAuthViewModel>().setOpenVerificationSheet(
+                false,
+              );
+              _showOtpSheet(context);
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         body: SafeArea(
           child: Stack(
@@ -147,7 +192,7 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: CustomTextFormField(
-                              //  validator: AppValidator.phone,
+                                validator: AppValidator.phone,
                                 hintText: "auth.signUp.enterPhone".tr(),
                                 controller: phoneController,
                                 padding: const EdgeInsets.only(
@@ -176,18 +221,54 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 16),
+                        Text(
+                          "auth.login.password".tr(),
+                          style: theme.bold18.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        PasswordTextField(
+                          controller: passwordController,
+                          hintText: "auth.login.enterPassword".tr(),
+                          validator: AppValidator.password,
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: TextButton(
+                            onPressed: () {
+                              final authViewModel = context
+                                  .read<DoctorAuthViewModel>();
+                              authViewModel.setPhone(
+                                phoneController.text.trim(),
+                              );
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: authViewModel,
+                                    child: const ForgotPasswordView(),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text("auth.login.forgotPassword".tr()),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
                               if (!_formKey.currentState!.validate()) return;
-                              final authViewModel =
-                                  context.read<DoctorAuthViewModel>();
-                              authViewModel.sendOtp(
+                              final authViewModel = context
+                                  .read<DoctorAuthViewModel>();
+                              authViewModel.login(
                                 DoctorLoginRequest(
                                   phone: phoneController.text.trim(),
                                   countryCode: authViewModel.state.countryCode,
+                                  password: passwordController.text,
                                   role: authViewModel.state.role,
                                 ),
                               );

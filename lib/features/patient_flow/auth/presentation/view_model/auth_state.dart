@@ -1,13 +1,23 @@
 import 'package:equatable/equatable.dart';
 import 'package:tabib_app/core/base_state/base_state.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/register_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/reset_password_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/data/models/response/verify_otp_response.dart';
+import 'package:tabib_app/features/patient_flow/auth/data/models/response/verify_reset_code_response.dart';
 import 'package:tabib_app/features/patient_flow/auth/presentation/view_model/auth_constants.dart';
 
 class AuthState extends Equatable {
   final BaseState<PatientRegisterResponse> registerModel;
-  final BaseState<PatientRegisterResponse> loginModel;
+  final BaseState<PatientVerifyOtpResponse> loginModel;
+  final BaseState<PatientRegisterResponse> sendOtpModel;
+  final BaseState<PatientRegisterResponse> forgotPasswordModel;
   final BaseState<PatientVerifyOtpResponse> verifyOtpModel;
+  final BaseState<PatientVerifyResetCodeResponse> verifyResetCodeModel;
+  final BaseState<PatientResetPasswordResponse> resetPasswordModel;
+  final bool openVerificationSheet;
+  final bool openResetSheet;
+  final String? resetToken;
+  final String? resetCode;
   final String preferredLanguage;
   final String? countryCode;
   final String? phone;
@@ -17,7 +27,17 @@ class AuthState extends Equatable {
   const AuthState({
     this.registerModel = const BaseState(requestState: RequestState.init),
     this.loginModel = const BaseState(requestState: RequestState.init),
+    this.sendOtpModel = const BaseState(requestState: RequestState.init),
+    this.forgotPasswordModel = const BaseState(requestState: RequestState.init),
     this.verifyOtpModel = const BaseState(requestState: RequestState.init),
+    this.verifyResetCodeModel = const BaseState(
+      requestState: RequestState.init,
+    ),
+    this.resetPasswordModel = const BaseState(requestState: RequestState.init),
+    this.openVerificationSheet = false,
+    this.openResetSheet = false,
+    this.resetToken,
+    this.resetCode,
     this.preferredLanguage = 'ar',
     this.countryCode,
     this.phone,
@@ -27,8 +47,16 @@ class AuthState extends Equatable {
 
   AuthState copyWith({
     BaseState<PatientRegisterResponse>? registerModel,
-    BaseState<PatientRegisterResponse>? loginModel,
+    BaseState<PatientVerifyOtpResponse>? loginModel,
+    BaseState<PatientRegisterResponse>? sendOtpModel,
+    BaseState<PatientRegisterResponse>? forgotPasswordModel,
     BaseState<PatientVerifyOtpResponse>? verifyOtpModel,
+    BaseState<PatientVerifyResetCodeResponse>? verifyResetCodeModel,
+    BaseState<PatientResetPasswordResponse>? resetPasswordModel,
+    bool? openVerificationSheet,
+    bool? openResetSheet,
+    String? resetToken,
+    String? resetCode,
     String? preferredLanguage,
     String? countryCode,
     String? phone,
@@ -38,7 +66,16 @@ class AuthState extends Equatable {
     return AuthState(
       registerModel: registerModel ?? this.registerModel,
       loginModel: loginModel ?? this.loginModel,
+      sendOtpModel: sendOtpModel ?? this.sendOtpModel,
+      forgotPasswordModel: forgotPasswordModel ?? this.forgotPasswordModel,
       verifyOtpModel: verifyOtpModel ?? this.verifyOtpModel,
+      verifyResetCodeModel: verifyResetCodeModel ?? this.verifyResetCodeModel,
+      resetPasswordModel: resetPasswordModel ?? this.resetPasswordModel,
+      openVerificationSheet:
+          openVerificationSheet ?? this.openVerificationSheet,
+      openResetSheet: openResetSheet ?? this.openResetSheet,
+      resetToken: resetToken ?? this.resetToken,
+      resetCode: resetCode ?? this.resetCode,
       preferredLanguage: preferredLanguage ?? this.preferredLanguage,
       countryCode: countryCode ?? this.countryCode,
       phone: phone ?? this.phone,
@@ -51,7 +88,15 @@ class AuthState extends Equatable {
   List<Object?> get props => [
     registerModel,
     loginModel,
+    sendOtpModel,
+    forgotPasswordModel,
     verifyOtpModel,
+    verifyResetCodeModel,
+    resetPasswordModel,
+    openVerificationSheet,
+    openResetSheet,
+    resetToken,
+    resetCode,
     preferredLanguage,
     countryCode,
     phone,

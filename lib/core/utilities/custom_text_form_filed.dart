@@ -16,6 +16,7 @@ class CustomTextFormField extends StatelessWidget {
     this.style,
     this.onChanged,
     this.maxLines,
+    this.obscureText = false,
   });
 
   final TextEditingController? controller;
@@ -30,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? style;
   final void Function(String)? onChanged;
   final int? maxLines;
+  final bool obscureText;
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -51,7 +53,8 @@ class CustomTextFormField extends StatelessWidget {
       child: TextFormField(
         readOnly: readOnly,
         validator: validator,
-        maxLines: maxLines,
+        obscureText: obscureText,
+        maxLines: obscureText ? 1 : maxLines,
         onTapUpOutside: (event) {
           FocusScope.of(context).unfocus();
         },
@@ -64,7 +67,8 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffix: suffixWidget,
           hintText: hintText,
-          hintStyle:style?? theme.regular14.copyWith(color: theme.textColor200),
+          hintStyle:
+              style ?? theme.regular14.copyWith(color: theme.textColor200),
           contentPadding: padding ?? const EdgeInsets.all(16.0),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,

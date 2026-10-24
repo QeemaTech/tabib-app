@@ -6,7 +6,10 @@
       "subtitle": "Hel ballamo, bixi la-tashi online, oo si fudud u maamul ballamahaaga caafimaad.",
       "phoneNumber": "Lambarka taleefanka",
       "enterPhoneNumber": "Geli lambarka taleefanka",
-      "loginButton": "Gal"
+      "loginButton": "Gal",
+      "password": "Erayga sirta",
+      "enterPassword": "Geli erayga sirta",
+      "forgotPassword": "Ma ilowday erayga sirta?"
     },
     "welcome": {
       "title": "Daryeelkaaga caafimaad... halkan ayuu ka bilaabmaa",
@@ -38,6 +41,8 @@
       "enterPhone": "Geli lambarka taleefankaaga",
       "email": "Iimaylka",
       "enterEmail": "Geli iimaylkaaga",
+      "password": "Erayga sirta",
+      "enterPassword": "Geli erayga sirta",
       "languageLabel": "Luqadda",
       "languageDescription": "Luqadda aad doorbidayso wada sheekeysiga",
       "signUpButton": "Xiga"
@@ -47,7 +52,21 @@
       "sentTo": "Waxaan u dirnay koodh 6 lambar ah lambarka taleefankaaga {} {}",
       "resendIn": "Ma helin koodhka? Dib u dir {} ilbiriqsi gudahood.",
       "resend": "Dib u dir",
-      "confirm": "Xaqiiji"
+      "confirm": "Xaqiiji",
+      "verifiedGoLogin": "Akoonka waa la xaqiijiyay. Fadlan gal."
+    },
+    "forgotPassword": {
+      "title": "Ilowday erayga sirta",
+      "subtitle": "Geli lambarka taleefankaaga, waxaan kuu soo diraynaa koodhka xaqiijinta.",
+      "sendCode": "Dir koodhka"
+    },
+    "resetPassword": {
+      "title": "Eray sir cusub",
+      "subtitle": "Dooro eray sir cusub oo akoonkaaga ah.",
+      "newPassword": "Erayga sirta cusub",
+      "confirmPassword": "Xaqiiji erayga sirta",
+      "save": "Kaydi",
+      "success": "Erayga sirta waa la cusbooneysiiyay. Hadda waad geli kartaa."
     },
     "completeProfile": {
       "skip": "Ka bood",

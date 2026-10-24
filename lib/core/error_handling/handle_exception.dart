@@ -3,76 +3,105 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+class NetworkError {
+  final String message;
+  final String? code;
+
+  const NetworkError({required this.message, this.code});
+}
+
 class NetworkException {
   NetworkException._();
 
-  static String getMessageError(Exception exception) {
+  static String getMessageError(Exception exception) =>
+      describe(exception).message;
+
+  static NetworkError describe(Exception exception) {
     if (exception is DioException) {
       switch (exception.type) {
         case DioExceptionType.connectionTimeout:
-          return 'errors.connectionTimeout'.tr();
+          return NetworkError(message: 'errors.connectionTimeout'.tr());
         case DioExceptionType.sendTimeout:
-          return 'errors.sendTimeout'.tr();
+          return NetworkError(message: 'errors.sendTimeout'.tr());
         case DioExceptionType.receiveTimeout:
-          return 'errors.receiveTimeout'.tr();
+          return NetworkError(message: 'errors.receiveTimeout'.tr());
         case DioExceptionType.badCertificate:
-          return 'errors.badCertificate'.tr();
+          return NetworkError(message: 'errors.badCertificate'.tr());
         case DioExceptionType.badResponse:
           return _handleMessageResponse(exception);
         case DioExceptionType.cancel:
-          return 'errors.cancel'.tr();
+          return NetworkError(message: 'errors.cancel'.tr());
         case DioExceptionType.connectionError:
-          return 'errors.connectionError'.tr();
+          return NetworkError(message: 'errors.connectionError'.tr());
         case DioExceptionType.unknown:
           print(exception.message);
-          return 'errors.unknown'.tr();
+          return NetworkError(message: 'errors.unknown'.tr());
         case DioExceptionType.transformTimeout:
           print(exception.message);
-          return 'errors.unknown'.tr();
+          return NetworkError(message: 'errors.unknown'.tr());
       }
-    }
-    else {
+    } else {
       log(exception.toString(), name: 'NetworkException');
-      return 'errors.unknown'.tr();
+      return NetworkError(message: 'errors.unknown'.tr());
     }
   }
 
-  static String _handleMessageResponse(DioException e) {
+  static NetworkError _handleMessageResponse(DioException e) {
     if (e.response != null) {
       final statusCode = e.response!.statusCode;
       final data = e.response!.data;
 
       final message = _extractErrorMessage(data);
+      final code = _extractErrorCode(data);
 
       switch (statusCode) {
         case 400:
-          return message ?? 'errors.badRequest'.tr();
+          return NetworkError(
+            message: message ?? 'errors.badRequest'.tr(),
+            code: code,
+          );
         case 401:
-          return message ?? 'errors.error401'.tr();
+          return NetworkError(
+            message: message ?? 'errors.error401'.tr(),
+            code: code,
+          );
         case 403:
-          return 'errors.error403'.tr();
+          return NetworkError(
+            message: message ?? 'errors.error403'.tr(),
+            code: code,
+          );
         case 404:
-          return message ?? 'errors.notFound'.tr();
+          return NetworkError(
+            message: message ?? 'errors.notFound'.tr(),
+            code: code,
+          );
         case 408:
-          return 'errors.error408'.tr();
+          return NetworkError(message: 'errors.error408'.tr(), code: code);
         case 429:
-          return message??'errors.error429'.tr();
+          return NetworkError(
+            message: message ?? 'errors.error429'.tr(),
+            code: code,
+          );
         case 500:
-          return 'errors.error500'.tr();
+          return NetworkError(message: 'errors.error500'.tr(), code: code);
         case 502:
-          return 'errors.error502'.tr();
+          return NetworkError(message: 'errors.error502'.tr(), code: code);
         case 503:
-          return 'errors.error503'.tr();
+          return NetworkError(message: 'errors.error503'.tr(), code: code);
         case 504:
-          return 'errors.error504'.tr();
+          return NetworkError(message: 'errors.error504'.tr(), code: code);
         default:
-          return message ??
-              'errors.serverError'.tr(
-                namedArgs: {'code': '${statusCode ?? 'unknown'}'},
-              );
+          return NetworkError(
+            message:
+                message ??
+                'errors.serverError'.tr(
+                  namedArgs: {'code': '${statusCode ?? 'unknown'}'},
+                ),
+            code: code,
+          );
       }
     }
-    return 'errors.defaultError'.tr();
+    return NetworkError(message: 'errors.defaultError'.tr());
   }
 
   static String? _extractErrorMessage(dynamic data) {
@@ -91,6 +120,16 @@ class NetworkException {
       }
     }
 
+    return null;
+  }
+
+  static String? _extractErrorCode(dynamic data) {
+    if (data is! Map) return null;
+    final error = data['error'];
+    if (error is Map) {
+      final code = error['code']?.toString();
+      if (code != null && code.isNotEmpty) return code;
+    }
     return null;
   }
 

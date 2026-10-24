@@ -6,7 +6,10 @@
       "subtitle": "Receive bookings, provide online consultations, and manage your medical appointments easily.",
       "phoneNumber": "Phone Number",
       "enterPhoneNumber": "Enter phone number",
-      "loginButton": "Login"
+      "loginButton": "Login",
+      "password": "Password",
+      "enterPassword": "Enter your password",
+      "forgotPassword": "Forgot password?"
     },
     "welcome": {
       "title": "Your medical care... starts here",
@@ -38,6 +41,8 @@
       "enterPhone": "Enter your phone number",
       "email": "Email",
       "enterEmail": "Enter your email",
+      "password": "Password",
+      "enterPassword": "Enter your password",
       "languageLabel": "Language",
       "languageDescription": "Preferred language for communication",
       "signUpButton": "Next"
@@ -47,7 +52,21 @@
       "sentTo": "We have sent a 6-digit code to your phone number {} {}",
       "resendIn": "Didn't receive the code? Resend it in {} seconds.",
       "resend": "Resend it",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "verifiedGoLogin": "Account verified. Please log in."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "subtitle": "Enter your phone number and we will send a verification code.",
+      "sendCode": "Send code"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "subtitle": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "save": "Save",
+      "success": "Password updated. You can log in now."
     },
     "completeProfile": {
       "skip": "Skip",

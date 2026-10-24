@@ -9,10 +9,7 @@ class DoctorRegisterResponse {
   @JsonKey(name: "data")
   final Data? data;
 
-  DoctorRegisterResponse ({
-    this.success,
-    this.data,
-  });
+  DoctorRegisterResponse({this.success, this.data});
 
   factory DoctorRegisterResponse.fromJson(Map<String, dynamic> json) {
     return _$DoctorRegisterResponseFromJson(json);
@@ -31,12 +28,10 @@ class Data {
   final int? expiresIn;
   @JsonKey(name: "devCode")
   final String? devCode;
+  @JsonKey(name: "message")
+  final String? message;
 
-  Data ({
-    this.resendAfter,
-    this.expiresIn,
-    this.devCode,
-  });
+  Data({this.resendAfter, this.expiresIn, this.devCode, this.message});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return _$DataFromJson(json);
@@ -46,5 +41,3 @@ class Data {
     return _$DataToJson(this);
   }
 }
-
-

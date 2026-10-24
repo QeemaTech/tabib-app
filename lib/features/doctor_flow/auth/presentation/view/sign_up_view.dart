@@ -8,6 +8,7 @@ import 'package:tabib_app/core/utilities/app_validator.dart';
 import 'package:tabib_app/core/utilities/custom_image_view.dart';
 import 'package:tabib_app/core/utilities/custom_text_form_filed.dart';
 import 'package:tabib_app/core/utilities/custom_toast.dart';
+import 'package:tabib_app/core/utilities/password_text_field.dart';
 import 'package:tabib_app/features/doctor_flow/auth/data/models/request/register_request.dart';
 import 'package:tabib_app/features/doctor_flow/auth/presentation/view/otp_bottom_sheet.dart';
 import 'package:tabib_app/features/doctor_flow/auth/presentation/view_model/auth_state.dart';
@@ -25,13 +26,22 @@ class _SignUpViewState extends State<SignUpView> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController emailController;
+  late TextEditingController passwordController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     nameController = TextEditingController();
     phoneController = TextEditingController();
     emailController = TextEditingController();
+    passwordController = TextEditingController();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final authViewModel = context.read<DoctorAuthViewModel>();
+      if (authViewModel.state.countryCode == null) {
+        authViewModel.setCountryCode('+39');
+      }
+    });
   }
 
   @override
@@ -39,6 +49,7 @@ class _SignUpViewState extends State<SignUpView> {
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -185,6 +196,11 @@ class _SignUpViewState extends State<SignUpView> {
                           hintText: "auth.signUp.enterEmail".tr(),
                           keyboardType: TextInputType.emailAddress,
                         ),
+                        PasswordTextField(
+                          controller: passwordController,
+                          hintText: "auth.signUp.enterPassword".tr(),
+                          validator: AppValidator.password,
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           "auth.signUp.languageLabel".tr(),
@@ -201,9 +217,9 @@ class _SignUpViewState extends State<SignUpView> {
                         const SizedBox(height: 20),
                         LanguageSelector(
                           onLanguageSelected: (String value) {
-                            context.read<DoctorAuthViewModel>().setPreferredLanguage(
-                              value,
-                            );
+                            context
+                                .read<DoctorAuthViewModel>()
+                                .setPreferredLanguage(value);
                           },
                         ),
                         const SizedBox(height: 20),
@@ -216,6 +232,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 email: emailController.text.trim(),
                                 phone: phoneController.text.trim(),
                                 fullName: nameController.text.trim(),
+                                password: passwordController.text,
                                 preferredLanguage:
                                     authViewModel.state.preferredLanguage,
                                 countryCode: authViewModel.state.countryCode,

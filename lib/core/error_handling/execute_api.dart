@@ -11,7 +11,8 @@ Future<Result<T>> executeApi<T>(Future<T> Function() callApi) async {
     return Success(result);
   } catch (e) {
     if (e is Exception) {
-      return Failure(NetworkException.getMessageError(e));
+      final error = NetworkException.describe(e);
+      return Failure(error.message, errorCode: error.code);
     }
     log(e.toString(), name: 'executeApi');
     return Failure('errors.unknown'.tr());
